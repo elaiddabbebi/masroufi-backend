@@ -12,8 +12,6 @@ public interface RoleService {
 
     RoleDto deleteRole(String uuid);
 
-    List<RoleDto> getRoles();
-
     RoleDto getRoleDetails(String uuid);
 
     List<RoleDto> getAllRoles();

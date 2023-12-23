@@ -85,16 +85,6 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<RoleDto> getRoles() {
-        List<Role> roles = this.roleRepository.findAll();
-        List<RoleDto> returnValue = new ArrayList<>();
-        for (Role role: roles) {
-            returnValue.add(RoleDto.buildFromRole(role));
-        }
-        return returnValue;
-    }
-
-    @Override
     public RoleDto getRoleDetails(String uuid) {
         Role role = this.roleRepository.findByUuid(uuid);
         if (role != null) {

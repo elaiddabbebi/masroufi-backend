@@ -5,7 +5,6 @@ import com.masroufi.api.enums.RoleType;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,7 +16,6 @@ import java.util.List;
 @Entity
 @Table(name = "role")
 public class Role extends BaseEntity implements Serializable {
-    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
