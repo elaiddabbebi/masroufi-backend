@@ -7,6 +7,7 @@ import com.masroufi.api.entity.Account;
 import com.masroufi.api.entity.Role;
 import com.masroufi.api.repository.AccountRepository;
 import com.masroufi.api.repository.RoleRepository;
+import com.masroufi.api.service.MenuItemService;
 import com.masroufi.api.service.UserService;
 import com.masroufi.api.shared.context.ApplicationSecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ApplicationSecurityContext applicationSecurityContext;
+
+    @Autowired
+    private MenuItemService menuItemService;
 
     @Override
     public UserDetailsDto updateMyProfileDetails(UserDetailsDto user) {
@@ -77,7 +81,9 @@ public class UserServiceImpl implements UserService {
         if (account == null) {
             throw new RuntimeException("Account not found");
         }
-        return UserDetailsDto.buildFromUser(account);
+        UserDetailsDto returnValue = UserDetailsDto.buildFromUser(account);
+        returnValue.setItems(this.menuItemService.getRoleMenuItems(account.getRole()));
+        return returnValue;
     }
 
     @Override

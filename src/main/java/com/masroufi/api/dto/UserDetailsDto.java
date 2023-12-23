@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
 
 @Setter
@@ -35,6 +36,7 @@ public class UserDetailsDto {
     private RoleDto role;
     private long age;
     private Boolean isActivated;
+    private List<MenuItemDto> items;
 
     public static UserDetailsDto buildFromUser(Account user) {
         long age = 0;
