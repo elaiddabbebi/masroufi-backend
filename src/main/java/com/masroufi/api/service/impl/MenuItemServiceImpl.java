@@ -18,19 +18,20 @@ public class MenuItemServiceImpl implements MenuItemService {
     private List<MenuItemDto> getApplicationMenuItems() {
         return Arrays.asList(
                 MenuItemDto.builder().code("MANAGE_DASHBOARD").label("DASHBOARD").icon("pi pi-fw pi-home").routerLink("/main/dashboard").visible(false).build(),
+                MenuItemDto.builder().code("CASH_FLOW").label("CASH_FLOW").icon("pi pi-fw pi-sort-alt").visible(false).items(
+                        Arrays.asList(
+                                MenuItemDto.builder().code("GAINS_EXPENSES").label("GAINS_EXPENSES").icon("pi pi-fw pi-dollar").routerLink("/main/expenses/search").visible(false).build(),
+                                MenuItemDto.builder().code("STATISTICS").label("STATISTICS").icon("pi pi-fw pi-chart-line").routerLink("/main/expenses/stat").visible(false).build(),
+                                MenuItemDto.builder().code("SIMULATOR").label("SIMULATOR").icon("pi pi-fw pi-calculator").routerLink("/main/expenses/simulator").visible(false).build()
+                        )
+                ).build(),
                 MenuItemDto.builder().code("MANAGE_SETTINGS").label("SETTINGS").icon("pi pi-fw pi-cog").visible(false).items(
                         Arrays.asList(
                                 MenuItemDto.builder().code("MANAGE_PROFILE").label("MY_PROFILE").icon("pi pi-fw pi-user").routerLink("/main/settings/profile").visible(false).build(),
+                                MenuItemDto.builder().code("MANAGE_CONFIG").label("MY_CONFIG").icon("pi pi-fw pi-cog").routerLink("/main/settings/configuration").visible(false).build(),
                                 MenuItemDto.builder().code("MANAGE_USERS").label("USERS").icon("pi pi-fw pi-users").routerLink("/main/settings/users").visible(false).build(),
                                 MenuItemDto.builder().code("MANAGE_ROLES").label("ROLES").icon("pi pi-fw pi-cog").routerLink("/main/settings/roles").visible(false).build(),
                                 MenuItemDto.builder().code("MANAGE_LISTS").label("LISTS").icon("pi pi-fw pi-list").routerLink("/main/settings/lists").visible(false).build()
-                        )
-                ).build(),
-                MenuItemDto.builder().code("CASH_REGISTER").label("CASH_REGISTER").icon("pi pi-fw pi-dollar").visible(false).items(
-                        Arrays.asList(
-                                MenuItemDto.builder().code("GAINS_EXPENSES").label("GAINS_EXPENSES").icon("pi pi-fw pi-list").routerLink("/main/expenses/search").visible(false).build(),
-                                MenuItemDto.builder().code("STATISTICS").label("STATISTICS").icon("pi pi-fw pi-chart-line").routerLink("/main/expenses/stat").visible(false).build(),
-                                MenuItemDto.builder().code("SIMULATOR").label("SIMULATOR").icon("pi pi-fw pi-calculator").routerLink("/main/expenses/simulator").visible(false).build()
                         )
                 ).build()
         );
@@ -47,6 +48,9 @@ public class MenuItemServiceImpl implements MenuItemService {
                 ).build(),
                 MenuItemPermissions.builder().code("MANAGE_PROFILE").permissions(
                         Arrays.asList(PermissionType.MANGE_PROFILE)
+                ).build(),
+                MenuItemPermissions.builder().code("MANAGE_CONFIG").permissions(
+                        Arrays.asList(PermissionType.MANAGE_CONFIG)
                 ).build(),
                 MenuItemPermissions.builder().code("MANAGE_USERS").permissions(
                         Arrays.asList(PermissionType.MANAGE_USERS)

@@ -11,6 +11,7 @@ public enum PermissionType {
     VIEW_CUSTOMER_DASHBOARD,
     MANGE_ROLES,
     MANGE_PROFILE,
+    MANAGE_CONFIG,
     MANAGE_EXPENSES,
     MANAGE_SYSTEM_LISTS
     ;
@@ -24,7 +25,8 @@ public enum PermissionType {
                 VIEW_SUPER_ADMIN_DASHBOARD,
                 MANAGE_SYSTEM_LISTS,
                 MANGE_ROLES,
-                MANGE_PROFILE
+                MANGE_PROFILE,
+                MANAGE_CONFIG
         );
     }
 
@@ -42,7 +44,8 @@ public enum PermissionType {
         return Arrays.asList(
                 MANAGE_USERS,
                 VIEW_ADMIN_DASHBOARD,
-                MANGE_PROFILE
+                MANGE_PROFILE,
+                MANAGE_CONFIG
         );
     }
 
@@ -50,7 +53,8 @@ public enum PermissionType {
         return Arrays.asList(
                 VIEW_CUSTOMER_DASHBOARD,
                 MANAGE_EXPENSES,
-                MANGE_PROFILE
+                MANGE_PROFILE,
+                MANAGE_CONFIG
         );
     }
 }
