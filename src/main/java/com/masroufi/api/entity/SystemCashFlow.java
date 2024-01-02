@@ -28,7 +28,7 @@ public class SystemCashFlow extends BaseEntity implements Serializable {
 
     private CashFlowType type;
 
-    @OneToOne
+    @ManyToOne
     private CashFlowCategory category;
 
     @Enumerated(EnumType.STRING)

@@ -36,6 +36,6 @@ public class CashFlow extends BaseEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     private CashFlowType type;
 
-    @OneToOne
-    private CashFlowCategory category;
+    @ManyToOne
+    private SystemCashFlow systemCashFlow;
 }
