@@ -25,11 +25,9 @@ public class CashFlow extends BaseEntity implements Serializable {
     private Long id;
 
     @OneToOne
-    private Account customer;
+    private Account user;
 
     private Date date;
-
-    private String name;
 
     private Double amount;
 

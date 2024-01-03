@@ -1,6 +1,7 @@
 package com.masroufi.api.repository;
 
 import com.masroufi.api.entity.Account;
+import com.masroufi.api.entity.CashFlow;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -8,10 +9,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AccountRepository extends JpaRepository<Account, Long>, JpaSpecificationExecutor<Account> {
+public interface CashFlowRepository extends JpaRepository<CashFlow, Long>, JpaSpecificationExecutor<CashFlow> {
 
-    Account findByUuid(String uuid);
+    CashFlow findByUuid(String uuid);
 
-    Account findByEmailIgnoreCase(String email);
-
+    List<CashFlow> findAllByUser(Account user);
 }
