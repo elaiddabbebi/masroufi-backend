@@ -25,8 +25,8 @@ public class CashFlowServiceImpl implements CashFlowService {
         } else {
             CashFlow newCashFlow = new CashFlow();
             newCashFlow.setName(cashFlow.getName().trim());
-            newCashFlow.setGainCashFlow(cashFlow.isGainCashFlow());
-            newCashFlow.setExpenseCashFlow(cashFlow.isExpenseCashFlow());
+            newCashFlow.setGain(cashFlow.isGain());
+            newCashFlow.setExpense(cashFlow.isExpense());
 
             newCashFlow.setSystemCashFlow(true);
             newCashFlow.setStatus(CashFlowStatus.VALIDATED);

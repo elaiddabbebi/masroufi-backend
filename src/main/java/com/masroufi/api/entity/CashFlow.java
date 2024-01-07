@@ -25,9 +25,9 @@ public class CashFlow extends BaseEntity implements Serializable {
 
     private String name;
 
-    private boolean gainCashFlow;
+    private boolean gain;
 
-    private boolean expenseCashFlow;
+    private boolean expense;
 
     @ManyToOne
     private CashFlowCategory category;

@@ -15,8 +15,8 @@ public class CashFlowCategoryDto {
     private String name;
     private CashFlowCategoryStatus status;
     private boolean systemCategory;
-    private boolean expenseCategory;
-    private boolean gainCategory;
+    private boolean expense;
+    private boolean gain;
 
     public static CashFlowCategoryDto buildFromCashFlowCategory(CashFlowCategory cashFlowCategory) {
         if (cashFlowCategory == null) {
@@ -27,8 +27,8 @@ public class CashFlowCategoryDto {
                 .name(cashFlowCategory.getName())
                 .status(cashFlowCategory.getStatus())
                 .systemCategory(cashFlowCategory.isSystemCategory())
-                .expenseCategory(cashFlowCategory.isExpenseCategory())
-                .gainCategory(cashFlowCategory.isGainCategory())
+                .expense(cashFlowCategory.isExpense())
+                .gain(cashFlowCategory.isGain())
                 .build();
     }
 }

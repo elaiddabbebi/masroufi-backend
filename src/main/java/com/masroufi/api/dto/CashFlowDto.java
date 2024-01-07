@@ -13,9 +13,8 @@ public class CashFlowDto {
 
     private String uuid;
     private String name;
-    private boolean gainCashFlow;
-
-    private boolean expenseCashFlow;
+    private boolean gain;
+    private boolean expense;
     private CashFlowCategoryDto category;
     private CashFlowStatus status;
     private boolean systemCashFlow;
@@ -27,8 +26,8 @@ public class CashFlowDto {
         return CashFlowDto.builder()
                 .uuid(cashFlow.getUuid())
                 .name(cashFlow.getName())
-                .gainCashFlow(cashFlow.isGainCashFlow())
-                .expenseCashFlow(cashFlow.isExpenseCashFlow())
+                .gain(cashFlow.isGain())
+                .expense(cashFlow.isExpense())
                 .systemCashFlow(cashFlow.isSystemCashFlow())
                 .category(CashFlowCategoryDto.buildFromCashFlowCategory(cashFlow.getCategory()))
                 .status(cashFlow.getStatus())

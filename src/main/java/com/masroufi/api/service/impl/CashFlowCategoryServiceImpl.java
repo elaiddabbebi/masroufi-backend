@@ -24,8 +24,8 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
         } else {
             CashFlowCategory category = new CashFlowCategory();
             category.setName(cashFlowCategory.getName().trim());
-            category.setGainCategory(cashFlowCategory.isGainCategory());
-            category.setExpenseCategory(category.isExpenseCategory());
+            category.setGain(cashFlowCategory.isGain());
+            category.setExpense(category.isExpense());
             category.setSystemCategory(true);
             category.setStatus(CashFlowCategoryStatus.VALIDATED);
             category = this.cashFlowCategoryRepository.save(category);
@@ -43,8 +43,8 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
                 throw new RuntimeException("Category not found");
             }
             category.setName(cashFlowCategory.getName().trim());
-            category.setGainCategory(cashFlowCategory.isGainCategory());
-            category.setExpenseCategory(category.isExpenseCategory());
+            category.setGain(cashFlowCategory.isGain());
+            category.setExpense(category.isExpense());
             category = this.cashFlowCategoryRepository.save(category);
             return CashFlowCategoryDto.buildFromCashFlowCategory(category);
         }

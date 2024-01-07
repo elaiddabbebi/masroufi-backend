@@ -30,7 +30,7 @@ public class CashFlowCategory extends BaseEntity implements Serializable {
 
     private boolean systemCategory;
 
-    private boolean expenseCategory;
+    private boolean expense;
 
-    private boolean gainCategory;
+    private boolean gain;
 }
