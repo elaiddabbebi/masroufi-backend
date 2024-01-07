@@ -1,8 +1,8 @@
 package com.masroufi.api.controller;
 
-import com.masroufi.api.dto.ActivateDeactivateUserModel;
+import com.masroufi.api.dto.request.ActivateDeactivateUserModel;
 import com.masroufi.api.dto.UserDetailsDto;
-import com.masroufi.api.dto.UserPasswordDto;
+import com.masroufi.api.dto.request.UserPasswordModel;
 import com.masroufi.api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,7 +35,7 @@ public class UserController {
     }
 
     @PutMapping("/password/{uuid}")
-    UserDetailsDto updateUserPassword(@PathVariable String uuid, @RequestBody @Valid UserPasswordDto passwordDto) {
+    UserDetailsDto updateUserPassword(@PathVariable String uuid, @RequestBody @Valid UserPasswordModel passwordDto) {
         return this.userService.updateUserPassword(uuid, passwordDto);
     }
 

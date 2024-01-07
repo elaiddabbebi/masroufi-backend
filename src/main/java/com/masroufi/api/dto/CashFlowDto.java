@@ -2,8 +2,8 @@ package com.masroufi.api.dto;
 
 import com.masroufi.api.entity.CashFlow;
 import com.masroufi.api.enums.CashFlowType;
+import com.masroufi.api.enums.SystemCashFlowStatus;
 import lombok.*;
-import java.util.Date;
 
 @Setter
 @Getter
@@ -11,24 +11,25 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 public class CashFlowDto {
-    private String uuid;
-    private Date date;
-    private String name;
-    private String category;
-    private Double amount;
-    private CashFlowType type;
 
-    public static CashFlowDto buildFromCashFlow(CashFlow cashFlow) {
+    private String uuid;
+    private String name;
+    private CashFlowType type;
+    private CashFlowCategoryDto category;
+    private SystemCashFlowStatus status;
+    private boolean systemCashFlow;
+
+    public static CashFlowDto buildFromSystemCashFlow(CashFlow cashFlow) {
         if (cashFlow == null) {
             return null;
         }
         return CashFlowDto.builder()
                 .uuid(cashFlow.getUuid())
-                .date(cashFlow.getDate())
-                .name(cashFlow.getSystemCashFlow().getName())
-                .category(cashFlow.getSystemCashFlow().getCategory().getName())
-                .amount(cashFlow.getAmount())
+                .name(cashFlow.getName())
                 .type(cashFlow.getType())
+                .systemCashFlow(cashFlow.isSystemCashFlow())
+                .category(CashFlowCategoryDto.buildFromCashFlowCategory(cashFlow.getCategory()))
+                .status(cashFlow.getStatus())
                 .build();
     }
 }

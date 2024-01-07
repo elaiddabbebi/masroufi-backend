@@ -1,7 +1,7 @@
 package com.masroufi.api.controller;
 
 import com.masroufi.api.dto.UserDetailsDto;
-import com.masroufi.api.dto.UserLoginModel;
+import com.masroufi.api.dto.request.UserLoginModel;
 import com.masroufi.api.security.SecurityConstants;
 import com.masroufi.api.service.UserService;
 import io.jsonwebtoken.Jwts;

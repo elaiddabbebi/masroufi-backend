@@ -1,7 +1,7 @@
 package com.masroufi.api.controller;
 
 import com.masroufi.api.dto.UserDetailsDto;
-import com.masroufi.api.dto.UserPasswordDto;
+import com.masroufi.api.dto.request.UserPasswordModel;
 import com.masroufi.api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,7 +28,7 @@ public class ProfileController {
     }
 
     @PutMapping("/password")
-    UserDetailsDto updateMyProfilePassword(@RequestBody @Valid UserPasswordDto userPasswordDto) {
+    UserDetailsDto updateMyProfilePassword(@RequestBody @Valid UserPasswordModel userPasswordDto) {
         return this.userService.updateMyPassword(userPasswordDto);
     }
 }

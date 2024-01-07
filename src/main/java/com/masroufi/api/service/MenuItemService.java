@@ -1,6 +1,6 @@
 package com.masroufi.api.service;
 
-import com.masroufi.api.dto.MenuItemDto;
+import com.masroufi.api.dto.response.MenuItemDto;
 import com.masroufi.api.entity.Role;
 
 import java.util.List;

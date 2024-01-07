@@ -1,7 +1,7 @@
 package com.masroufi.api.service.impl;
 
-import com.masroufi.api.dto.MenuItemDto;
-import com.masroufi.api.dto.MenuItemPermissions;
+import com.masroufi.api.dto.response.MenuItemDto;
+import com.masroufi.api.dto.response.MenuItemPermissionsDto;
 import com.masroufi.api.entity.Permission;
 import com.masroufi.api.entity.Role;
 import com.masroufi.api.enums.PermissionType;
@@ -37,37 +37,37 @@ public class MenuItemServiceImpl implements MenuItemService {
         );
     }
 
-    private List<MenuItemPermissions> getApplicationMenuItemPermissions() {
+    private List<MenuItemPermissionsDto> getApplicationMenuItemPermissions() {
         return Arrays.asList(
-                MenuItemPermissions.builder().code("MANAGE_DASHBOARD").permissions(
+                MenuItemPermissionsDto.builder().code("MANAGE_DASHBOARD").permissions(
                         Arrays.asList(
                                 PermissionType.VIEW_SUPER_ADMIN_DASHBOARD,
                                 PermissionType.VIEW_ADMIN_DASHBOARD,
                                 PermissionType.VIEW_CUSTOMER_DASHBOARD
                         )
                 ).build(),
-                MenuItemPermissions.builder().code("MANAGE_PROFILE").permissions(
+                MenuItemPermissionsDto.builder().code("MANAGE_PROFILE").permissions(
                         Arrays.asList(PermissionType.MANGE_PROFILE)
                 ).build(),
-                MenuItemPermissions.builder().code("MANAGE_CONFIG").permissions(
+                MenuItemPermissionsDto.builder().code("MANAGE_CONFIG").permissions(
                         Arrays.asList(PermissionType.MANAGE_CONFIG)
                 ).build(),
-                MenuItemPermissions.builder().code("MANAGE_USERS").permissions(
+                MenuItemPermissionsDto.builder().code("MANAGE_USERS").permissions(
                         Arrays.asList(PermissionType.MANAGE_USERS)
                 ).build(),
-                MenuItemPermissions.builder().code("MANAGE_ROLES").permissions(
+                MenuItemPermissionsDto.builder().code("MANAGE_ROLES").permissions(
                         Arrays.asList(PermissionType.MANGE_ROLES)
                 ).build(),
-                MenuItemPermissions.builder().code("MANAGE_LISTS").permissions(
+                MenuItemPermissionsDto.builder().code("MANAGE_LISTS").permissions(
                         Arrays.asList(PermissionType.MANAGE_SYSTEM_LISTS)
                 ).build(),
-                MenuItemPermissions.builder().code("GAINS_EXPENSES").permissions(
+                MenuItemPermissionsDto.builder().code("GAINS_EXPENSES").permissions(
                         Arrays.asList(PermissionType.MANAGE_EXPENSES)
                 ).build(),
-                MenuItemPermissions.builder().code("STATISTICS").permissions(
+                MenuItemPermissionsDto.builder().code("STATISTICS").permissions(
                         Arrays.asList(PermissionType.MANAGE_EXPENSES)
                 ).build(),
-                MenuItemPermissions.builder().code("SIMULATOR").permissions(
+                MenuItemPermissionsDto.builder().code("SIMULATOR").permissions(
                         Arrays.asList(PermissionType.MANAGE_EXPENSES)
                 ).build()
         );
@@ -75,8 +75,8 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     private void processMenuItemVisibility(MenuItemDto menuItemDto, List<PermissionType> permissionTypes) {
         if (menuItemDto.getItems() == null || menuItemDto.getItems().isEmpty()) {
-            List<MenuItemPermissions> menuItemPermissions = this.getApplicationMenuItemPermissions();
-            List<MenuItemPermissions> concernedMenuItemPermissions = menuItemPermissions.stream().filter(item -> item.getCode().equals(menuItemDto.getCode())).collect(Collectors.toList());
+            List<MenuItemPermissionsDto> menuItemPermissions = this.getApplicationMenuItemPermissions();
+            List<MenuItemPermissionsDto> concernedMenuItemPermissions = menuItemPermissions.stream().filter(item -> item.getCode().equals(menuItemDto.getCode())).collect(Collectors.toList());
             if (!concernedMenuItemPermissions.isEmpty()) {
                 for (PermissionType permissionType: permissionTypes) {
                     if (concernedMenuItemPermissions.get(0).getPermissions().contains(permissionType)) {

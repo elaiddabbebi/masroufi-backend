@@ -2,11 +2,11 @@ package com.masroufi.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.masroufi.api.enums.CashFlowType;
+import com.masroufi.api.enums.SystemCashFlowStatus;
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 
 @Setter
 @Getter
@@ -24,16 +24,15 @@ public class CashFlow extends BaseEntity implements Serializable {
     @JsonIgnore
     private Long id;
 
-    @OneToOne
-    private Account user;
+    private String name;
 
-    private Date date;
-
-    private Double amount;
-
-    @Enumerated(EnumType.STRING)
     private CashFlowType type;
 
     @ManyToOne
-    private SystemCashFlow systemCashFlow;
+    private CashFlowCategory category;
+
+    @Enumerated(EnumType.STRING)
+    private SystemCashFlowStatus status;
+
+    private boolean systemCashFlow;
 }

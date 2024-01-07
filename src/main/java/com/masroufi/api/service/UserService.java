@@ -1,8 +1,8 @@
 package com.masroufi.api.service;
 
-import com.masroufi.api.dto.ActivateDeactivateUserModel;
+import com.masroufi.api.dto.request.ActivateDeactivateUserModel;
 import com.masroufi.api.dto.UserDetailsDto;
-import com.masroufi.api.dto.UserPasswordDto;
+import com.masroufi.api.dto.request.UserPasswordModel;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
@@ -11,7 +11,7 @@ public interface UserService extends UserDetailsService {
 
     UserDetailsDto updateMyProfileDetails(UserDetailsDto user);
 
-    UserDetailsDto updateMyPassword(UserPasswordDto passwordDto);
+    UserDetailsDto updateMyPassword(UserPasswordModel passwordDto);
 
     UserDetailsDto getMyProfileDetails();
 
@@ -19,7 +19,7 @@ public interface UserService extends UserDetailsService {
 
     UserDetailsDto updateUserDetails(String uuid, UserDetailsDto user);
 
-    UserDetailsDto updateUserPassword(String uuid, UserPasswordDto passwordDto);
+    UserDetailsDto updateUserPassword(String uuid, UserPasswordModel passwordDto);
 
     UserDetailsDto deleteUser(String uuid);
 

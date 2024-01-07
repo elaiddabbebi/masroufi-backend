@@ -1,4 +1,4 @@
-package com.masroufi.api.dto;
+package com.masroufi.api.dto.response;
 
 import com.masroufi.api.enums.PermissionType;
 import lombok.*;
@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MenuItemPermissions {
+public class MenuItemPermissionsDto {
     private String code;
     private List<PermissionType> permissions;
 }

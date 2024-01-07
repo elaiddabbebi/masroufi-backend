@@ -1,8 +1,8 @@
 package com.masroufi.api.service.impl;
 
-import com.masroufi.api.dto.ActivateDeactivateUserModel;
+import com.masroufi.api.dto.request.ActivateDeactivateUserModel;
 import com.masroufi.api.dto.UserDetailsDto;
-import com.masroufi.api.dto.UserPasswordDto;
+import com.masroufi.api.dto.request.UserPasswordModel;
 import com.masroufi.api.entity.Account;
 import com.masroufi.api.entity.Role;
 import com.masroufi.api.repository.AccountRepository;
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetailsDto updateMyPassword(UserPasswordDto passwordDto) {
+    public UserDetailsDto updateMyPassword(UserPasswordModel passwordDto) {
         if (passwordDto.getOldPassword() == null) {
             throw new RuntimeException("Old password is required!");
         }
@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetailsDto updateUserPassword(String uuid, UserPasswordDto passwordDto) {
+    public UserDetailsDto updateUserPassword(String uuid, UserPasswordModel passwordDto) {
         if (!passwordDto.getNewPassword().equals(passwordDto.getPasswordConfirmation())) {
             throw new RuntimeException("Password confirmation error!");
         }

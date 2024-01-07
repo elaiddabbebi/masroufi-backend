@@ -1,4 +1,4 @@
-package com.masroufi.api.dto;
+package com.masroufi.api.dto.request;
 
 import lombok.*;
 import org.springframework.validation.annotation.Validated;
@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Validated
-public class UserPasswordDto {
+public class UserPasswordModel {
     private String oldPassword;
     @NotNull
     @NotEmpty

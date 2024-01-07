@@ -1,4 +1,4 @@
-package com.masroufi.api.dto;
+package com.masroufi.api.dto.request;
 
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
