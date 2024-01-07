@@ -2,7 +2,7 @@ package com.masroufi.api.controller;
 
 
 import com.masroufi.api.dto.CashFlowCategoryDto;
-import com.masroufi.api.dto.request.ValidateRejectCategoryModel;
+import com.masroufi.api.dto.request.ValidityModel;
 import com.masroufi.api.service.CashFlowCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +37,7 @@ public class CashFlowCategoryController {
     }
 
     @PatchMapping("/{uuid}")
-    CashFlowCategoryDto updateCategoryValidity(@PathVariable String uuid, @RequestBody ValidateRejectCategoryModel validityModel) {
+    CashFlowCategoryDto updateCategoryValidity(@PathVariable String uuid, @RequestBody ValidityModel validityModel) {
         return this.cashFlowCategoryService.updateCashFlowCategoryValidity(uuid, validityModel.isValid());
     }
 

@@ -25,7 +25,7 @@ public class CustomerCashFlowRegistry extends BaseEntity implements Serializable
     private Long id;
 
     @OneToOne
-    private Account user;
+    private Account customer;
 
     private Date date;
 

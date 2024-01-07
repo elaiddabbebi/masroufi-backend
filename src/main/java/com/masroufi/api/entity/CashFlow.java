@@ -1,8 +1,8 @@
 package com.masroufi.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.masroufi.api.enums.CashFlowStatus;
 import com.masroufi.api.enums.CashFlowType;
-import com.masroufi.api.enums.SystemCashFlowStatus;
 import lombok.*;
 
 import javax.persistence.*;
@@ -32,7 +32,7 @@ public class CashFlow extends BaseEntity implements Serializable {
     private CashFlowCategory category;
 
     @Enumerated(EnumType.STRING)
-    private SystemCashFlowStatus status;
+    private CashFlowStatus status;
 
     private boolean systemCashFlow;
 }

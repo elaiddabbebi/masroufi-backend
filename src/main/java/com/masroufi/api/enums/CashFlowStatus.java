@@ -1,6 +1,6 @@
 package com.masroufi.api.enums;
 
-public enum SystemCashFlowStatus {
+public enum CashFlowStatus {
     PENDING,
     VALIDATED,
     REJECTED

@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ValidateRejectCategoryModel {
+public class ValidityModel {
     private boolean valid;
 }

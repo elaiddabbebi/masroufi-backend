@@ -1,8 +1,8 @@
 package com.masroufi.api.dto;
 
 import com.masroufi.api.entity.CashFlow;
+import com.masroufi.api.enums.CashFlowStatus;
 import com.masroufi.api.enums.CashFlowType;
-import com.masroufi.api.enums.SystemCashFlowStatus;
 import lombok.*;
 
 @Setter
@@ -16,10 +16,10 @@ public class CashFlowDto {
     private String name;
     private CashFlowType type;
     private CashFlowCategoryDto category;
-    private SystemCashFlowStatus status;
+    private CashFlowStatus status;
     private boolean systemCashFlow;
 
-    public static CashFlowDto buildFromSystemCashFlow(CashFlow cashFlow) {
+    public static CashFlowDto buildFromCashFlow(CashFlow cashFlow) {
         if (cashFlow == null) {
             return null;
         }
