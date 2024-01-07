@@ -37,7 +37,7 @@ public class CashFlowController {
     }
 
     @PatchMapping("/{uuid}")
-    CashFlowDto updateValidity(@PathVariable String uuid, @RequestBody ValidityModel validityModel) {
+    CashFlowDto updateCashFlowValidity(@PathVariable String uuid, @RequestBody ValidityModel validityModel) {
         return this.cashFlowService.updateCashFlowValidity(uuid, validityModel.isValid());
     }
 
