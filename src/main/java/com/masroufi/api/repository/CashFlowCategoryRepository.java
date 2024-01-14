@@ -15,13 +15,13 @@ public interface CashFlowCategoryRepository extends JpaRepository<CashFlowCatego
 
     CashFlowCategory findByNameIgnoreCase(String name);
 
-    List<CashFlowCategory> findAllByNameLikeIgnoreCaseAndExpenseCategoryIsTrue(String name);
+    List<CashFlowCategory> findAllByNameLikeIgnoreCaseAndExpenseIsTrue(String name);
 
-    List<CashFlowCategory> findAllByNameLikeIgnoreCaseAndGainCategoryIsTrue(String name);
+    List<CashFlowCategory> findAllByNameLikeIgnoreCaseAndGainIsTrue(String name);
 
-    List<CashFlowCategory> findAllByNameLikeIgnoreCaseAndExpenseCategoryIsTrueAndStatus(String name, CashFlowCategoryStatus status);
+    List<CashFlowCategory> findAllByNameLikeIgnoreCaseAndExpenseIsTrueAndStatus(String name, CashFlowCategoryStatus status);
 
-    List<CashFlowCategory> findAllByNameLikeIgnoreCaseAndGainCategoryIsTrueAndStatus(String name, CashFlowCategoryStatus status);
+    List<CashFlowCategory> findAllByNameLikeIgnoreCaseAndGainIsTrueAndStatus(String name, CashFlowCategoryStatus status);
 
     List<CashFlowCategory> findAllByNameLikeIgnoreCase(String name);
 }

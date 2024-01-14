@@ -19,4 +19,5 @@ public interface CashFlowRepository extends JpaRepository<CashFlow, Long>, JpaSp
     List<CashFlow> findAllByNameLikeIgnoreCase(String name);
 
     List<CashFlow> findAllByNameLikeIgnoreCaseAndCategoryAndStatus(String name, CashFlowCategory category, CashFlowStatus status);
+
 }
