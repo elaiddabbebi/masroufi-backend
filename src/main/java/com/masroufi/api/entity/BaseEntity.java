@@ -31,6 +31,7 @@ public class BaseEntity {
         if (this.uuid == null) {
             this.uuid = UUID.randomUUID().toString();
             this.createdAt = new Date();
+            this.isDeleted = false;
         }
     }
 }

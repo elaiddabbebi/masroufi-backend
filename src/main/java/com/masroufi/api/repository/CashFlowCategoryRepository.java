@@ -13,6 +13,8 @@ public interface CashFlowCategoryRepository extends JpaRepository<CashFlowCatego
 
     CashFlowCategory findByUuid(String uuid);
 
+    List<CashFlowCategory> findAllByIsDeletedIsFalseOrIsDeletedIsNullOrderByIdDesc();
+
     CashFlowCategory findByNameIgnoreCase(String name);
 
     List<CashFlowCategory> findAllByNameLikeIgnoreCaseAndExpenseIsTrue(String name);

@@ -83,7 +83,7 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
 
     @Override
     public List<CashFlowCategoryDto> findAll() {
-        List<CashFlowCategory> allCategories = this.cashFlowCategoryRepository.findAll();
+        List<CashFlowCategory> allCategories = this.cashFlowCategoryRepository.findAllByIsDeletedIsFalseOrIsDeletedIsNullOrderByIdDesc();
         return allCategories.stream().map(CashFlowCategoryDto::buildFromCashFlowCategory).collect(Collectors.toList());
     }
 }
