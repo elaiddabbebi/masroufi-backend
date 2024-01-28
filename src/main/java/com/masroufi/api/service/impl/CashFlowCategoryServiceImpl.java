@@ -25,7 +25,7 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
             CashFlowCategory category = new CashFlowCategory();
             category.setName(cashFlowCategory.getName().trim());
             category.setGain(cashFlowCategory.isGain());
-            category.setExpense(category.isExpense());
+            category.setExpense(cashFlowCategory.isExpense());
             category.setSystemCategory(true);
             category.setStatus(CashFlowCategoryStatus.VALIDATED);
             category = this.cashFlowCategoryRepository.save(category);
@@ -44,7 +44,7 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
             }
             category.setName(cashFlowCategory.getName().trim());
             category.setGain(cashFlowCategory.isGain());
-            category.setExpense(category.isExpense());
+            category.setExpense(cashFlowCategory.isExpense());
             category = this.cashFlowCategoryRepository.save(category);
             return CashFlowCategoryDto.buildFromCashFlowCategory(category);
         }
