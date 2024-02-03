@@ -1,10 +1,12 @@
 package com.masroufi.api.service.impl;
 
 import com.masroufi.api.dto.CashFlowDto;
+import com.masroufi.api.entity.Account;
 import com.masroufi.api.entity.CashFlow;
 import com.masroufi.api.enums.CashFlowStatus;
 import com.masroufi.api.repository.CashFlowRepository;
 import com.masroufi.api.service.CashFlowService;
+import com.masroufi.api.shared.context.ApplicationSecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +20,12 @@ public class CashFlowServiceImpl implements CashFlowService {
     @Autowired
     private CashFlowRepository cashFlowRepository;
 
+    @Autowired
+    private ApplicationSecurityContext applicationSecurityContext;
+
     @Override
     public CashFlowDto createCashFlow(CashFlowDto cashFlow) {
+        this.applicationSecurityContext.isSupperAdminOrThrowException();
         if (cashFlow == null) {
             return null;
         } else {
@@ -30,6 +36,10 @@ public class CashFlowServiceImpl implements CashFlowService {
 
             newCashFlow.setSystemCashFlow(true);
             newCashFlow.setStatus(CashFlowStatus.VALIDATED);
+            Account user = this.applicationSecurityContext.getCurrentUser();
+            if (user != null) {
+                newCashFlow.setCreatedBy(user.getId());
+            }
             newCashFlow = this.cashFlowRepository.save(newCashFlow);
             return CashFlowDto.buildFromCashFlow(newCashFlow);
         }
@@ -37,12 +47,13 @@ public class CashFlowServiceImpl implements CashFlowService {
 
     @Override
     public CashFlowDto updateCashFlow(String uuid, CashFlowDto cashFlow) {
+        this.applicationSecurityContext.isSupperAdminOrThrowException();
         if (cashFlow == null) {
             return null;
         } else {
             CashFlow cashFlowToUpdate = this.cashFlowRepository.findByUuid(uuid);
             if (cashFlowToUpdate == null) {
-                throw new RuntimeException(" not found");
+                throw new RuntimeException("Cashflow not found");
             }
             cashFlowToUpdate.setName(cashFlow.getName().trim());
 
@@ -53,9 +64,10 @@ public class CashFlowServiceImpl implements CashFlowService {
 
     @Override
     public CashFlowDto deleteCashFlow(String uuid) {
+        this.applicationSecurityContext.isSupperAdminOrThrowException();
         CashFlow cashFlowToDelete = this.cashFlowRepository.findByUuid(uuid);
         if (cashFlowToDelete == null) {
-            throw new RuntimeException(" not found");
+            throw new RuntimeException("Cashflow not found");
         }
         cashFlowToDelete.setIsDeleted(true);
         cashFlowToDelete = this.cashFlowRepository.save(cashFlowToDelete);
@@ -66,16 +78,17 @@ public class CashFlowServiceImpl implements CashFlowService {
     public CashFlowDto findCashFlow(String uuid) {
         CashFlow cashFlow = this.cashFlowRepository.findByUuid(uuid);
         if (cashFlow == null) {
-            throw new RuntimeException(" not found");
+            throw new RuntimeException("Cashflow not found");
         }
         return CashFlowDto.buildFromCashFlow(cashFlow);
     }
 
     @Override
     public CashFlowDto updateCashFlowValidity(String uuid, boolean valid) {
+        this.applicationSecurityContext.isSupperAdminOrThrowException();
         CashFlow cashFlowToUpdate = this.cashFlowRepository.findByUuid(uuid);
         if (cashFlowToUpdate == null) {
-            throw new RuntimeException(" not found");
+            throw new RuntimeException("Cashflow not found");
         }
         cashFlowToUpdate.setStatus(valid ? CashFlowStatus.VALIDATED : CashFlowStatus.REJECTED);
         cashFlowToUpdate = this.cashFlowRepository.save(cashFlowToUpdate);

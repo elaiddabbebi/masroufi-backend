@@ -1,10 +1,12 @@
 package com.masroufi.api.service.impl;
 
 import com.masroufi.api.dto.CashFlowCategoryDto;
+import com.masroufi.api.entity.Account;
 import com.masroufi.api.entity.CashFlowCategory;
 import com.masroufi.api.enums.CashFlowCategoryStatus;
 import com.masroufi.api.repository.CashFlowCategoryRepository;
 import com.masroufi.api.service.CashFlowCategoryService;
+import com.masroufi.api.shared.context.ApplicationSecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +19,12 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
     @Autowired
     private CashFlowCategoryRepository cashFlowCategoryRepository;
 
+    @Autowired
+    private ApplicationSecurityContext applicationSecurityContext;
+
     @Override
     public CashFlowCategoryDto createCashFlowCategory(CashFlowCategoryDto cashFlowCategory) {
+        this.applicationSecurityContext.isSupperAdminOrThrowException();
         if (cashFlowCategory == null) {
             return null;
         } else {
@@ -28,6 +34,10 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
             category.setExpense(cashFlowCategory.isExpense());
             category.setSystemCategory(true);
             category.setStatus(CashFlowCategoryStatus.VALIDATED);
+            Account user = this.applicationSecurityContext.getCurrentUser();
+            if (user != null) {
+                category.setCreatedBy(user.getId());
+            }
             category = this.cashFlowCategoryRepository.save(category);
             return CashFlowCategoryDto.buildFromCashFlowCategory(category);
         }
@@ -35,6 +45,7 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
 
     @Override
     public CashFlowCategoryDto updateCashFlowCategory(String uuid, CashFlowCategoryDto cashFlowCategory) {
+        this.applicationSecurityContext.isSupperAdminOrThrowException();
         if (cashFlowCategory == null) {
             return null;
         } else {
@@ -52,6 +63,7 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
 
     @Override
     public CashFlowCategoryDto deleteCashFlowCategory(String uuid) {
+        this.applicationSecurityContext.isSupperAdminOrThrowException();
         CashFlowCategory category = this.cashFlowCategoryRepository.findByUuid(uuid);
         if (category == null) {
             throw new RuntimeException("Category not found");
@@ -72,6 +84,7 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
 
     @Override
     public CashFlowCategoryDto updateCashFlowCategoryValidity(String uuid, boolean valid) {
+        this.applicationSecurityContext.isSupperAdminOrThrowException();
         CashFlowCategory category = this.cashFlowCategoryRepository.findByUuid(uuid);
         if (category == null) {
             throw new RuntimeException("Category not found");
