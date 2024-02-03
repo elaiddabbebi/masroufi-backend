@@ -4,6 +4,7 @@ import com.masroufi.api.dto.CashFlowCategoryDto;
 import com.masroufi.api.entity.Account;
 import com.masroufi.api.entity.CashFlowCategory;
 import com.masroufi.api.enums.CashFlowCategoryStatus;
+import com.masroufi.api.repository.AccountRepository;
 import com.masroufi.api.repository.CashFlowCategoryRepository;
 import com.masroufi.api.service.CashFlowCategoryService;
 import com.masroufi.api.shared.context.ApplicationSecurityContext;
@@ -21,6 +22,9 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
 
     @Autowired
     private ApplicationSecurityContext applicationSecurityContext;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     @Override
     public CashFlowCategoryDto createCashFlowCategory(CashFlowCategoryDto cashFlowCategory) {
@@ -97,6 +101,23 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
     @Override
     public List<CashFlowCategoryDto> findAll() {
         List<CashFlowCategory> allCategories = this.cashFlowCategoryRepository.findAllByIsDeletedIsFalseOrIsDeletedIsNullOrderByIdDesc();
-        return allCategories.stream().map(CashFlowCategoryDto::buildFromCashFlowCategory).collect(Collectors.toList());
+        return allCategories.stream().map(elt -> {
+            CashFlowCategoryDto dto = CashFlowCategoryDto.buildFromCashFlowCategory(elt);
+            if (elt.getCreatedBy() != null) {
+                if (this.accountRepository.findById(elt.getCreatedBy()).isPresent()) {
+                    Account user = this.accountRepository.findById(elt.getCreatedBy()).get();
+                    String fullName = user.getFirstName();
+                    if (fullName == null) {
+                        fullName = user.getLastName();
+                    } else {
+                        if (user.getLastName() != null) {
+                            fullName += " " + user.getLastName();
+                        }
+                    }
+                    dto.setCreatedBy(fullName);
+                }
+            }
+            return dto;
+        }).collect(Collectors.toList());
     }
 }

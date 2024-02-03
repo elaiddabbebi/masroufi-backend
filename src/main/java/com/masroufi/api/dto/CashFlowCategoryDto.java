@@ -17,6 +17,7 @@ public class CashFlowCategoryDto {
     private boolean systemCategory;
     private boolean expense;
     private boolean gain;
+    private String createdBy;
 
     public static CashFlowCategoryDto buildFromCashFlowCategory(CashFlowCategory cashFlowCategory) {
         if (cashFlowCategory == null) {
