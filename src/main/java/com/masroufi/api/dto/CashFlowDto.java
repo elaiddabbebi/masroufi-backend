@@ -18,6 +18,7 @@ public class CashFlowDto {
     private CashFlowCategoryDto category;
     private CashFlowStatus status;
     private boolean systemCashFlow;
+    private String createdBy;
 
     public static CashFlowDto buildFromCashFlow(CashFlow cashFlow) {
         if (cashFlow == null) {

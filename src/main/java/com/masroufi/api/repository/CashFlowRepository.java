@@ -20,4 +20,6 @@ public interface CashFlowRepository extends JpaRepository<CashFlow, Long>, JpaSp
 
     List<CashFlow> findAllByNameLikeIgnoreCaseAndCategoryAndStatus(String name, CashFlowCategory category, CashFlowStatus status);
 
+    List<CashFlow> findAllByIsDeletedIsFalseOrIsDeletedIsNullOrderByIdDesc();
+
 }

@@ -11,7 +11,7 @@ public interface CashFlowService {
 
     CashFlowDto deleteCashFlow(String uuid);
 
-    CashFlowDto findCashFlow(String uuid);
+    CashFlowDto findCashFlowByUuid(String uuid);
 
     CashFlowDto updateCashFlowValidity(String uuid, boolean valid);
 

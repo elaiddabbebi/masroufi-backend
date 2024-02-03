@@ -49,4 +49,16 @@ public class Account extends BaseEntity implements Serializable {
 
     @OneToOne
     private Role role;
+
+    public String getFullName() {
+        String fullName = firstName;
+        if (fullName == null) {
+            fullName = lastName;
+        } else {
+            if (lastName != null) {
+                fullName += " " + lastName;
+            }
+        }
+        return fullName;
+    }
 }

@@ -15,7 +15,7 @@ public interface CashFlowCategoryRepository extends JpaRepository<CashFlowCatego
 
     List<CashFlowCategory> findAllByIsDeletedIsFalseOrIsDeletedIsNullOrderByIdDesc();
 
-    CashFlowCategory findByNameIgnoreCase(String name);
+    List<CashFlowCategory> findAllByNameIgnoreCase(String name);
 
     List<CashFlowCategory> findAllByNameLikeIgnoreCaseAndExpenseIsTrue(String name);
 

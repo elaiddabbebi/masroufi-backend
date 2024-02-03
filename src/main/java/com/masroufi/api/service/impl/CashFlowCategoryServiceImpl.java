@@ -2,6 +2,7 @@ package com.masroufi.api.service.impl;
 
 import com.masroufi.api.dto.CashFlowCategoryDto;
 import com.masroufi.api.entity.Account;
+import com.masroufi.api.entity.CashFlow;
 import com.masroufi.api.entity.CashFlowCategory;
 import com.masroufi.api.enums.CashFlowCategoryStatus;
 import com.masroufi.api.repository.AccountRepository;
@@ -26,12 +27,20 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
     @Autowired
     private AccountRepository accountRepository;
 
+    private void isNewCategoryOrThrowException(String name) {
+        List<CashFlowCategory> allByNameIgnoreCase = this.cashFlowCategoryRepository.findAllByNameIgnoreCase(name);
+        if (allByNameIgnoreCase != null && !allByNameIgnoreCase.isEmpty()) {
+            throw new RuntimeException("Cash flow category already exist");
+        }
+    }
+
     @Override
     public CashFlowCategoryDto createCashFlowCategory(CashFlowCategoryDto cashFlowCategory) {
         this.applicationSecurityContext.isSupperAdminOrThrowException();
         if (cashFlowCategory == null) {
             return null;
         } else {
+            this.isNewCategoryOrThrowException(cashFlowCategory.getName().trim());
             CashFlowCategory category = new CashFlowCategory();
             category.setName(cashFlowCategory.getName().trim());
             category.setGain(cashFlowCategory.isGain());
@@ -57,6 +66,9 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
             if (category == null) {
                 throw new RuntimeException("Category not found");
             }
+            if (!category.getName().trim().equalsIgnoreCase(cashFlowCategory.getName().trim())) {
+                this.isNewCategoryOrThrowException(cashFlowCategory.getName().trim());
+            }
             category.setName(cashFlowCategory.getName().trim());
             category.setGain(cashFlowCategory.isGain());
             category.setExpense(cashFlowCategory.isExpense());
@@ -79,6 +91,7 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
 
     @Override
     public CashFlowCategoryDto findCashFlowCategory(String uuid) {
+        this.applicationSecurityContext.isSupperAdminOrThrowException();
         CashFlowCategory category = this.cashFlowCategoryRepository.findByUuid(uuid);
         if (category == null) {
             throw new RuntimeException("Category not found");
@@ -100,21 +113,13 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
 
     @Override
     public List<CashFlowCategoryDto> findAll() {
+        this.applicationSecurityContext.isSupperAdminOrThrowException();
         List<CashFlowCategory> allCategories = this.cashFlowCategoryRepository.findAllByIsDeletedIsFalseOrIsDeletedIsNullOrderByIdDesc();
-        return allCategories.stream().map(elt -> {
-            CashFlowCategoryDto dto = CashFlowCategoryDto.buildFromCashFlowCategory(elt);
-            if (elt.getCreatedBy() != null) {
-                if (this.accountRepository.findById(elt.getCreatedBy()).isPresent()) {
-                    Account user = this.accountRepository.findById(elt.getCreatedBy()).get();
-                    String fullName = user.getFirstName();
-                    if (fullName == null) {
-                        fullName = user.getLastName();
-                    } else {
-                        if (user.getLastName() != null) {
-                            fullName += " " + user.getLastName();
-                        }
-                    }
-                    dto.setCreatedBy(fullName);
+        return allCategories.stream().map(category -> {
+            CashFlowCategoryDto dto = CashFlowCategoryDto.buildFromCashFlowCategory(category);
+            if (category.getCreatedBy() != null) {
+                if (this.accountRepository.findById(category.getCreatedBy()).isPresent()) {
+                    dto.setCreatedBy(this.accountRepository.findById(category.getCreatedBy()).get().getFullName());
                 }
             }
             return dto;

@@ -23,7 +23,7 @@ public class CashFlowController {
 
     @GetMapping("/{uuid}")
     CashFlowDto findCashFlow(@PathVariable String uuid) {
-        return this.cashFlowService.findCashFlow(uuid);
+        return this.cashFlowService.findCashFlowByUuid(uuid);
     }
 
     @PostMapping
