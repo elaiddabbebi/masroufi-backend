@@ -40,11 +40,7 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
             return null;
         } else {
             this.isNewCategoryOrThrowException(cashFlowCategory.getName().trim());
-            CashFlowCategory category = new CashFlowCategory();
-            category.setName(cashFlowCategory.getName().trim());
-            category.setGain(cashFlowCategory.isGain());
-            category.setExpense(cashFlowCategory.isExpense());
-            category.setSystemCategory(true);
+            CashFlowCategory category = this.buildFromDto(cashFlowCategory);
             category.setStatus(CashFlowCategoryStatus.VALIDATED);
             Account user = this.applicationSecurityContext.getCurrentUser();
             if (user != null) {
@@ -71,6 +67,7 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
             category.setName(cashFlowCategory.getName().trim());
             category.setGain(cashFlowCategory.isGain());
             category.setExpense(cashFlowCategory.isExpense());
+            category.setPublished(cashFlowCategory.isPublished());
             category = this.cashFlowCategoryRepository.save(category);
             return CashFlowCategoryDto.buildFromCashFlowCategory(category);
         }
@@ -133,6 +130,60 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
         } else {
             List<CashFlowCategory> cashFlowCategories = this.cashFlowCategoryRepository.findAllByNameEqualsIgnoreCaseAndIsDeletedIsFalse(categoryName);
             return cashFlowCategories != null && !cashFlowCategories.isEmpty();
+        }
+    }
+
+    @Override
+    public List<CashFlowCategoryDto> findTop10ByNameLike(String name) {
+        this.applicationSecurityContext.isSupperAdminOrThrowException();
+        if (name == null) {
+            return null;
+        } else {
+            List<CashFlowCategory> cashFlowCategories = this.cashFlowCategoryRepository.findTop10ByNameLikeIgnoreCaseAndIsDeletedIsFalse("%" + name.trim() + "%");
+            return cashFlowCategories.stream().map(CashFlowCategoryDto::buildFromCashFlowCategory).collect(Collectors.toList());
+        }
+    }
+
+    private CashFlowCategory buildFromDto(CashFlowCategoryDto categoryDto) {
+        if (categoryDto == null || categoryDto.getName() == null) {
+            return null;
+        } else {
+            CashFlowCategory category = new CashFlowCategory();
+            category.setName(categoryDto.getName().trim());
+            category.setGain(categoryDto.isGain());
+            category.setExpense(categoryDto.isExpense());
+            category.setPublished(categoryDto.isPublished());
+            category.setStatus(categoryDto.getStatus());
+            return category;
+        }
+    }
+
+    @Override
+    public CashFlowCategory findOrCreateOrUpdateCashFlowCategory(CashFlowCategoryDto categoryDto) {
+        if (categoryDto == null || categoryDto.getName() == null) {
+            return null;
+        } else {
+            List<CashFlowCategory> cashFlowCategories = this.cashFlowCategoryRepository.findAllByNameEqualsIgnoreCaseAndIsDeletedIsFalse(categoryDto.getName().trim());
+            CashFlowCategory category;
+            if (cashFlowCategories != null && !cashFlowCategories.isEmpty()) {
+                category = cashFlowCategories.get(0);
+                if (categoryDto.isPublished()) {
+                    category.setPublished(true);
+                }
+                if (categoryDto.isGain()) {
+                    category.setGain(true);
+                }
+                if (categoryDto.isExpense()) {
+                    category.setExpense(true);
+                }
+            } else {
+                category = this.buildFromDto(categoryDto);
+                Account user = this.applicationSecurityContext.getCurrentUser();
+                if (user != null) {
+                    category.setCreatedBy(user.getId());
+                }
+            }
+            return this.cashFlowCategoryRepository.save(category);
         }
     }
 }

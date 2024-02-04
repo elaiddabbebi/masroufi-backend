@@ -17,13 +17,17 @@ public interface CashFlowCategoryRepository extends JpaRepository<CashFlowCatego
 
     List<CashFlowCategory> findAllByNameEqualsIgnoreCaseAndIsDeletedIsFalse(String name);
 
-    List<CashFlowCategory> findAllByNameLikeIgnoreCaseAndExpenseIsTrue(String name);
+    List<CashFlowCategory> findTop10ByNameLikeIgnoreCase(String name);
 
-    List<CashFlowCategory> findAllByNameLikeIgnoreCaseAndGainIsTrue(String name);
+    List<CashFlowCategory> findTop10ByNameLikeIgnoreCaseAndIsDeletedIsFalse(String name);
 
-    List<CashFlowCategory> findAllByNameLikeIgnoreCaseAndExpenseIsTrueAndStatus(String name, CashFlowCategoryStatus status);
+    List<CashFlowCategory> findTop10ByNameLikeIgnoreCaseAndExpenseIsTrue(String name);
 
-    List<CashFlowCategory> findAllByNameLikeIgnoreCaseAndGainIsTrueAndStatus(String name, CashFlowCategoryStatus status);
+    List<CashFlowCategory> findTop10ByNameLikeIgnoreCaseAndGainIsTrue(String name);
 
-    List<CashFlowCategory> findAllByNameLikeIgnoreCase(String name);
+    List<CashFlowCategory> findTop10ByNameLikeIgnoreCaseAndStatusAndIsDeletedIsFalse(String name, CashFlowCategoryStatus status);
+
+    List<CashFlowCategory> findTop10ByNameLikeIgnoreCaseAndExpenseIsTrueAndStatusAndIsDeletedIsFalse(String name, CashFlowCategoryStatus status);
+
+    List<CashFlowCategory> findTop10ByNameLikeIgnoreCaseAndGainIsTrueAndStatusAndIsDeletedIsFalse(String name, CashFlowCategoryStatus status);
 }

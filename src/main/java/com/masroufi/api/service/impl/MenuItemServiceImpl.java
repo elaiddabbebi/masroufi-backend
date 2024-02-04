@@ -19,11 +19,11 @@ public class MenuItemServiceImpl implements MenuItemService {
         return Arrays.asList(
                 MenuItemDto.builder().code("MANAGE_DASHBOARD").label("DASHBOARD").icon("pi pi-fw pi-home").routerLink("/main/dashboard").visible(false).build(),
                 MenuItemDto.builder().code("MANAGE_USERS").label("USERS").icon("pi pi-fw pi-users").routerLink("/main/settings/users").visible(false).build(),
-                MenuItemDto.builder().code("MANAGE_ROLES").label("ROLES_AND_PERMISSIONS").icon("pi pi-fw pi-sliders-h").routerLink("/main/settings/roles").visible(false).build(),
+                MenuItemDto.builder().code("MANAGE_ROLES").label("ROLES_AND_PERMISSIONS").icon("pi pi-fw pi-sitemap").routerLink("/main/settings/roles").visible(false).build(),
                 MenuItemDto.builder().code("MANAGE_CASH_FLOW").label("CASH_FLOW").icon("pi pi-fw pi-bitcoin").routerLink("/main/settings/lists").visible(false).build(),
                 MenuItemDto.builder().code("MANAGE_CASH_FLOW_REGISTRY").label("CASH_FLOW_REGISTRY").icon("pi pi-fw pi-bitcoin").routerLink("/main/cash-flow-registry/list").visible(false).build(),
+                MenuItemDto.builder().code("STATISTICS").label("STATISTICS").icon("pi pi-fw pi-chart-bar").routerLink("/main/cash-flow-registry/stat").visible(false).build(),
                 MenuItemDto.builder().code("SIMULATOR").label("SIMULATOR").icon("pi pi-fw pi-calculator").routerLink("/main/cash-flow-registry/simulator").visible(false).build(),
-                MenuItemDto.builder().code("STATISTICS").label("STATISTICS").icon("pi pi-fw pi-chart-line").routerLink("/main/cash-flow-registry/stat").visible(false).build(),
                 MenuItemDto.builder().code("MANAGE_PROFILE").label("MY_PROFILE").icon("pi pi-fw pi-user").routerLink("/main/settings/profile").visible(false).build(),
                 MenuItemDto.builder().code("MANAGE_CONFIG").label("SETTINGS").icon("pi pi-fw pi-cog").routerLink("/main/settings/configuration").visible(false).build()
         );

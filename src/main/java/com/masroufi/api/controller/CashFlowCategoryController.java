@@ -50,4 +50,9 @@ public class CashFlowCategoryController {
     boolean checkIfCategoryExist(@RequestParam String categoryName) {
         return this.cashFlowCategoryService.checkIfCategoryExist(categoryName);
     }
+
+    @GetMapping("/top-10-by-name")
+    List<CashFlowCategoryDto> findTop10ByNameLike(@RequestParam String categoryName) {
+        return this.cashFlowCategoryService.findTop10ByNameLike(categoryName);
+    }
 }

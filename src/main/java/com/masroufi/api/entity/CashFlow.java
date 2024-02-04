@@ -35,5 +35,5 @@ public class CashFlow extends BaseEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     private CashFlowStatus status;
 
-    private boolean systemCashFlow;
+    private boolean published;
 }

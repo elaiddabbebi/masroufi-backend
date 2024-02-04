@@ -1,6 +1,7 @@
 package com.masroufi.api.service;
 
 import com.masroufi.api.dto.CashFlowCategoryDto;
+import com.masroufi.api.entity.CashFlowCategory;
 
 import java.util.List;
 
@@ -18,4 +19,8 @@ public interface CashFlowCategoryService {
     List<CashFlowCategoryDto> findAll();
 
     boolean checkIfCategoryExist(String categoryName);
+
+    List<CashFlowCategoryDto> findTop10ByNameLike(String name);
+
+    CashFlowCategory findOrCreateOrUpdateCashFlowCategory(CashFlowCategoryDto categoryDto);
 }

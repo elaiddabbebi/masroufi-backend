@@ -28,7 +28,7 @@ public class CashFlowCategory extends BaseEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     private CashFlowCategoryStatus status;
 
-    private boolean systemCategory;
+    private boolean published;
 
     private boolean expense;
 

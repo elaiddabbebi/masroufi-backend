@@ -6,6 +6,7 @@ import com.masroufi.api.entity.CashFlow;
 import com.masroufi.api.enums.CashFlowStatus;
 import com.masroufi.api.repository.AccountRepository;
 import com.masroufi.api.repository.CashFlowRepository;
+import com.masroufi.api.service.CashFlowCategoryService;
 import com.masroufi.api.service.CashFlowService;
 import com.masroufi.api.shared.context.ApplicationSecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class CashFlowServiceImpl implements CashFlowService {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private CashFlowCategoryService cashFlowCategoryService;
+
     private void isNewCashFlowOrThrowException(String cashFlowName) {
         List<CashFlow> cashFlowList = this.cashFlowRepository.findAllByNameIgnoreCase(cashFlowName);
         if (cashFlowList != null && !cashFlowList.isEmpty()) {
@@ -42,9 +46,10 @@ public class CashFlowServiceImpl implements CashFlowService {
         } else {
             CashFlow newCashFlow = new CashFlow();
             newCashFlow.setName(cashFlow.getName().trim());
+            newCashFlow.setCategory(this.cashFlowCategoryService.findOrCreateOrUpdateCashFlowCategory(cashFlow.getCategory()));
             newCashFlow.setGain(cashFlow.isGain());
             newCashFlow.setExpense(cashFlow.isExpense());
-            newCashFlow.setSystemCashFlow(true);
+            newCashFlow.setPublished(cashFlow.isPublished());
             newCashFlow.setStatus(CashFlowStatus.VALIDATED);
             Account user = this.applicationSecurityContext.getCurrentUser();
             if (user != null) {
@@ -66,8 +71,10 @@ public class CashFlowServiceImpl implements CashFlowService {
                 throw new RuntimeException("Cashflow not found");
             }
             cashFlowToUpdate.setName(cashFlow.getName().trim());
+            cashFlowToUpdate.setCategory(this.cashFlowCategoryService.findOrCreateOrUpdateCashFlowCategory(cashFlow.getCategory()));
             cashFlowToUpdate.setGain(cashFlow.isGain());
             cashFlowToUpdate.setExpense(cashFlow.isExpense());
+            cashFlowToUpdate.setPublished(cashFlow.isPublished());
             cashFlowToUpdate = this.cashFlowRepository.save(cashFlowToUpdate);
             return CashFlowDto.buildFromCashFlow(cashFlowToUpdate);
         }

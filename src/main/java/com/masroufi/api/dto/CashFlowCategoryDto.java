@@ -14,7 +14,7 @@ public class CashFlowCategoryDto {
     private String uuid;
     private String name;
     private CashFlowCategoryStatus status;
-    private boolean systemCategory;
+    private boolean published;
     private boolean expense;
     private boolean gain;
     private String createdBy;
@@ -27,7 +27,7 @@ public class CashFlowCategoryDto {
                 .uuid(cashFlowCategory.getUuid())
                 .name(cashFlowCategory.getName())
                 .status(cashFlowCategory.getStatus())
-                .systemCategory(cashFlowCategory.isSystemCategory())
+                .published(cashFlowCategory.isPublished())
                 .expense(cashFlowCategory.isExpense())
                 .gain(cashFlowCategory.isGain())
                 .build();

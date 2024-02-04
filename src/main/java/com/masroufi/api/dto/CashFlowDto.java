@@ -17,7 +17,7 @@ public class CashFlowDto {
     private boolean expense;
     private CashFlowCategoryDto category;
     private CashFlowStatus status;
-    private boolean systemCashFlow;
+    private boolean published;
     private String createdBy;
 
     public static CashFlowDto buildFromCashFlow(CashFlow cashFlow) {
@@ -29,7 +29,7 @@ public class CashFlowDto {
                 .name(cashFlow.getName())
                 .gain(cashFlow.isGain())
                 .expense(cashFlow.isExpense())
-                .systemCashFlow(cashFlow.isSystemCashFlow())
+                .published(cashFlow.isPublished())
                 .category(CashFlowCategoryDto.buildFromCashFlowCategory(cashFlow.getCategory()))
                 .status(cashFlow.getStatus())
                 .build();
