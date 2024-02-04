@@ -182,6 +182,13 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
                 if (user != null) {
                     category.setCreatedBy(user.getId());
                 }
+                if (category.getStatus() == null) {
+                    if (this.applicationSecurityContext.isSupperAdmin()) {
+                        category.setStatus(CashFlowCategoryStatus.VALIDATED);
+                    } else {
+                        category.setStatus(CashFlowCategoryStatus.PENDING);
+                    }
+                }
             }
             return this.cashFlowCategoryRepository.save(category);
         }
