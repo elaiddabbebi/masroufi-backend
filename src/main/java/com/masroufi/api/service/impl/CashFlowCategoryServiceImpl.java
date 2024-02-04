@@ -2,7 +2,6 @@ package com.masroufi.api.service.impl;
 
 import com.masroufi.api.dto.CashFlowCategoryDto;
 import com.masroufi.api.entity.Account;
-import com.masroufi.api.entity.CashFlow;
 import com.masroufi.api.entity.CashFlowCategory;
 import com.masroufi.api.enums.CashFlowCategoryStatus;
 import com.masroufi.api.repository.AccountRepository;
@@ -28,7 +27,7 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
     private AccountRepository accountRepository;
 
     private void isNewCategoryOrThrowException(String name) {
-        List<CashFlowCategory> allByNameIgnoreCase = this.cashFlowCategoryRepository.findAllByNameIgnoreCase(name);
+        List<CashFlowCategory> allByNameIgnoreCase = this.cashFlowCategoryRepository.findAllByNameEqualsIgnoreCaseAndIsDeletedIsFalse(name);
         if (allByNameIgnoreCase != null && !allByNameIgnoreCase.isEmpty()) {
             throw new RuntimeException("Cash flow category already exist");
         }
@@ -124,5 +123,16 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
             }
             return dto;
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean checkIfCategoryExist(String categoryName) {
+        this.applicationSecurityContext.isSupperAdminOrThrowException();
+        if (categoryName == null) {
+            return false;
+        } else {
+            List<CashFlowCategory> cashFlowCategories = this.cashFlowCategoryRepository.findAllByNameEqualsIgnoreCaseAndIsDeletedIsFalse(categoryName);
+            return cashFlowCategories != null && !cashFlowCategories.isEmpty();
+        }
     }
 }

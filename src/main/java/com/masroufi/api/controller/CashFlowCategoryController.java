@@ -45,4 +45,9 @@ public class CashFlowCategoryController {
     CashFlowCategoryDto deleteCategory(@PathVariable String uuid) {
         return this.cashFlowCategoryService.deleteCashFlowCategory(uuid);
     }
+
+    @GetMapping("/check-exist")
+    boolean checkIfCategoryExist(@RequestParam String categoryName) {
+        return this.cashFlowCategoryService.checkIfCategoryExist(categoryName);
+    }
 }

@@ -16,4 +16,6 @@ public interface CashFlowCategoryService {
     CashFlowCategoryDto updateCashFlowCategoryValidity(String uuid, boolean valid);
 
     List<CashFlowCategoryDto> findAll();
+
+    boolean checkIfCategoryExist(String categoryName);
 }
