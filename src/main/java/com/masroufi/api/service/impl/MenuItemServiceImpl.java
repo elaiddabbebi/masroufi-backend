@@ -25,7 +25,7 @@ public class MenuItemServiceImpl implements MenuItemService {
                 MenuItemDto.builder().code("STATISTICS").label("STATISTICS").icon("pi pi-fw pi-chart-bar").routerLink("/main/statistics").visible(false).build(),
                 MenuItemDto.builder().code("SIMULATOR").label("SIMULATOR").icon("pi pi-fw pi-calculator").routerLink("/main/simulator").visible(false).build(),
                 MenuItemDto.builder().code("MANAGE_PROFILE").label("MY_PROFILE").icon("pi pi-fw pi-user").routerLink("/main/profile").visible(false).build(),
-                MenuItemDto.builder().code("MANAGE_CONFIG").label("SETTINGS").icon("pi pi-fw pi-cog").routerLink("/main/configuration").visible(false).build()
+                MenuItemDto.builder().code("MANAGE_CONFIG").label("CONFIGURATION").icon("pi pi-fw pi-cog").routerLink("/main/configuration").visible(false).build()
         );
     }
 
