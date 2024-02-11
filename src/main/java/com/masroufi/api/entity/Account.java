@@ -1,6 +1,8 @@
 package com.masroufi.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.masroufi.api.entity.embeddable.CashFlowConfig;
+import com.masroufi.api.entity.embeddable.SubscriptionConfig;
 import lombok.*;
 
 import javax.persistence.*;
@@ -49,6 +51,12 @@ public class Account extends BaseEntity implements Serializable {
 
     @OneToOne
     private Role role;
+
+    @Embedded
+    private CashFlowConfig cashFlowConfig;
+
+    @Embedded
+    private SubscriptionConfig subscriptionConfig;
 
     public String getFullName() {
         String fullName = firstName;
