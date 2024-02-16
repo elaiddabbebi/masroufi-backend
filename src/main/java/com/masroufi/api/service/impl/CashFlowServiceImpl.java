@@ -3,6 +3,7 @@ package com.masroufi.api.service.impl;
 import com.masroufi.api.dto.CashFlowDto;
 import com.masroufi.api.entity.Account;
 import com.masroufi.api.entity.CashFlow;
+import com.masroufi.api.entity.CashFlowCategory;
 import com.masroufi.api.enums.CashFlowStatus;
 import com.masroufi.api.repository.AccountRepository;
 import com.masroufi.api.repository.CashFlowRepository;
@@ -31,19 +32,25 @@ public class CashFlowServiceImpl implements CashFlowService {
     @Autowired
     private CashFlowCategoryService cashFlowCategoryService;
 
-    private void isNewCashFlowOrThrowException(String cashFlowName) {
-        List<CashFlow> cashFlowList = this.cashFlowRepository.findAllByNameIgnoreCase(cashFlowName);
+    private void isNewCashFlowOrThrowException(String cashFlowName, String categoryName) {
+        List<CashFlow> cashFlowList = this.cashFlowRepository.findAllByNameIgnoreCase(cashFlowName.trim());
         if (cashFlowList != null && !cashFlowList.isEmpty()) {
-            throw new RuntimeException("Cash flow already exist");
+            for (CashFlow cashFlow: cashFlowList) {
+                CashFlowCategory category = cashFlow.getCategory();
+                if (category != null && category.getName() != null && category.getName().equalsIgnoreCase(categoryName)) {
+                    throw new RuntimeException("Cash flow already exist");
+                }
+            }
         }
     }
 
     @Override
     public CashFlowDto createCashFlow(CashFlowDto cashFlow) {
         this.applicationSecurityContext.isSupperAdminOrThrowException();
-        if (cashFlow == null) {
+        if (cashFlow == null || cashFlow.getCategory() == null) {
             return null;
         } else {
+            this.isNewCashFlowOrThrowException(cashFlow.getName(), cashFlow.getCategory().getName());
             CashFlow newCashFlow = new CashFlow();
             newCashFlow.setName(cashFlow.getName().trim());
             newCashFlow.setCategory(this.cashFlowCategoryService.findOrCreateOrUpdateCashFlowCategory(cashFlow.getCategory()));
@@ -63,12 +70,19 @@ public class CashFlowServiceImpl implements CashFlowService {
     @Override
     public CashFlowDto updateCashFlow(String uuid, CashFlowDto cashFlow) {
         this.applicationSecurityContext.isSupperAdminOrThrowException();
-        if (cashFlow == null) {
+        if (cashFlow == null || cashFlow.getCategory() == null) {
             return null;
         } else {
             CashFlow cashFlowToUpdate = this.cashFlowRepository.findByUuid(uuid);
             if (cashFlowToUpdate == null) {
                 throw new RuntimeException("Cashflow not found");
+            }
+            if (
+                (cashFlowToUpdate.getCategory() != null &&
+                !cashFlowToUpdate.getCategory().getName().equalsIgnoreCase(cashFlow.getCategory().getName())) ||
+                !cashFlowToUpdate.getName().equalsIgnoreCase(cashFlow.getName())
+            ) {
+                this.isNewCashFlowOrThrowException(cashFlow.getName(), cashFlow.getCategory().getName());
             }
             cashFlowToUpdate.setName(cashFlow.getName().trim());
             cashFlowToUpdate.setCategory(this.cashFlowCategoryService.findOrCreateOrUpdateCashFlowCategory(cashFlow.getCategory()));
