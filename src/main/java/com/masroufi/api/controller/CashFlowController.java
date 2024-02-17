@@ -27,13 +27,13 @@ public class CashFlowController {
     }
 
     @PostMapping
-    CashFlowDto createCashFlow(@RequestBody CashFlowDto categoryDto) {
-        return this.cashFlowService.createCashFlow(categoryDto);
+    CashFlowDto createCashFlow(@RequestBody CashFlowDto dto) {
+        return this.cashFlowService.createCashFlow(dto);
     }
 
     @PutMapping("/{uuid}")
-    CashFlowDto updateCashFlow(@PathVariable String uuid, @RequestBody CashFlowDto categoryDto) {
-        return this.cashFlowService.updateCashFlow(uuid, categoryDto);
+    CashFlowDto updateCashFlow(@PathVariable String uuid, @RequestBody CashFlowDto dto) {
+        return this.cashFlowService.updateCashFlow(uuid, dto);
     }
 
     @PatchMapping("/{uuid}")

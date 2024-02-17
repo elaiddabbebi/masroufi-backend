@@ -1,10 +1,13 @@
 package com.masroufi.api.service.impl;
 
+import com.masroufi.api.dto.CashFlowCategoryDto;
 import com.masroufi.api.dto.CashFlowDto;
+import com.masroufi.api.dto.CustomerCashFlowRegistryDto;
 import com.masroufi.api.entity.Account;
 import com.masroufi.api.entity.CashFlow;
 import com.masroufi.api.entity.CashFlowCategory;
 import com.masroufi.api.enums.CashFlowStatus;
+import com.masroufi.api.enums.CashFlowType;
 import com.masroufi.api.repository.AccountRepository;
 import com.masroufi.api.repository.CashFlowRepository;
 import com.masroufi.api.service.CashFlowCategoryService;
@@ -32,64 +35,26 @@ public class CashFlowServiceImpl implements CashFlowService {
     @Autowired
     private CashFlowCategoryService cashFlowCategoryService;
 
-    private void isNewCashFlowOrThrowException(String cashFlowName, String categoryName) {
-        List<CashFlow> cashFlowList = this.cashFlowRepository.findAllByNameIgnoreCase(cashFlowName.trim());
-        if (cashFlowList != null && !cashFlowList.isEmpty()) {
-            for (CashFlow cashFlow: cashFlowList) {
-                CashFlowCategory category = cashFlow.getCategory();
-                if (category != null && category.getName() != null && category.getName().equalsIgnoreCase(categoryName)) {
-                    throw new RuntimeException("Cash flow already exist");
-                }
-            }
-        }
-    }
-
     @Override
     public CashFlowDto createCashFlow(CashFlowDto cashFlow) {
-        this.applicationSecurityContext.isSupperAdminOrThrowException();
         if (cashFlow == null || cashFlow.getCategory() == null) {
             return null;
         } else {
+            this.applicationSecurityContext.isSupperAdminOrThrowException();
             this.isNewCashFlowOrThrowException(cashFlow.getName(), cashFlow.getCategory().getName());
-            CashFlow newCashFlow = new CashFlow();
-            newCashFlow.setName(cashFlow.getName().trim());
-            newCashFlow.setCategory(this.cashFlowCategoryService.findOrCreateOrUpdateCashFlowCategory(cashFlow.getCategory()));
-            newCashFlow.setGain(cashFlow.isGain());
-            newCashFlow.setExpense(cashFlow.isExpense());
-            newCashFlow.setPublished(cashFlow.isPublished());
-            newCashFlow.setStatus(CashFlowStatus.VALIDATED);
-            Account user = this.applicationSecurityContext.getCurrentUser();
-            if (user != null) {
-                newCashFlow.setCreatedBy(user.getId());
-            }
-            newCashFlow = this.cashFlowRepository.save(newCashFlow);
+            CashFlow newCashFlow = this.create(cashFlow);
             return CashFlowDto.buildFromCashFlow(newCashFlow);
         }
     }
 
     @Override
     public CashFlowDto updateCashFlow(String uuid, CashFlowDto cashFlow) {
-        this.applicationSecurityContext.isSupperAdminOrThrowException();
         if (cashFlow == null || cashFlow.getCategory() == null) {
             return null;
         } else {
+            this.applicationSecurityContext.isSupperAdminOrThrowException();
             CashFlow cashFlowToUpdate = this.cashFlowRepository.findByUuid(uuid);
-            if (cashFlowToUpdate == null) {
-                throw new RuntimeException("Cashflow not found");
-            }
-            if (
-                (cashFlowToUpdate.getCategory() != null &&
-                !cashFlowToUpdate.getCategory().getName().equalsIgnoreCase(cashFlow.getCategory().getName())) ||
-                !cashFlowToUpdate.getName().equalsIgnoreCase(cashFlow.getName())
-            ) {
-                this.isNewCashFlowOrThrowException(cashFlow.getName(), cashFlow.getCategory().getName());
-            }
-            cashFlowToUpdate.setName(cashFlow.getName().trim());
-            cashFlowToUpdate.setCategory(this.cashFlowCategoryService.findOrCreateOrUpdateCashFlowCategory(cashFlow.getCategory()));
-            cashFlowToUpdate.setGain(cashFlow.isGain());
-            cashFlowToUpdate.setExpense(cashFlow.isExpense());
-            cashFlowToUpdate.setPublished(cashFlow.isPublished());
-            cashFlowToUpdate = this.cashFlowRepository.save(cashFlowToUpdate);
+            cashFlowToUpdate = this.update(cashFlowToUpdate, cashFlow);
             return CashFlowDto.buildFromCashFlow(cashFlowToUpdate);
         }
     }
@@ -141,5 +106,101 @@ public class CashFlowServiceImpl implements CashFlowService {
             }
             return dto;
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public CashFlow findOrCreatedOrUpdateCashFlow(CustomerCashFlowRegistryDto dto) {
+        if (dto != null) {
+            CashFlowCategoryDto categoryDto = CashFlowCategoryDto.builder()
+                    .name(dto.getCategory().trim())
+                    .expense(dto.getType().equals(CashFlowType.EXPENSE))
+                    .gain(dto.getType().equals(CashFlowType.GAIN))
+                    .build();
+
+            CashFlowDto cashFlowDto = CashFlowDto.builder()
+                    .name(dto.getName().trim())
+                    .expense(dto.getType().equals(CashFlowType.EXPENSE))
+                    .gain(dto.getType().equals(CashFlowType.GAIN))
+                    .category(categoryDto)
+                    .build();
+            if (this.isNewCashFlow(dto.getName(), dto.getCategory())) {
+                return this.create(cashFlowDto);
+            } else {
+                CashFlow cashFlowToUpdate = this.findCashFlowByNameAndCategory(dto.getName(), dto.getCategory());
+                return this.update(cashFlowToUpdate, cashFlowDto);
+            }
+        }
+        return null;
+    }
+
+    private void isNewCashFlowOrThrowException(String cashFlowName, String categoryName) {
+        if (!this.isNewCashFlow(cashFlowName,categoryName)) {
+            throw new RuntimeException("Cash flow already exist");
+        }
+    }
+
+    private boolean isNewCashFlow(String cashFlowName, String categoryName) {
+        return this.findCashFlowByNameAndCategory(cashFlowName, categoryName) == null;
+    }
+
+    private CashFlow findCashFlowByNameAndCategory(String cashFlowName, String categoryName) {
+        List<CashFlow> cashFlowList = this.cashFlowRepository.findAllByNameIgnoreCase(cashFlowName.trim());
+        if (cashFlowList != null && !cashFlowList.isEmpty()) {
+            for (CashFlow cashFlow: cashFlowList) {
+                CashFlowCategory category = cashFlow.getCategory();
+                if (category != null && category.getName() != null && category.getName().equalsIgnoreCase(categoryName)) {
+                    return cashFlow;
+                }
+            }
+        }
+        return null;
+    }
+
+    private CashFlow create(CashFlowDto dto) {
+        CashFlow newCashFlow = new CashFlow();
+        newCashFlow.setName(dto.getName().trim());
+        newCashFlow.setCategory(this.cashFlowCategoryService.findOrCreateOrUpdateCashFlowCategory(dto.getCategory()));
+        newCashFlow.setGain(dto.isGain());
+        newCashFlow.setExpense(dto.isExpense());
+        Account user = this.applicationSecurityContext.getCurrentUser();
+        if (user != null) {
+            newCashFlow.setCreatedBy(user.getId());
+        }
+        if (this.applicationSecurityContext.isSupperAdmin()) {
+            newCashFlow.setStatus(CashFlowStatus.VALIDATED);
+            newCashFlow.setPublished(dto.isPublished());
+        } else {
+            newCashFlow.setStatus(CashFlowStatus.PENDING);
+            newCashFlow.setPublished(false);
+        }
+        return this.cashFlowRepository.save(newCashFlow);
+    }
+
+    private CashFlow update(CashFlow cashFlowToUpdate, CashFlowDto dto) {
+        if (cashFlowToUpdate == null) {
+            throw new RuntimeException("Cashflow not found");
+        }
+        if (
+                (cashFlowToUpdate.getCategory() != null && this.applicationSecurityContext.isSupperAdmin() &&
+                        !cashFlowToUpdate.getCategory().getName().equalsIgnoreCase(dto.getCategory().getName())) ||
+                        !cashFlowToUpdate.getName().equalsIgnoreCase(dto.getName())
+        ) {
+            this.isNewCashFlowOrThrowException(dto.getName(), dto.getCategory().getName());
+        }
+        cashFlowToUpdate.setName(dto.getName().trim());
+        cashFlowToUpdate.setCategory(this.cashFlowCategoryService.findOrCreateOrUpdateCashFlowCategory(dto.getCategory()));
+        if (this.applicationSecurityContext.isSupperAdmin()) {
+            cashFlowToUpdate.setPublished(dto.isPublished());
+            cashFlowToUpdate.setGain(dto.isGain());
+            cashFlowToUpdate.setExpense(dto.isExpense());
+        } else {
+            if (dto.isGain()) {
+                cashFlowToUpdate.setGain(true);
+            }
+            if (dto.isExpense()) {
+                cashFlowToUpdate.setExpense(true);
+            }
+        }
+        return this.cashFlowRepository.save(cashFlowToUpdate);
     }
 }
