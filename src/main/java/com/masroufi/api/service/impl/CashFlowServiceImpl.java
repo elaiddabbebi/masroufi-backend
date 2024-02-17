@@ -109,28 +109,25 @@ public class CashFlowServiceImpl implements CashFlowService {
     }
 
     @Override
-    public CashFlow findOrCreatedOrUpdateCashFlow(CustomerCashFlowRegistryDto dto) {
-        if (dto != null) {
-            CashFlowCategoryDto categoryDto = CashFlowCategoryDto.builder()
-                    .name(dto.getCategory().trim())
-                    .expense(dto.getType().equals(CashFlowType.EXPENSE))
-                    .gain(dto.getType().equals(CashFlowType.GAIN))
-                    .build();
+    public CashFlow findOrCreatedOrUpdateCashFlow(String name, String category, boolean gain, boolean expense) {
+        CashFlowCategoryDto categoryDto = CashFlowCategoryDto.builder()
+                .name(category.trim())
+                .expense(expense)
+                .gain(gain)
+                .build();
 
-            CashFlowDto cashFlowDto = CashFlowDto.builder()
-                    .name(dto.getName().trim())
-                    .expense(dto.getType().equals(CashFlowType.EXPENSE))
-                    .gain(dto.getType().equals(CashFlowType.GAIN))
-                    .category(categoryDto)
-                    .build();
-            if (this.isNewCashFlow(dto.getName(), dto.getCategory())) {
-                return this.create(cashFlowDto);
-            } else {
-                CashFlow cashFlowToUpdate = this.findCashFlowByNameAndCategory(dto.getName(), dto.getCategory());
-                return this.update(cashFlowToUpdate, cashFlowDto);
-            }
+        CashFlowDto cashFlowDto = CashFlowDto.builder()
+                .name(name)
+                .expense(expense)
+                .gain(gain)
+                .category(categoryDto)
+                .build();
+        if (this.isNewCashFlow(name, category)) {
+            return this.create(cashFlowDto);
+        } else {
+            CashFlow cashFlowToUpdate = this.findCashFlowByNameAndCategory(name, category);
+            return this.update(cashFlowToUpdate, cashFlowDto);
         }
-        return null;
     }
 
     private void isNewCashFlowOrThrowException(String cashFlowName, String categoryName) {

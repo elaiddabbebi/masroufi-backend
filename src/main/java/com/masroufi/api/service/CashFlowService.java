@@ -19,5 +19,5 @@ public interface CashFlowService {
 
     List<CashFlowDto> findAll();
 
-    CashFlow findOrCreatedOrUpdateCashFlow(CustomerCashFlowRegistryDto dto);
+    CashFlow findOrCreatedOrUpdateCashFlow(String name, String category, boolean gain, boolean expense);
 }

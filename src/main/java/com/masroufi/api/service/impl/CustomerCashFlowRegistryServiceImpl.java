@@ -3,6 +3,7 @@ package com.masroufi.api.service.impl;
 import com.masroufi.api.dto.CustomerCashFlowRegistryDto;
 import com.masroufi.api.entity.Account;
 import com.masroufi.api.entity.CustomerCashFlowRegistry;
+import com.masroufi.api.enums.CashFlowType;
 import com.masroufi.api.repository.CustomerCashFlowRegistryRepository;
 import com.masroufi.api.service.CashFlowService;
 import com.masroufi.api.service.CustomerCashFlowRegistryService;
@@ -48,7 +49,12 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
             cashFlowRegistry.setAmount(dto.getAmount());
             cashFlowRegistry.setDate(dto.getDate());
             cashFlowRegistry.setType(dto.getType());
-            cashFlowRegistry.setCashFlow(this.cashFlowService.findOrCreatedOrUpdateCashFlow(dto));
+            cashFlowRegistry.setCashFlow(this.cashFlowService.findOrCreatedOrUpdateCashFlow(
+                    dto.getName(),
+                    dto.getCategory(),
+                    dto.getType().equals(CashFlowType.GAIN),
+                    dto.getType().equals(CashFlowType.EXPENSE)
+            ));
 
             cashFlowRegistry = this.customerCashFlowRegistryRepository.save(cashFlowRegistry);
             return CustomerCashFlowRegistryDto.buildFromCashFlowRegistry(cashFlowRegistry);
@@ -97,8 +103,12 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
             cashFlowRegistry.setAmount(dto.getAmount());
             cashFlowRegistry.setDate(dto.getDate());
             cashFlowRegistry.setType(dto.getType());
-            cashFlowRegistry.setCashFlow(this.cashFlowService.findOrCreatedOrUpdateCashFlow(dto));
-
+            cashFlowRegistry.setCashFlow(this.cashFlowService.findOrCreatedOrUpdateCashFlow(
+                    dto.getName(),
+                    dto.getCategory(),
+                    dto.getType().equals(CashFlowType.GAIN),
+                    dto.getType().equals(CashFlowType.EXPENSE)
+            ));
             cashFlowRegistry = this.customerCashFlowRegistryRepository.save(cashFlowRegistry);
             return CustomerCashFlowRegistryDto.buildFromCashFlowRegistry(cashFlowRegistry);
         }
