@@ -20,7 +20,7 @@ public class MenuItemServiceImpl implements MenuItemService {
                 MenuItemDto.builder().code("MANAGE_DASHBOARD").label("DASHBOARD").icon("pi pi-fw pi-home").routerLink("/main/dashboard").visible(false).build(),
                 MenuItemDto.builder().code("MANAGE_USERS").label("USERS").icon("pi pi-fw pi-users").routerLink("/main/users").visible(false).build(),
                 MenuItemDto.builder().code("MANAGE_ROLES").label("ROLES_AND_PERMISSIONS").icon("pi pi-fw pi-sitemap").routerLink("/main/roles").visible(false).build(),
-                MenuItemDto.builder().code("MANAGE_CASH_FLOW").label("CASH_FLOW").icon("pi pi-fw pi-bitcoin").routerLink("/main/cash-flow").visible(false).build(),
+                MenuItemDto.builder().code("MANAGE_CASH_FLOW").label("CASH").icon("pi pi-fw pi-database").routerLink("/main/cash-flow").visible(false).build(),
                 MenuItemDto.builder().code("MANAGE_CASH_FLOW_REGISTRY").label("CASH_FLOW_REGISTRY").icon("pi pi-fw pi-wallet").routerLink("/main/cash-flow-registry").visible(false).build(),
                 MenuItemDto.builder().code("STATISTICS").label("STATISTICS").icon("pi pi-fw pi-chart-bar").routerLink("/main/statistics").visible(false).build(),
                 MenuItemDto.builder().code("SIMULATOR").label("SIMULATOR").icon("pi pi-fw pi-calculator").routerLink("/main/simulator").visible(false).build(),
