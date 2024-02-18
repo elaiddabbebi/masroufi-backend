@@ -22,5 +22,7 @@ public interface CashFlowCategoryService {
 
     List<CashFlowCategoryDto> findTop10ByNameLike(String name);
 
+    List<String> findAllCategoryNames();
+
     CashFlowCategory findOrCreateOrUpdateCashFlowCategory(CashFlowCategoryDto categoryDto);
 }

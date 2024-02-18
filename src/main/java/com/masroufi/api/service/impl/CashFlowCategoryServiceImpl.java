@@ -144,6 +144,16 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
         }
     }
 
+    @Override
+    public List<String> findAllCategoryNames() {
+        if (this.applicationSecurityContext.isSupperAdmin()) {
+            return this.cashFlowCategoryRepository.findAllCategoryNamesForSupperAdmin();
+        } else {
+            Account customer = this.applicationSecurityContext.getCurrentUser();
+            return this.cashFlowCategoryRepository.findAllCategoryNamesByCustomer(customer.getId());
+        }
+    }
+
     private CashFlowCategory buildFromDto(CashFlowCategoryDto categoryDto) {
         if (categoryDto == null || categoryDto.getName() == null) {
             return null;

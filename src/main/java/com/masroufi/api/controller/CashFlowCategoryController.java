@@ -55,4 +55,9 @@ public class CashFlowCategoryController {
     List<CashFlowCategoryDto> findTop10ByNameLike(@RequestParam String categoryName) {
         return this.cashFlowCategoryService.findTop10ByNameLike(categoryName);
     }
+
+    @GetMapping("/name-list")
+    List<String> findAllCategoryNames() {
+        return this.cashFlowCategoryService.findAllCategoryNames();
+    }
 }

@@ -31,7 +31,7 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
         this.applicationSecurityContext.isCustomerOrThrowException();
         Account customer = this.applicationSecurityContext.getCurrentUser();
         if (customer != null) {
-            List<CustomerCashFlowRegistry> customerCashFlowRegistryList = this.customerCashFlowRegistryRepository.findAllByCustomer(customer);
+            List<CustomerCashFlowRegistry> customerCashFlowRegistryList = this.customerCashFlowRegistryRepository.findAllByCustomerOrderByDateDescIdDesc(customer);
             if (customerCashFlowRegistryList != null && !customerCashFlowRegistryList.isEmpty()) {
                 return customerCashFlowRegistryList.stream().map(CustomerCashFlowRegistryDto::buildFromCashFlowRegistry).collect(Collectors.toList());
             }

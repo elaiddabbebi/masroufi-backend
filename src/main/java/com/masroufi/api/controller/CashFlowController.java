@@ -46,4 +46,9 @@ public class CashFlowController {
         return this.cashFlowService.deleteCashFlow(uuid);
     }
 
+    @GetMapping("/name-list")
+    List<String> getAllCashFlowNameList() {
+        return this.cashFlowService.getAllCashFlowNameList();
+    }
+
 }

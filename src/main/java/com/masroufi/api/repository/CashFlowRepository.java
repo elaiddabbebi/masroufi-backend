@@ -1,10 +1,9 @@
 package com.masroufi.api.repository;
 
 import com.masroufi.api.entity.CashFlow;
-import com.masroufi.api.entity.CashFlowCategory;
-import com.masroufi.api.enums.CashFlowStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,10 +15,20 @@ public interface CashFlowRepository extends JpaRepository<CashFlow, Long>, JpaSp
 
     List<CashFlow> findAllByNameIgnoreCase(String name);
 
-    List<CashFlow> findAllByNameLikeIgnoreCase(String name);
-
-    List<CashFlow> findAllByNameLikeIgnoreCaseAndCategoryAndStatus(String name, CashFlowCategory category, CashFlowStatus status);
-
     List<CashFlow> findAllByIsDeletedIsFalseOrIsDeletedIsNullOrderByIdDesc();
+
+    @Query("Select distinct(c.name) " +
+            "From CashFlow c " +
+            "where (c.isDeleted is false or c.isDeleted is null) " +
+            "and c.status <> 'REJECTED'")
+    List<String> findAllCashFlowNamesForSupperAdmin();
+
+    @Query("Select distinct(c.name) " +
+            "From CashFlow c " +
+            "where (c.isDeleted is false or c.isDeleted is null) " +
+            "and c.status <> 'REJECTED' " +
+            "and (c.createdBy = :customerId or c.published is true) " +
+            "order by c.name")
+    List<String> findAllCashFlowNamesByCustomer(Long customerId);
 
 }

@@ -1,7 +1,6 @@
 package com.masroufi.api.service;
 
 import com.masroufi.api.dto.CashFlowDto;
-import com.masroufi.api.dto.CustomerCashFlowRegistryDto;
 import com.masroufi.api.entity.CashFlow;
 
 import java.util.List;
@@ -20,4 +19,6 @@ public interface CashFlowService {
     List<CashFlowDto> findAll();
 
     CashFlow findOrCreatedOrUpdateCashFlow(String name, String category, boolean gain, boolean expense);
+
+    List<String> getAllCashFlowNameList();
 }

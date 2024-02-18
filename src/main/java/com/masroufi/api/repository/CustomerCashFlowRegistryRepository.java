@@ -13,5 +13,5 @@ public interface CustomerCashFlowRegistryRepository extends JpaRepository<Custom
 
     CustomerCashFlowRegistry findByUuid(String uuid);
 
-    List<CustomerCashFlowRegistry> findAllByCustomer(Account customer);
+    List<CustomerCashFlowRegistry> findAllByCustomerOrderByDateDescIdDesc(Account customer);
 }

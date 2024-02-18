@@ -130,6 +130,16 @@ public class CashFlowServiceImpl implements CashFlowService {
         }
     }
 
+    @Override
+    public List<String> getAllCashFlowNameList() {
+        if (this.applicationSecurityContext.isSupperAdmin()) {
+            return this.cashFlowRepository.findAllCashFlowNamesForSupperAdmin();
+        } else {
+            Account customer = this.applicationSecurityContext.getCurrentUser();
+            return this.cashFlowRepository.findAllCashFlowNamesByCustomer(customer.getId());
+        }
+    }
+
     private void isNewCashFlowOrThrowException(String cashFlowName, String categoryName) {
         if (!this.isNewCashFlow(cashFlowName,categoryName)) {
             throw new RuntimeException("Cash flow already exist");
