@@ -5,6 +5,7 @@ import com.masroufi.api.entity.Account;
 import com.masroufi.api.entity.CustomerCashFlowRegistry;
 import com.masroufi.api.enums.CashFlowType;
 import com.masroufi.api.repository.CustomerCashFlowRegistryRepository;
+import com.masroufi.api.service.AccountConfigurationService;
 import com.masroufi.api.service.CashFlowService;
 import com.masroufi.api.service.CustomerCashFlowRegistryService;
 import com.masroufi.api.shared.context.ApplicationSecurityContext;
@@ -25,6 +26,9 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
 
     @Autowired
     private ApplicationSecurityContext applicationSecurityContext;
+
+    @Autowired
+    private AccountConfigurationService accountConfigurationService;
 
     @Override
     public List<CustomerCashFlowRegistryDto> findAll() {
@@ -113,5 +117,22 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
             return CustomerCashFlowRegistryDto.buildFromCashFlowRegistry(cashFlowRegistry);
         }
         return null;
+    }
+
+    @Override
+    public Double calculateCurrentCashAmountOfCustomer(Account customer) {
+        Double initialCashAmount = this.accountConfigurationService.getInitialCashAmountOf(customer);
+        if (initialCashAmount == null) {
+            initialCashAmount = 0D;
+        }
+        Double totalIncome = this.customerCashFlowRegistryRepository.calculateCustomerIncome(customer);
+        if (totalIncome == null) {
+            totalIncome = 0D;
+        }
+        Double totalExpense = this.customerCashFlowRegistryRepository.calculateCustomerExpense(customer);
+        if (totalExpense == null) {
+            totalExpense = 0D;
+        }
+        return initialCashAmount + totalIncome - totalExpense;
     }
 }

@@ -43,4 +43,15 @@ public class AccountConfigurationServiceImpl implements AccountConfigurationServ
         }
         return null;
     }
+
+    @Override
+    public Double getInitialCashAmountOf(Account account) {
+        CashFlowConfig config = account.getCashFlowConfig();
+        if (config != null) {
+            if (config.getInitialCashAmount() != null) {
+                return config.getInitialCashAmount();
+            }
+        }
+        return 0D;
+    }
 }
