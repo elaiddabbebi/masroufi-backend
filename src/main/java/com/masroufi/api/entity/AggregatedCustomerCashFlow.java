@@ -37,10 +37,10 @@ public class AggregatedCustomerCashFlow extends BaseEntity implements Serializab
     private int day;
 
     @Column
-    private long gainAmount;
+    private double gainAmount;
 
     @Column
-    private long expenseAmount;
+    private double expenseAmount;
 
     @Column
     private Long customerId;

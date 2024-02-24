@@ -2,6 +2,7 @@ package com.masroufi.api.service;
 
 import com.masroufi.api.dto.CustomerCashFlowRegistryDto;
 import com.masroufi.api.entity.Account;
+import com.masroufi.api.entity.CustomerCashFlowRegistry;
 
 import java.util.List;
 
@@ -18,4 +19,12 @@ public interface CustomerCashFlowRegistryService {
     CustomerCashFlowRegistryDto update(String uuid, CustomerCashFlowRegistryDto dto);
 
     Double calculateCurrentCashAmountOfCustomer(Account customer);
+
+    void processCustomerCashFlowTransaction(CustomerCashFlowRegistry cashFlow);
+
+    void reverseCustomerCashFlowTransaction(CustomerCashFlowRegistry cashFlow);
+
+    void processCustomerCashStateTransaction(CustomerCashFlowRegistry cashFlow);
+
+    void reverseCustomerCashStateTransaction(CustomerCashFlowRegistry cashFlow);
 }
