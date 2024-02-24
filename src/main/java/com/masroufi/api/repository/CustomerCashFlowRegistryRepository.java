@@ -16,15 +16,4 @@ public interface CustomerCashFlowRegistryRepository extends JpaRepository<Custom
 
     List<CustomerCashFlowRegistry> findAllByCustomerOrderByDateDescIdDesc(Account customer);
 
-    @Query("Select coalesce(sum(c.amount), 0) " +
-            "From CustomerCashFlowRegistry c " +
-            "Where c.customer = :customer " +
-            "And c.type = 'GAIN'")
-    Double calculateCustomerIncome(Account customer);
-
-    @Query("Select coalesce(sum(c.amount), 0) " +
-            "From CustomerCashFlowRegistry c " +
-            "Where c.customer = :customer " +
-            "And c.type = 'EXPENSE'")
-    Double calculateCustomerExpense(Account customer);
 }
