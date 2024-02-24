@@ -2,6 +2,7 @@ package com.masroufi.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.masroufi.api.entity.embeddable.CashFlowConfig;
+import com.masroufi.api.entity.embeddable.CustomerCashState;
 import com.masroufi.api.entity.embeddable.SubscriptionConfig;
 import lombok.*;
 
@@ -56,7 +57,14 @@ public class Account extends BaseEntity implements Serializable {
     private CashFlowConfig cashFlowConfig;
 
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "startDate", column = @Column(name = "subscription_start_date")),
+            @AttributeOverride(name = "endDate", column = @Column(name = "subscription_end_date")),
+    })
     private SubscriptionConfig subscriptionConfig;
+
+    @Embedded
+    private CustomerCashState customerCashState;
 
     public String getFullName() {
         String fullName = firstName;
