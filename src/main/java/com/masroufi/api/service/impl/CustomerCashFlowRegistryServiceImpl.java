@@ -139,23 +139,6 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
         return null;
     }
 
-    @Override
-    public Double calculateCurrentCashAmountOfCustomer(Account customer) {
-        Double initialCashAmount = this.accountConfigurationService.getInitialCashAmountOf(customer);
-        if (initialCashAmount == null) {
-            initialCashAmount = 0D;
-        }
-        Double totalIncome = this.customerCashFlowRegistryRepository.calculateCustomerIncome(customer);
-        if (totalIncome == null) {
-            totalIncome = 0D;
-        }
-        Double totalExpense = this.customerCashFlowRegistryRepository.calculateCustomerExpense(customer);
-        if (totalExpense == null) {
-            totalExpense = 0D;
-        }
-        return initialCashAmount + totalIncome - totalExpense;
-    }
-
     private void updateAggregatedCashFlowFrom(CustomerCashFlowRegistry cashFlow, TransactionType transactionType) {
         if (cashFlow != null) {
             Date date = cashFlow.getDate();

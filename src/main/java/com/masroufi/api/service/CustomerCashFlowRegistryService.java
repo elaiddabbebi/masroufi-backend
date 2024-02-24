@@ -18,8 +18,6 @@ public interface CustomerCashFlowRegistryService {
 
     CustomerCashFlowRegistryDto update(String uuid, CustomerCashFlowRegistryDto dto);
 
-    Double calculateCurrentCashAmountOfCustomer(Account customer);
-
     void processCustomerCashFlowTransaction(CustomerCashFlowRegistry cashFlow);
 
     void reverseCustomerCashFlowTransaction(CustomerCashFlowRegistry cashFlow);
