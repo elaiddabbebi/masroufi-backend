@@ -6,6 +6,7 @@ import com.masroufi.api.service.CustomerCashFlowRegistryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
@@ -26,17 +27,20 @@ public class CustomerCashFlowRegistryController {
     }
 
     @PostMapping
-    CustomerCashFlowRegistryDto create(@RequestBody CustomerCashFlowRegistryDto dto) {
+    @Transactional
+    public CustomerCashFlowRegistryDto create(@RequestBody CustomerCashFlowRegistryDto dto) {
         return this.customerCashFlowRegistryService.create(dto);
     }
 
     @PutMapping("/{uuid}")
-    CustomerCashFlowRegistryDto update(@PathVariable String uuid, @RequestBody CustomerCashFlowRegistryDto dto) {
+    @Transactional
+    public CustomerCashFlowRegistryDto update(@PathVariable String uuid, @RequestBody CustomerCashFlowRegistryDto dto) {
         return this.customerCashFlowRegistryService.update(uuid, dto);
     }
 
     @DeleteMapping("/{uuid}")
-    CustomerCashFlowRegistryDto delete(@PathVariable String uuid) {
+    @Transactional
+    public CustomerCashFlowRegistryDto delete(@PathVariable String uuid) {
         return this.customerCashFlowRegistryService.delete(uuid);
     }
 
