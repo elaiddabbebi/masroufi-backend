@@ -4,6 +4,8 @@ import com.masroufi.api.shared.types.MyDate;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MyDateHelper {
 
@@ -15,7 +17,7 @@ public class MyDateHelper {
                 .minute(0)
                 .hour(0)
                 .day(mondayDate.getDayOfMonth())
-                .month(mondayDate.getMonthValue())
+                .month(mondayDate.getMonthValue() - 1)
                 .year(mondayDate.getYear())
                 .build();
     }
@@ -28,7 +30,7 @@ public class MyDateHelper {
                 .minute(0)
                 .hour(0)
                 .day(sundayDate.getDayOfMonth())
-                .month(sundayDate.getMonthValue())
+                .month(sundayDate.getMonthValue() - 1)
                 .year(sundayDate.getYear())
                 .build();
     }
@@ -41,7 +43,7 @@ public class MyDateHelper {
                 .minute(0)
                 .hour(0)
                 .day(lastMondayDate.getDayOfMonth())
-                .month(lastMondayDate.getMonthValue())
+                .month(lastMondayDate.getMonthValue() - 1)
                 .year(lastMondayDate.getYear())
                 .build();
     }
@@ -54,7 +56,7 @@ public class MyDateHelper {
                 .minute(0)
                 .hour(0)
                 .day(lastSundayDate.getDayOfMonth())
-                .month(lastSundayDate.getMonthValue())
+                .month(lastSundayDate.getMonthValue() - 1)
                 .year(lastSundayDate.getYear())
                 .build();
     }
@@ -67,7 +69,7 @@ public class MyDateHelper {
                 .minute(0)
                 .hour(0)
                 .day(firstDayOfMonth.getDayOfMonth())
-                .month(firstDayOfMonth.getMonthValue())
+                .month(firstDayOfMonth.getMonthValue() - 1)
                 .year(firstDayOfMonth.getYear())
                 .build();
     }
@@ -80,7 +82,7 @@ public class MyDateHelper {
                 .minute(0)
                 .hour(0)
                 .day(lastDayOfMonth.getDayOfMonth())
-                .month(lastDayOfMonth.getMonthValue())
+                .month(lastDayOfMonth.getMonthValue() - 1)
                 .year(lastDayOfMonth.getYear())
                 .build();
     }
@@ -93,7 +95,7 @@ public class MyDateHelper {
                 .minute(0)
                 .hour(0)
                 .day(firstDayOfLastMonth.getDayOfMonth())
-                .month(firstDayOfLastMonth.getMonthValue())
+                .month(firstDayOfLastMonth.getMonthValue() - 1)
                 .year(firstDayOfLastMonth.getYear())
                 .build();
     }
@@ -106,8 +108,51 @@ public class MyDateHelper {
                 .minute(0)
                 .hour(0)
                 .day(lastDayOfLastMonth.getDayOfMonth())
-                .month(lastDayOfLastMonth.getMonthValue())
+                .month(lastDayOfLastMonth.getMonthValue() - 1)
                 .year(lastDayOfLastMonth.getYear())
+                .build();
+    }
+
+    public static MyDate fromDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        if (date != null) {
+            calendar.setTime(date);
+        } else {
+            calendar.setTime(new Date());
+        }
+        return MyDate.builder()
+                .second(calendar.get(Calendar.SECOND))
+                .minute(calendar.get(Calendar.MINUTE))
+                .hour(calendar.get(Calendar.HOUR))
+                .day(calendar.get(Calendar.DAY_OF_MONTH))
+                .month(calendar.get(Calendar.MONTH))
+                .year(calendar.get(Calendar.YEAR))
+                .build();
+    }
+
+    public static MyDate now() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        return MyDate.builder()
+                .second(calendar.get(Calendar.SECOND))
+                .minute(calendar.get(Calendar.MINUTE))
+                .hour(calendar.get(Calendar.HOUR))
+                .day(calendar.get(Calendar.DAY_OF_MONTH))
+                .month(calendar.get(Calendar.MONTH))
+                .year(calendar.get(Calendar.YEAR))
+                .build();
+    }
+
+    public static MyDate today() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        return MyDate.builder()
+                .second(0)
+                .minute(0)
+                .hour(0)
+                .day(calendar.get(Calendar.DAY_OF_MONTH))
+                .month(calendar.get(Calendar.MONTH))
+                .year(calendar.get(Calendar.YEAR))
                 .build();
     }
 }

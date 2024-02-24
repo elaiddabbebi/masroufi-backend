@@ -10,15 +10,14 @@ import com.masroufi.api.enums.TransactionType;
 import com.masroufi.api.repository.AccountRepository;
 import com.masroufi.api.repository.AggregatedCustomerCashFlowRepository;
 import com.masroufi.api.repository.CustomerCashFlowRegistryRepository;
-import com.masroufi.api.service.AccountConfigurationService;
 import com.masroufi.api.service.CashFlowService;
 import com.masroufi.api.service.CustomerCashFlowRegistryService;
 import com.masroufi.api.shared.context.ApplicationSecurityContext;
+import com.masroufi.api.shared.helpers.MyDateHelper;
+import com.masroufi.api.shared.types.MyDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.temporal.TemporalField;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,9 +36,6 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
 
     @Autowired
     private ApplicationSecurityContext applicationSecurityContext;
-
-    @Autowired
-    private AccountConfigurationService accountConfigurationService;
 
     @Autowired
     private AggregatedCustomerCashFlowRepository aggregatedCustomerCashFlowRepository;
@@ -140,26 +136,25 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
     private void updateAggregatedCashFlowFrom(CustomerCashFlowRegistry cashFlow, TransactionType transactionType) {
         if (cashFlow != null) {
             Date date = cashFlow.getDate();
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
+            MyDate myDate = MyDateHelper.fromDate(date);
             Account customer = cashFlow.getCustomer();
             if (customer != null) {
                 AggregatedCustomerCashFlow customerCashFlow;
                 List<AggregatedCustomerCashFlow> aggregatedcashFlowList =
                         this.aggregatedCustomerCashFlowRepository.findByCustomerIdAndYearAndMonthAndDay(
                                 customer.getId(),
-                                calendar.get(Calendar.YEAR),
-                                calendar.get(Calendar.MONTH),
-                                calendar.get(Calendar.DAY_OF_MONTH)
+                                myDate.getYear(),
+                                myDate.getMonth(),
+                                myDate.getDay()
                         );
                 if (aggregatedcashFlowList != null && !aggregatedcashFlowList.isEmpty()) {
                     customerCashFlow = aggregatedcashFlowList.get(0);
                 } else {
                     customerCashFlow = new AggregatedCustomerCashFlow();
                     customerCashFlow.setCustomerId(customer.getId());
-                    customerCashFlow.setDay(calendar.get(Calendar.DAY_OF_MONTH));
-                    customerCashFlow.setMonth(calendar.get(Calendar.MONTH));
-                    customerCashFlow.setYear(calendar.get(Calendar.YEAR));
+                    customerCashFlow.setDay(myDate.getDay());
+                    customerCashFlow.setMonth(myDate.getMonth());
+                    customerCashFlow.setYear(myDate.getYear());
                 }
 
                 if (cashFlow.getType().equals(CashFlowType.EXPENSE)) {
