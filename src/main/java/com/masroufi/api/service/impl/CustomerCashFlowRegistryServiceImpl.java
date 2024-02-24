@@ -17,6 +17,8 @@ import com.masroufi.api.shared.context.ApplicationSecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.temporal.TemporalField;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,8 +75,7 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
             ));
 
             cashFlowRegistry = this.customerCashFlowRegistryRepository.save(cashFlowRegistry);
-            this.processCustomerCashFlowTransaction(cashFlowRegistry);
-            this.processCustomerCashStateTransaction(cashFlowRegistry);
+            this.processAllAggregatedDataOf(cashFlowRegistry);
             return CustomerCashFlowRegistryDto.buildFromCashFlowRegistry(cashFlowRegistry);
         }
         return null;
@@ -89,8 +90,7 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
             if (!customer.getId().equals(cashFlowRegistry.getCustomer().getId())) {
                 throw new RuntimeException("FORBIDDEN");
             }
-            this.reverseCustomerCashFlowTransaction(cashFlowRegistry);
-            this.reverseCustomerCashStateTransaction(cashFlowRegistry);
+            this.reverseAllAggregatedDataOf(cashFlowRegistry);
             this.customerCashFlowRegistryRepository.delete(cashFlowRegistry);
             return CustomerCashFlowRegistryDto.buildFromCashFlowRegistry(cashFlowRegistry);
         }
@@ -120,8 +120,7 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
             if (!customer.getId().equals(cashFlowRegistry.getCustomer().getId())) {
                 throw new RuntimeException("FORBIDDEN");
             }
-            this.reverseCustomerCashFlowTransaction(cashFlowRegistry);
-            this.reverseCustomerCashStateTransaction(cashFlowRegistry);
+            this.reverseAllAggregatedDataOf(cashFlowRegistry);
             cashFlowRegistry.setAmount(dto.getAmount());
             cashFlowRegistry.setDate(dto.getDate());
             cashFlowRegistry.setType(dto.getType());
@@ -132,8 +131,7 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
                     dto.getType().equals(CashFlowType.EXPENSE)
             ));
             cashFlowRegistry = this.customerCashFlowRegistryRepository.save(cashFlowRegistry);
-            this.processCustomerCashFlowTransaction(cashFlowRegistry);
-            this.processCustomerCashStateTransaction(cashFlowRegistry);
+            this.processAllAggregatedDataOf(cashFlowRegistry);
             return CustomerCashFlowRegistryDto.buildFromCashFlowRegistry(cashFlowRegistry);
         }
         return null;
@@ -142,24 +140,26 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
     private void updateAggregatedCashFlowFrom(CustomerCashFlowRegistry cashFlow, TransactionType transactionType) {
         if (cashFlow != null) {
             Date date = cashFlow.getDate();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
             Account customer = cashFlow.getCustomer();
-            if (date != null && customer != null) {
+            if (customer != null) {
                 AggregatedCustomerCashFlow customerCashFlow;
                 List<AggregatedCustomerCashFlow> aggregatedcashFlowList =
                         this.aggregatedCustomerCashFlowRepository.findByCustomerIdAndYearAndMonthAndDay(
                                 customer.getId(),
-                                date.getYear(),
-                                date.getMonth(),
-                                date.getDate()
+                                calendar.get(Calendar.YEAR),
+                                calendar.get(Calendar.MONTH),
+                                calendar.get(Calendar.DAY_OF_MONTH)
                         );
                 if (aggregatedcashFlowList != null && !aggregatedcashFlowList.isEmpty()) {
                     customerCashFlow = aggregatedcashFlowList.get(0);
                 } else {
                     customerCashFlow = new AggregatedCustomerCashFlow();
                     customerCashFlow.setCustomerId(customer.getId());
-                    customerCashFlow.setDay(date.getDate());
-                    customerCashFlow.setMonth(date.getMonth());
-                    customerCashFlow.setYear(date.getYear());
+                    customerCashFlow.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+                    customerCashFlow.setMonth(calendar.get(Calendar.MONTH));
+                    customerCashFlow.setYear(calendar.get(Calendar.YEAR));
                 }
 
                 if (cashFlow.getType().equals(CashFlowType.EXPENSE)) {
@@ -264,5 +264,17 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
                 this.accountRepository.save(customer);
             }
         }
+    }
+
+    @Override
+    public void processAllAggregatedDataOf(CustomerCashFlowRegistry cashFlow) {
+        this.processCustomerCashFlowTransaction(cashFlow);
+        this.processCustomerCashStateTransaction(cashFlow);
+    }
+
+    @Override
+    public void reverseAllAggregatedDataOf(CustomerCashFlowRegistry cashFlow) {
+        this.reverseCustomerCashFlowTransaction(cashFlow);
+        this.reverseCustomerCashStateTransaction(cashFlow);
     }
 }

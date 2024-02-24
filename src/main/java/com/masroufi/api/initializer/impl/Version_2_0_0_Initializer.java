@@ -31,8 +31,7 @@ public class Version_2_0_0_Initializer implements ApplicationInitializer {
         if (allRegistries != null && !allRegistries.isEmpty()) {
             for (CustomerCashFlowRegistry registry: allRegistries) {
                 if (registry != null) {
-                    this.customerCashFlowRegistryService.processCustomerCashFlowTransaction(registry);
-                    this.customerCashFlowRegistryService.processCustomerCashStateTransaction(registry);
+                    this.customerCashFlowRegistryService.processAllAggregatedDataOf(registry);
                 }
             }
         }

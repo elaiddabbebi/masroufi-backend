@@ -18,4 +18,19 @@ public class DashboardController {
     Double getCurrentCashAmount() {
         return this.dashboardService.getCurrentCashAmount();
     }
+
+    @GetMapping("current-week-consumption")
+    Double getCurrentWeekConsumption() {
+        return this.dashboardService.getCurrentWeekConsumption();
+    }
+
+    @GetMapping("last-week-consumption")
+    Double getLastWeekConsumption() {
+        return this.dashboardService.getLastWeekConsumption();
+    }
+
+    @GetMapping("last-month-balance")
+    Double getLastMonthBalance() {
+        return this.dashboardService.getLastMonthBalance();
+    }
 }

@@ -25,4 +25,8 @@ public interface CustomerCashFlowRegistryService {
     void processCustomerCashStateTransaction(CustomerCashFlowRegistry cashFlow);
 
     void reverseCustomerCashStateTransaction(CustomerCashFlowRegistry cashFlow);
+
+    void processAllAggregatedDataOf(CustomerCashFlowRegistry cashFlow);
+
+    void reverseAllAggregatedDataOf(CustomerCashFlowRegistry cashFlow);
 }
