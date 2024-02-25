@@ -168,7 +168,7 @@ public class DashboardServiceImpl implements DashboardService {
                             .stream()
                             .filter(elt -> day.equals(elt.getDay()))
                             .collect(Collectors.toList());
-                    if (todayDataList != null && !todayDataList.isEmpty()) {
+                    if (!todayDataList.isEmpty()) {
                         lastMonthCleanedData.add(todayDataList.get(0).getExpenseAmount());
                     } else {
                         lastMonthCleanedData.add(0D);
@@ -188,7 +188,7 @@ public class DashboardServiceImpl implements DashboardService {
                             .stream()
                             .filter(elt -> day.equals(elt.getDay()))
                             .collect(Collectors.toList());
-                    if (todayDataList != null && !todayDataList.isEmpty()) {
+                    if (!todayDataList.isEmpty()) {
                         currentMonthCleanedData.add(todayDataList.get(0).getExpenseAmount());
                     } else {
                         currentMonthCleanedData.add(0D);
@@ -210,9 +210,7 @@ public class DashboardServiceImpl implements DashboardService {
             returnValue.setLastMonthData(lastMonthConsumptionData);
             returnValue.setCurrentMonthData(currentMonthConsumptionData);
 
-            return returnValue;
-        } else {
-            return returnValue;
         }
+        return returnValue;
     }
 }
