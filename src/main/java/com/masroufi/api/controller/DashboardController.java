@@ -30,6 +30,11 @@ public class DashboardController {
         return this.dashboardService.getLastWeekConsumption();
     }
 
+    @GetMapping("current-month-balance")
+    Double getCurrentMonthBalance() {
+        return this.dashboardService.getCurrentMonthBalance();
+    }
+
     @GetMapping("last-month-balance")
     Double getLastMonthBalance() {
         return this.dashboardService.getLastMonthBalance();

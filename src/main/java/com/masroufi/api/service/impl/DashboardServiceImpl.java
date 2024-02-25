@@ -88,6 +88,41 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
+    public Double getCurrentMonthBalance() {
+        this.applicationSecurityContext.isCustomerOrThrowException();
+        Account customer = this.applicationSecurityContext.getCurrentUser();
+        if (customer != null) {
+            MyDate currentMonthStartDate = MyDateHelper.getCurrentMonthStartDate();
+            MyDate currentMonthEndDate = MyDateHelper.getCurrentMonthEndDate();
+            Double expense = this.aggregatedCustomerCashFlowRepository
+                    .calculateExpenseByCustomerBetween(
+                            customer.getId(),
+                            currentMonthStartDate.getYear(),
+                            currentMonthStartDate.getMonth(),
+                            currentMonthStartDate.getDay(),
+                            currentMonthEndDate.getYear(),
+                            currentMonthEndDate.getMonth(),
+                            currentMonthEndDate.getDay()
+                    );
+            expense = expense != null ? expense : 0D;
+            Double gain = this.aggregatedCustomerCashFlowRepository
+                    .calculateGainByCustomerBetween(
+                            customer.getId(),
+                            currentMonthStartDate.getYear(),
+                            currentMonthStartDate.getMonth(),
+                            currentMonthStartDate.getDay(),
+                            currentMonthEndDate.getYear(),
+                            currentMonthEndDate.getMonth(),
+                            currentMonthEndDate.getDay()
+                    );
+            gain = gain != null ? gain : 0D;
+            return gain - expense;
+        } else {
+            return 0D;
+        }
+    }
+
+    @Override
     public Double getLastMonthBalance() {
         this.applicationSecurityContext.isCustomerOrThrowException();
         Account customer = this.applicationSecurityContext.getCurrentUser();
