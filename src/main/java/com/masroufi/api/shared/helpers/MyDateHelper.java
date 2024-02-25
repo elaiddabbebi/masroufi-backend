@@ -6,6 +6,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class MyDateHelper {
 
@@ -115,6 +116,7 @@ public class MyDateHelper {
 
     public static MyDate fromDate(Date date) {
         Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
         if (date != null) {
             calendar.setTime(date);
         } else {
@@ -132,6 +134,7 @@ public class MyDateHelper {
 
     public static MyDate now() {
         Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
         calendar.setTime(new Date());
         return MyDate.builder()
                 .second(calendar.get(Calendar.SECOND))
@@ -145,6 +148,7 @@ public class MyDateHelper {
 
     public static MyDate today() {
         Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
         calendar.setTime(new Date());
         return MyDate.builder()
                 .second(0)

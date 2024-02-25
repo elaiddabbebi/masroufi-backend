@@ -22,7 +22,7 @@ public class Version_2_0_0_Initializer implements ApplicationInitializer {
 
     @Override
     public void initApplication() {
-        // this.processAllCashFlowRegistries(); // Already executed
+//         this.processAllCashFlowRegistries(); // Already executed
     }
 
     private void processAllCashFlowRegistries() {
