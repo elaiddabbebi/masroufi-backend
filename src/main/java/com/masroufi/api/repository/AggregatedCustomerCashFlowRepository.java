@@ -13,7 +13,7 @@ public interface AggregatedCustomerCashFlowRepository extends JpaRepository<Aggr
 
     AggregatedCustomerCashFlow findByUuid(String uuid);
 
-    List<AggregatedCustomerCashFlow> findByCustomerIdAndYearAndMonth(Long customerId, int year, int month);
+    List<AggregatedCustomerCashFlow> findByCustomerIdAndYearAndMonthOrderByDay(Long customerId, int year, int month);
 
     List<AggregatedCustomerCashFlow> findByCustomerIdAndYearAndMonthAndDay(Long customerId, int year, int month, int day);
 

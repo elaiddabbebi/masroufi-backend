@@ -1,6 +1,7 @@
 package com.masroufi.api.controller;
 
 
+import com.masroufi.api.dto.ConsumptionEvolutionData;
 import com.masroufi.api.service.DashboardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,5 +33,10 @@ public class DashboardController {
     @GetMapping("last-month-balance")
     Double getLastMonthBalance() {
         return this.dashboardService.getLastMonthBalance();
+    }
+
+    @GetMapping("consumption-evolution")
+    ConsumptionEvolutionData getConsumptionEvolution() {
+        return this.dashboardService.getConsumptionEvolutionData();
     }
 }
