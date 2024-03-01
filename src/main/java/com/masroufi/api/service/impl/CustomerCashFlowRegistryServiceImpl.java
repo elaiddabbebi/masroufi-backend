@@ -13,8 +13,6 @@ import com.masroufi.api.repository.CustomerCashFlowRegistryRepository;
 import com.masroufi.api.service.CashFlowService;
 import com.masroufi.api.service.CustomerCashFlowRegistryService;
 import com.masroufi.api.shared.context.ApplicationSecurityContext;
-import com.masroufi.api.shared.helpers.MyDateHelper;
-import com.masroufi.api.shared.types.MyDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -136,25 +134,20 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
     private void updateAggregatedCashFlowFrom(CustomerCashFlowRegistry cashFlow, TransactionType transactionType) {
         if (cashFlow != null) {
             Date date = cashFlow.getDate();
-            MyDate myDate = MyDateHelper.fromDate(date);
             Account customer = cashFlow.getCustomer();
             if (customer != null) {
                 AggregatedCustomerCashFlow customerCashFlow;
                 List<AggregatedCustomerCashFlow> aggregatedcashFlowList =
-                        this.aggregatedCustomerCashFlowRepository.findByCustomerIdAndYearAndMonthAndDay(
+                        this.aggregatedCustomerCashFlowRepository.findByCustomerIdAndDate(
                                 customer.getId(),
-                                myDate.getYear(),
-                                myDate.getMonth(),
-                                myDate.getDay()
+                                date
                         );
                 if (aggregatedcashFlowList != null && !aggregatedcashFlowList.isEmpty()) {
                     customerCashFlow = aggregatedcashFlowList.get(0);
                 } else {
                     customerCashFlow = new AggregatedCustomerCashFlow();
                     customerCashFlow.setCustomerId(customer.getId());
-                    customerCashFlow.setDay(myDate.getDay());
-                    customerCashFlow.setMonth(myDate.getMonth());
-                    customerCashFlow.setYear(myDate.getYear());
+                    customerCashFlow.setDate(date);
                 }
 
                 if (cashFlow.getType().equals(CashFlowType.EXPENSE)) {

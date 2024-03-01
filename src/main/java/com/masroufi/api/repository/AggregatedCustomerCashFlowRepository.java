@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -13,29 +14,24 @@ public interface AggregatedCustomerCashFlowRepository extends JpaRepository<Aggr
 
     AggregatedCustomerCashFlow findByUuid(String uuid);
 
-    List<AggregatedCustomerCashFlow> findByCustomerIdAndYearAndMonthOrderByDay(Long customerId, int year, int month);
+    @Query("Select agg " +
+            "From AggregatedCustomerCashFlow  agg " +
+            "WHERE agg.customerId = :customerId " +
+            "and agg.date between :startDate and :endDate " +
+            "Order by agg.date asc ")
+    List<AggregatedCustomerCashFlow> findAllByCustomerBetween(Long customerId, Date startDate, Date endDate);
 
-    List<AggregatedCustomerCashFlow> findByCustomerIdAndYearAndMonthAndDay(Long customerId, int year, int month, int day);
+    List<AggregatedCustomerCashFlow> findByCustomerIdAndDate(Long customerId, Date date);
 
     @Query("Select COALESCE(SUM(agg.expenseAmount), 0) " +
             "From AggregatedCustomerCashFlow  agg " +
             "WHERE agg.customerId = :customerId " +
-            "and agg.year >= :startYear " +
-            "and agg.month >= :startMonth " +
-            "and agg.day >= :startDay " +
-            "and agg.year <= :endYear " +
-            "and agg.month <= :endMonth " +
-            "and agg.day <= :endDay ")
-    Double calculateExpenseByCustomerBetween(Long customerId, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay);
+            "and agg.date between :startDate and :endDate")
+    Double calculateExpenseByCustomerBetween(Long customerId, Date startDate, Date endDate);
 
     @Query("Select COALESCE(SUM(agg.gainAmount), 0) " +
             "From AggregatedCustomerCashFlow  agg " +
             "WHERE agg.customerId = :customerId " +
-            "and agg.year >= :startYear " +
-            "and agg.month >= :startMonth " +
-            "and agg.day >= :startDay " +
-            "and agg.year <= :endYear " +
-            "and agg.month <= :endMonth " +
-            "and agg.day <= :endDay")
-    Double calculateGainByCustomerBetween(Long customerId, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay);
+            "and agg.date between :startDate and :endDate")
+    Double calculateGainByCustomerBetween(Long customerId, Date startDate, Date endDate);
 }

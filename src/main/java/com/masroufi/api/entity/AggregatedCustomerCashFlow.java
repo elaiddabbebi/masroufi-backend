@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Setter
 @Getter
@@ -14,9 +15,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "aggregated_customer_cash_flow", indexes = {
         @Index(name = "idx_aggregated_customer_cash_flow_customer_id",  columnList="customerId"),
-        @Index(name = "idx_aggregated_customer_cash_flow_year",   columnList="year"),
-        @Index(name = "idx_aggregated_customer_cash_flow_month",  columnList="month"),
-        @Index(name = "idx_aggregated_customer_cash_flow_day",    columnList="day"),
+        @Index(name = "idx_aggregated_customer_cash_flow_date",   columnList="date"),
 })
 public class AggregatedCustomerCashFlow extends BaseEntity implements Serializable {
 
@@ -28,16 +27,10 @@ public class AggregatedCustomerCashFlow extends BaseEntity implements Serializab
     private Long id;
 
     @Column
-    private int year;
-
-    @Column
-    private int month;
-
-    @Column
-    private int day;
-
-    @Column
     private double gainAmount;
+
+    @Temporal(TemporalType.DATE)
+    private Date date;
 
     @Column
     private double expenseAmount;

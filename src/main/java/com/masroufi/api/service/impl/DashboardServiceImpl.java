@@ -9,12 +9,12 @@ import com.masroufi.api.enums.Month;
 import com.masroufi.api.repository.AggregatedCustomerCashFlowRepository;
 import com.masroufi.api.service.DashboardService;
 import com.masroufi.api.shared.context.ApplicationSecurityContext;
-import com.masroufi.api.shared.helpers.MyDateHelper;
-import com.masroufi.api.shared.types.MyDate;
+import com.masroufi.api.shared.helpers.DateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,17 +48,13 @@ public class DashboardServiceImpl implements DashboardService {
         this.applicationSecurityContext.isCustomerOrThrowException();
         Account customer = this.applicationSecurityContext.getCurrentUser();
         if (customer != null) {
-            MyDate currentWeekStartDate = MyDateHelper.getCurrentWeekStartDate();
-            MyDate currentWeekEndDate = MyDateHelper.getCurrentWeekEndDate();
+            Date currentWeekStartDate = DateHelper.getCurrentWeekStartDate();
+            Date currentWeekEndDate = DateHelper.getCurrentWeekEndDate();
             return this.aggregatedCustomerCashFlowRepository
                     .calculateExpenseByCustomerBetween(
                             customer.getId(),
-                            currentWeekStartDate.getYear(),
-                            currentWeekStartDate.getMonth(),
-                            currentWeekStartDate.getDay(),
-                            currentWeekEndDate.getYear(),
-                            currentWeekEndDate.getMonth(),
-                            currentWeekEndDate.getDay()
+                            currentWeekStartDate,
+                            currentWeekEndDate
                     );
         } else {
             return 0D;
@@ -70,17 +66,13 @@ public class DashboardServiceImpl implements DashboardService {
         this.applicationSecurityContext.isCustomerOrThrowException();
         Account customer = this.applicationSecurityContext.getCurrentUser();
         if (customer != null) {
-            MyDate lastWeekStartDate = MyDateHelper.getLastWeekStartDate();
-            MyDate lastWeekEndDate = MyDateHelper.getLastWeekEndDate();
+            Date lastWeekStartDate = DateHelper.getLastWeekStartDate();
+            Date lastWeekEndDate = DateHelper.getLastWeekEndDate();
             return this.aggregatedCustomerCashFlowRepository
                     .calculateExpenseByCustomerBetween(
                             customer.getId(),
-                            lastWeekStartDate.getYear(),
-                            lastWeekStartDate.getMonth(),
-                            lastWeekStartDate.getDay(),
-                            lastWeekEndDate.getYear(),
-                            lastWeekEndDate.getMonth(),
-                            lastWeekEndDate.getDay()
+                            lastWeekStartDate,
+                            lastWeekEndDate
                     );
         } else {
             return 0D;
@@ -92,28 +84,20 @@ public class DashboardServiceImpl implements DashboardService {
         this.applicationSecurityContext.isCustomerOrThrowException();
         Account customer = this.applicationSecurityContext.getCurrentUser();
         if (customer != null) {
-            MyDate currentMonthStartDate = MyDateHelper.getCurrentMonthStartDate();
-            MyDate currentMonthEndDate = MyDateHelper.getCurrentMonthEndDate();
+            Date currentMonthStartDate = DateHelper.getCurrentMonthStartDate();
+            Date currentMonthEndDate = DateHelper.getCurrentMonthEndDate();
             Double expense = this.aggregatedCustomerCashFlowRepository
                     .calculateExpenseByCustomerBetween(
                             customer.getId(),
-                            currentMonthStartDate.getYear(),
-                            currentMonthStartDate.getMonth(),
-                            currentMonthStartDate.getDay(),
-                            currentMonthEndDate.getYear(),
-                            currentMonthEndDate.getMonth(),
-                            currentMonthEndDate.getDay()
+                            currentMonthStartDate,
+                            currentMonthEndDate
                     );
             expense = expense != null ? expense : 0D;
             Double gain = this.aggregatedCustomerCashFlowRepository
                     .calculateGainByCustomerBetween(
                             customer.getId(),
-                            currentMonthStartDate.getYear(),
-                            currentMonthStartDate.getMonth(),
-                            currentMonthStartDate.getDay(),
-                            currentMonthEndDate.getYear(),
-                            currentMonthEndDate.getMonth(),
-                            currentMonthEndDate.getDay()
+                            currentMonthStartDate,
+                            currentMonthEndDate
                     );
             gain = gain != null ? gain : 0D;
             return gain - expense;
@@ -127,28 +111,20 @@ public class DashboardServiceImpl implements DashboardService {
         this.applicationSecurityContext.isCustomerOrThrowException();
         Account customer = this.applicationSecurityContext.getCurrentUser();
         if (customer != null) {
-            MyDate lastMonthStartDate = MyDateHelper.getLastMonthStartDate();
-            MyDate lastMonthEndDate = MyDateHelper.getLastMonthEndDate();
+            Date lastMonthStartDate = DateHelper.getLastMonthStartDate();
+            Date lastMonthEndDate = DateHelper.getLastMonthEndDate();
             Double expense = this.aggregatedCustomerCashFlowRepository
                     .calculateExpenseByCustomerBetween(
                             customer.getId(),
-                            lastMonthStartDate.getYear(),
-                            lastMonthStartDate.getMonth(),
-                            lastMonthStartDate.getDay(),
-                            lastMonthEndDate.getYear(),
-                            lastMonthEndDate.getMonth(),
-                            lastMonthEndDate.getDay()
+                            lastMonthStartDate,
+                            lastMonthEndDate
                     );
             expense = expense != null ? expense : 0D;
             Double gain = this.aggregatedCustomerCashFlowRepository
                     .calculateGainByCustomerBetween(
                             customer.getId(),
-                            lastMonthStartDate.getYear(),
-                            lastMonthStartDate.getMonth(),
-                            lastMonthStartDate.getDay(),
-                            lastMonthEndDate.getYear(),
-                            lastMonthEndDate.getMonth(),
-                            lastMonthEndDate.getDay()
+                            lastMonthStartDate,
+                            lastMonthEndDate
                     );
             gain = gain != null ? gain : 0D;
             return gain - expense;
@@ -163,14 +139,14 @@ public class DashboardServiceImpl implements DashboardService {
         this.applicationSecurityContext.isCustomerOrThrowException();
         Account customer = this.applicationSecurityContext.getCurrentUser();
         if (customer != null) {
-            MyDate lastMonthStartDate = MyDateHelper.getLastMonthStartDate();
-            MyDate lastMonthEndDate = MyDateHelper.getLastMonthEndDate();
-            MyDate currentMonthStartDate = MyDateHelper.getCurrentMonthStartDate();
-            MyDate currentMonthEndDate = MyDateHelper.getCurrentMonthEndDate();
+            Date lastMonthStartDate = DateHelper.getLastMonthStartDate();
+            Date lastMonthEndDate = DateHelper.getLastMonthEndDate();
+            Date currentMonthStartDate = DateHelper.getCurrentMonthStartDate();
+            Date currentMonthEndDate = DateHelper.getCurrentMonthEndDate();
 
             List<String> monthDays = new ArrayList<>();
             List<Integer> monthDaysInteger = new ArrayList<>();
-            for (int i = 1; i <= Math.max(lastMonthEndDate.getDay(), currentMonthEndDate.getDay()); i++) {
+            for (int i = 1; i <= Math.max(lastMonthEndDate.getDate(), currentMonthEndDate.getDate()); i++) {
                 monthDaysInteger.add(i);
                 String label = String.valueOf(i);
                 if (i < 10) {
@@ -181,17 +157,17 @@ public class DashboardServiceImpl implements DashboardService {
             returnValue.setDaysOfMonth(monthDays);
 
             List< AggregatedCustomerCashFlow> lastMonthData = this.aggregatedCustomerCashFlowRepository
-                    .findByCustomerIdAndYearAndMonthOrderByDay(
+                    .findAllByCustomerBetween(
                             customer.getId(),
-                            lastMonthStartDate.getYear(),
-                            lastMonthStartDate.getMonth()
+                            lastMonthStartDate,
+                            lastMonthEndDate
                     );
 
             List< AggregatedCustomerCashFlow> currentMonthData = this.aggregatedCustomerCashFlowRepository
-                    .findByCustomerIdAndYearAndMonthOrderByDay(
+                    .findAllByCustomerBetween(
                             customer.getId(),
-                            currentMonthStartDate.getYear(),
-                            currentMonthStartDate.getMonth()
+                            currentMonthStartDate,
+                            currentMonthEndDate
                     );
 
             MonthConsumptionData lastMonthConsumptionData = new MonthConsumptionData();
@@ -201,7 +177,7 @@ public class DashboardServiceImpl implements DashboardService {
                 if (lastMonthData != null && !lastMonthData.isEmpty()) {
                     List<AggregatedCustomerCashFlow> todayDataList = lastMonthData
                             .stream()
-                            .filter(elt -> day.equals(elt.getDay()))
+                            .filter(elt -> elt.getDate() != null && day.equals(elt.getDate().getDate()))
                             .collect(Collectors.toList());
                     if (!todayDataList.isEmpty()) {
                         lastMonthCleanedData.add(todayDataList.get(0).getExpenseAmount());
@@ -221,7 +197,7 @@ public class DashboardServiceImpl implements DashboardService {
                 if (currentMonthData != null && !currentMonthData.isEmpty()) {
                     List<AggregatedCustomerCashFlow> todayDataList = currentMonthData
                             .stream()
-                            .filter(elt -> day.equals(elt.getDay()))
+                            .filter(elt -> elt.getDate() != null && day.equals(elt.getDate().getDate()))
                             .collect(Collectors.toList());
                     if (!todayDataList.isEmpty()) {
                         currentMonthCleanedData.add(todayDataList.get(0).getExpenseAmount());

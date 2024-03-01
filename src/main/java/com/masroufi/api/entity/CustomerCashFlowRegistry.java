@@ -14,7 +14,10 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "customer_cash_flow_registry")
+@Table(name = "customer_cash_flow_registry", indexes = {
+        @Index(name = "idx_customer_cash_flow_registry_customer_id",  columnList="customer_id"),
+        @Index(name = "idx_customer_cash_flow_registry_date",   columnList="date"),
+})
 public class CustomerCashFlowRegistry extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -27,6 +30,7 @@ public class CustomerCashFlowRegistry extends BaseEntity implements Serializable
     @OneToOne
     private Account customer;
 
+    @Temporal(TemporalType.DATE)
     private Date date;
 
     private Double amount;
