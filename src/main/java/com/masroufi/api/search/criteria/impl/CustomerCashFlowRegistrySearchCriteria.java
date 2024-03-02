@@ -9,5 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class CustomerCashFlowRegistrySearchCriteria extends AbstractSearchCriteria {
+    private Long customerId;
     private String cashFlow;
 }

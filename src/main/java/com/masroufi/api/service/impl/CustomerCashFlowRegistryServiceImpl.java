@@ -12,12 +12,17 @@ import com.masroufi.api.enums.TransactionType;
 import com.masroufi.api.repository.AccountRepository;
 import com.masroufi.api.repository.AggregatedCustomerCashFlowRepository;
 import com.masroufi.api.repository.CustomerCashFlowRegistryRepository;
+import com.masroufi.api.search.specification.SortSpecificationBuilder;
+import com.masroufi.api.search.specification.impl.CustomerCashFlowRegistrySpecification;
 import com.masroufi.api.service.CashFlowService;
 import com.masroufi.api.service.CustomerCashFlowRegistryService;
 import com.masroufi.api.shared.context.ApplicationSecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Pageable;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,6 +60,22 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
 
     @Override
     public ResultSetResponse<CustomerCashFlowRegistryDto> search(CustomerCashFlowRegistrySearchCriteria searchCriteria) {
+        this.applicationSecurityContext.isCustomerOrThrowException();
+        Account customer = this.applicationSecurityContext.getCurrentUser();
+        if (customer != null) {
+            searchCriteria.setCustomerId(customer.getId());
+            Specification<CustomerCashFlowRegistry> specification = CustomerCashFlowRegistrySpecification.of(searchCriteria);
+            Pageable pageable = SortSpecificationBuilder.pageOf(searchCriteria);
+            List<CustomerCashFlowRegistry> result = this.customerCashFlowRegistryRepository.findAll(specification, pageable).toList();
+
+            ResultSetResponse<CustomerCashFlowRegistryDto> returnValue = new ResultSetResponse<>();
+            returnValue.setPage(searchCriteria.getPage());
+            returnValue.setSize(searchCriteria.getSize());
+            returnValue.setResult(result.stream().map(CustomerCashFlowRegistryDto::buildFromCashFlowRegistry).collect(Collectors.toList()));
+            returnValue.setTotal(result.size());
+
+            return returnValue;
+        }
         return null;
     }
 

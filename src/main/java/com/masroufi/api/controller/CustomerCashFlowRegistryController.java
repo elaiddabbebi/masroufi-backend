@@ -2,6 +2,8 @@ package com.masroufi.api.controller;
 
 
 import com.masroufi.api.dto.CustomerCashFlowRegistryDto;
+import com.masroufi.api.dto.response.ResultSetResponse;
+import com.masroufi.api.search.criteria.impl.CustomerCashFlowRegistrySearchCriteria;
 import com.masroufi.api.service.CustomerCashFlowRegistryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,11 @@ public class CustomerCashFlowRegistryController {
     @GetMapping
     List<CustomerCashFlowRegistryDto> findAll() {
         return this.customerCashFlowRegistryService.findAll();
+    }
+
+    @GetMapping("/search")
+    ResultSetResponse<CustomerCashFlowRegistryDto> search(@ModelAttribute CustomerCashFlowRegistrySearchCriteria criteria) {
+        return this.customerCashFlowRegistryService.search(criteria);
     }
 
     @GetMapping("/{uuid}")
