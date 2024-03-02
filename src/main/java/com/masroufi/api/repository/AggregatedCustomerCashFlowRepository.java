@@ -19,7 +19,7 @@ public interface AggregatedCustomerCashFlowRepository extends JpaRepository<Aggr
             "WHERE agg.customerId = :customerId " +
             "and agg.date between :startDate and :endDate " +
             "Order by agg.date asc ")
-    List<AggregatedCustomerCashFlow> findAllByCustomerBetween(Long customerId, Date startDate, Date endDate);
+    List<AggregatedCustomerCashFlow> findAllByCustomerIdAndDateBetween(Long customerId, Date startDate, Date endDate);
 
     List<AggregatedCustomerCashFlow> findByCustomerIdAndDate(Long customerId, Date date);
 

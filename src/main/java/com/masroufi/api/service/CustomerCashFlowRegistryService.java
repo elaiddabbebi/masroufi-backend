@@ -1,7 +1,8 @@
 package com.masroufi.api.service;
 
+import com.masroufi.api.search.criteria.impl.CustomerCashFlowRegistrySearchCriteria;
 import com.masroufi.api.dto.CustomerCashFlowRegistryDto;
-import com.masroufi.api.entity.Account;
+import com.masroufi.api.dto.response.ResultSetResponse;
 import com.masroufi.api.entity.CustomerCashFlowRegistry;
 
 import java.util.List;
@@ -9,6 +10,8 @@ import java.util.List;
 public interface CustomerCashFlowRegistryService {
 
     List<CustomerCashFlowRegistryDto> findAll();
+
+    ResultSetResponse<CustomerCashFlowRegistryDto> search(CustomerCashFlowRegistrySearchCriteria searchCriteria);
 
     CustomerCashFlowRegistryDto create(CustomerCashFlowRegistryDto dto);
 

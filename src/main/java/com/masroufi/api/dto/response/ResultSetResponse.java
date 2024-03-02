@@ -10,8 +10,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResultSetResponse<T> {
-    private int count;
     private int page;
+    private int size;
     private int total;
     private List<T> result;
 }

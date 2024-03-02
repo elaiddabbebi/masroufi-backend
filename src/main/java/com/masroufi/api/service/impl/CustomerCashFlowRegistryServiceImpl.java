@@ -1,6 +1,8 @@
 package com.masroufi.api.service.impl;
 
+import com.masroufi.api.search.criteria.impl.CustomerCashFlowRegistrySearchCriteria;
 import com.masroufi.api.dto.CustomerCashFlowRegistryDto;
+import com.masroufi.api.dto.response.ResultSetResponse;
 import com.masroufi.api.entity.Account;
 import com.masroufi.api.entity.AggregatedCustomerCashFlow;
 import com.masroufi.api.entity.CustomerCashFlowRegistry;
@@ -48,6 +50,11 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
                 return customerCashFlowRegistryList.stream().map(CustomerCashFlowRegistryDto::buildFromCashFlowRegistry).collect(Collectors.toList());
             }
         }
+        return null;
+    }
+
+    @Override
+    public ResultSetResponse<CustomerCashFlowRegistryDto> search(CustomerCashFlowRegistrySearchCriteria searchCriteria) {
         return null;
     }
 
