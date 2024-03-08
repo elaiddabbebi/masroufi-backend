@@ -30,6 +30,26 @@ public class DashboardController {
         return this.dashboardService.getLastWeekConsumption();
     }
 
+    @GetMapping("current-week-balance")
+    Double getCurrentWeekBalance() {
+        return this.dashboardService.getCurrentWeekBalance();
+    }
+
+    @GetMapping("last-week-balance")
+    Double getLastWeekBalance() {
+        return this.dashboardService.getLastWeekBalance();
+    }
+
+    @GetMapping("current-month-consumption")
+    Double getCurrentMonthConsumption() {
+        return this.dashboardService.getCurrentMonthConsumption();
+    }
+
+    @GetMapping("last-month-consumption")
+    Double getLastMonthConsumption() {
+        return this.dashboardService.getLastMonthConsumption();
+    }
+
     @GetMapping("current-month-balance")
     Double getCurrentMonthBalance() {
         return this.dashboardService.getCurrentMonthBalance();
@@ -38,6 +58,16 @@ public class DashboardController {
     @GetMapping("last-month-balance")
     Double getLastMonthBalance() {
         return this.dashboardService.getLastMonthBalance();
+    }
+
+    @GetMapping("current-year-revenue")
+    Double getCurrentYearRevenue() {
+        return this.dashboardService.getCurrentYearRevenue();
+    }
+
+    @GetMapping("current-year-balance")
+    Double getCurrentYearBalance() {
+        return this.dashboardService.getCurrentYearBalance();
     }
 
     @GetMapping("consumption-evolution")

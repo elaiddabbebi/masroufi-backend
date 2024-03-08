@@ -10,9 +10,21 @@ public interface DashboardService {
 
     Double getLastWeekConsumption();
 
+    Double getCurrentWeekBalance();
+
+    Double getLastWeekBalance();
+
+    Double getCurrentMonthConsumption();
+
+    Double getLastMonthConsumption();
+
     Double getCurrentMonthBalance();
 
     Double getLastMonthBalance();
+
+    Double getCurrentYearRevenue();
+
+    Double getCurrentYearBalance();
 
     ConsumptionEvolutionData getConsumptionEvolutionData();
 

@@ -7,9 +7,7 @@ import java.util.Date;
 
 public class DateHelper {
 
-    private static Date toDate(LocalDate localDate) {
-        return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
-    }
+    /********** Week utils ***********/
 
     public static Date getCurrentWeekStartDate() {
         LocalDate currentDate = LocalDate.now();
@@ -31,6 +29,8 @@ public class DateHelper {
         return toDate(currentDate.minusWeeks(1).with(DayOfWeek.SUNDAY));
     }
 
+    /********** Month utils ***********/
+
     public static Date getCurrentMonthStartDate() {
         LocalDate currentDate = LocalDate.now();
         return toDate(currentDate.withDayOfMonth(1));
@@ -49,5 +49,33 @@ public class DateHelper {
     public static Date getLastMonthEndDate() {
         LocalDate currentDate = LocalDate.now();
         return toDate(currentDate.withDayOfMonth(1).minusDays(1));
+    }
+
+    /********** Year utils ***********/
+
+    public static Date getCurrentYearStartDate() {
+        LocalDate currentDate = LocalDate.now();
+        return toDate(currentDate.withDayOfYear(1));
+    }
+
+    public static Date getCurrentYearEndDate() {
+        LocalDate currentDate = LocalDate.now();
+        return toDate(currentDate.withDayOfYear(currentDate.lengthOfYear()));
+    }
+
+    public static Date getLastYearStartDate() {
+        LocalDate currentDate = LocalDate.now();
+        return toDate(currentDate.minusYears(1).withDayOfYear(1));
+    }
+
+    public static Date getLastYearEndDate() {
+        LocalDate currentDate = LocalDate.now();
+        return toDate(currentDate.withDayOfYear(1).minusDays(1));
+    }
+
+    /********** Generic utils ***********/
+
+    private static Date toDate(LocalDate localDate) {
+        return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
     }
 }
