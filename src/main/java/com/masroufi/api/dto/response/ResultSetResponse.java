@@ -12,6 +12,6 @@ import java.util.List;
 public class ResultSetResponse<T> {
     private int page;
     private int size;
-    private int total;
+    private long total;
     private List<T> result;
 }

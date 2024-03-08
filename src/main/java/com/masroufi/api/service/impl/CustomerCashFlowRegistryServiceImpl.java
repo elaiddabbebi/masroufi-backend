@@ -66,13 +66,15 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
             searchCriteria.setCustomerId(customer.getId());
             Specification<CustomerCashFlowRegistry> specification = CustomerCashFlowRegistrySpecification.of(searchCriteria);
             Pageable pageable = SortSpecificationBuilder.pageOf(searchCriteria);
+
             List<CustomerCashFlowRegistry> result = this.customerCashFlowRegistryRepository.findAll(specification, pageable).toList();
+            long total = this.customerCashFlowRegistryRepository.count(specification);
 
             ResultSetResponse<CustomerCashFlowRegistryDto> returnValue = new ResultSetResponse<>();
             returnValue.setPage(searchCriteria.getPage());
             returnValue.setSize(searchCriteria.getSize());
             returnValue.setResult(result.stream().map(CustomerCashFlowRegistryDto::buildFromCashFlowRegistry).collect(Collectors.toList()));
-            returnValue.setTotal(result.size());
+            returnValue.setTotal(total);
 
             return returnValue;
         }
