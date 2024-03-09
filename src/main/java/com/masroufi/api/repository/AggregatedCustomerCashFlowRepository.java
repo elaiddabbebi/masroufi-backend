@@ -1,6 +1,5 @@
 package com.masroufi.api.repository;
 
-import com.masroufi.api.dto.GenericType;
 import com.masroufi.api.entity.AggregatedCustomerCashFlow;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

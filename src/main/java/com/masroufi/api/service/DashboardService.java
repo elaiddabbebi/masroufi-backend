@@ -1,7 +1,8 @@
 package com.masroufi.api.service;
 
-import com.masroufi.api.dto.ConsumptionEvolutionData;
-import com.masroufi.api.dto.MonthAmount;
+import com.masroufi.api.dto.response.ConsumptionEvolutionData;
+import com.masroufi.api.dto.response.ExpenseRevenueEvolutionData;
+import com.masroufi.api.dto.response.MonthAmount;
 
 import java.util.List;
 
@@ -34,5 +35,7 @@ public interface DashboardService {
     List<MonthAmount> getCurrentYearRevenueEvolution();
 
     List<MonthAmount> getCurrentYearExpenseEvolution();
+
+    ExpenseRevenueEvolutionData getCurrentYearExpenseRevenueEvolution();
 
 }

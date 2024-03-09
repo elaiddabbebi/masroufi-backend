@@ -1,4 +1,4 @@
-package com.masroufi.api.dto;
+package com.masroufi.api.dto.response;
 
 import com.masroufi.api.enums.Month;
 import lombok.*;

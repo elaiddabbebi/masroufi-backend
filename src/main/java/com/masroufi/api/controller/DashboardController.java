@@ -1,8 +1,9 @@
 package com.masroufi.api.controller;
 
 
-import com.masroufi.api.dto.ConsumptionEvolutionData;
-import com.masroufi.api.dto.MonthAmount;
+import com.masroufi.api.dto.response.ConsumptionEvolutionData;
+import com.masroufi.api.dto.response.ExpenseRevenueEvolutionData;
+import com.masroufi.api.dto.response.MonthAmount;
 import com.masroufi.api.service.DashboardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -86,5 +87,10 @@ public class DashboardController {
     @GetMapping("current-year-expense-evolution")
     List<MonthAmount> getCurrentYearExpenseEvolution() {
         return this.dashboardService.getCurrentYearExpenseEvolution();
+    }
+
+    @GetMapping("current-year-expense-revenue-evolution")
+    ExpenseRevenueEvolutionData getCurrentYearExpenseRevenueEvolution() {
+        return this.dashboardService.getCurrentYearExpenseRevenueEvolution();
     }
 }

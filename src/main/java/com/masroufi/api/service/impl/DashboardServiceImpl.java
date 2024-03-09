@@ -1,9 +1,9 @@
 package com.masroufi.api.service.impl;
 
-import com.masroufi.api.dto.ConsumptionEvolutionData;
-import com.masroufi.api.dto.GenericType;
-import com.masroufi.api.dto.MonthAmount;
-import com.masroufi.api.dto.MonthConsumptionData;
+import com.masroufi.api.dto.response.ConsumptionEvolutionData;
+import com.masroufi.api.dto.response.ExpenseRevenueEvolutionData;
+import com.masroufi.api.dto.response.MonthAmount;
+import com.masroufi.api.dto.response.MonthConsumptionData;
 import com.masroufi.api.entity.Account;
 import com.masroufi.api.entity.AggregatedCustomerCashFlow;
 import com.masroufi.api.entity.embeddable.CustomerCashState;
@@ -312,6 +312,25 @@ public class DashboardServiceImpl implements DashboardService {
         if (customer != null) {
             int year = DateHelper.getCurrentYear();
             return this.calculateFlowByCustomerAndYear(customer.getId(), year, CashFlowType.EXPENSE);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public ExpenseRevenueEvolutionData getCurrentYearExpenseRevenueEvolution() {
+        this.applicationSecurityContext.isCustomerOrThrowException();
+        Account customer = this.applicationSecurityContext.getCurrentUser();
+        if (customer != null) {
+            int year = DateHelper.getCurrentYear();
+            List<MonthAmount> expenseEvolutionData = this.calculateFlowByCustomerAndYear(customer.getId(), year, CashFlowType.EXPENSE);
+            List<MonthAmount> revenueEvolutionData = this.calculateFlowByCustomerAndYear(customer.getId(), year, CashFlowType.GAIN);
+            List<Month> months = DateHelper.getMonthsOfYear();
+            return ExpenseRevenueEvolutionData.builder()
+                    .months(months)
+                    .expenseEvolution(expenseEvolutionData)
+                    .revenueEvolution(revenueEvolutionData)
+                    .build();
         } else {
             return null;
         }
