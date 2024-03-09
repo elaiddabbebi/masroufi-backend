@@ -3,14 +3,12 @@ package com.masroufi.api.dto;
 import com.masroufi.api.enums.Month;
 import lombok.*;
 
-import java.util.List;
-
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MonthConsumptionData {
+public class MonthAmount {
     private Month month;
-    private List<Double> data;
+    private Double amount;
 }

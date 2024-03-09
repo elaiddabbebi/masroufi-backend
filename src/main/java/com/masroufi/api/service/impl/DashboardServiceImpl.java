@@ -1,10 +1,13 @@
 package com.masroufi.api.service.impl;
 
 import com.masroufi.api.dto.ConsumptionEvolutionData;
+import com.masroufi.api.dto.GenericType;
+import com.masroufi.api.dto.MonthAmount;
 import com.masroufi.api.dto.MonthConsumptionData;
 import com.masroufi.api.entity.Account;
 import com.masroufi.api.entity.AggregatedCustomerCashFlow;
 import com.masroufi.api.entity.embeddable.CustomerCashState;
+import com.masroufi.api.enums.CashFlowType;
 import com.masroufi.api.enums.Month;
 import com.masroufi.api.repository.AggregatedCustomerCashFlowRepository;
 import com.masroufi.api.service.DashboardService;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -289,6 +293,30 @@ public class DashboardServiceImpl implements DashboardService {
         return returnValue;
     }
 
+    @Override
+    public List<MonthAmount> getCurrentYearRevenueEvolution() {
+        this.applicationSecurityContext.isCustomerOrThrowException();
+        Account customer = this.applicationSecurityContext.getCurrentUser();
+        if (customer != null) {
+            int year = DateHelper.getCurrentYear();
+            return this.calculateFlowByCustomerAndYear(customer.getId(), year, CashFlowType.GAIN);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public List<MonthAmount> getCurrentYearExpenseEvolution() {
+        this.applicationSecurityContext.isCustomerOrThrowException();
+        Account customer = this.applicationSecurityContext.getCurrentUser();
+        if (customer != null) {
+            int year = DateHelper.getCurrentYear();
+            return this.calculateFlowByCustomerAndYear(customer.getId(), year, CashFlowType.EXPENSE);
+        } else {
+            return null;
+        }
+    }
+
     private Double calculateBalanceByCustomerBetween(Account customer, Date startDate, Date endDate) {
         Double expense = this.aggregatedCustomerCashFlowRepository
                 .calculateExpenseByCustomerBetween(
@@ -305,5 +333,38 @@ public class DashboardServiceImpl implements DashboardService {
                 );
         gain = gain != null ? gain : 0D;
         return gain - expense;
+    }
+
+    private List<MonthAmount> calculateFlowByCustomerAndYear(Long customerId, int year, CashFlowType cashFlowType) {
+        List<Month> months = DateHelper.getMonthsOfYear();
+        List<MonthAmount> returnValue = new ArrayList<>();
+        for (Month month: months) {
+            MonthAmount monthAmount = MonthAmount.builder()
+                    .month(month)
+                    .amount(0D)
+                    .build();
+            returnValue.add(monthAmount);
+        }
+        List<Map<String, Object>> result;
+        if (cashFlowType.equals(CashFlowType.EXPENSE)) {
+            result = this.aggregatedCustomerCashFlowRepository.calculateExpenseByCustomerAndMonthAndYear(customerId, year);
+        } else {
+            result = this.aggregatedCustomerCashFlowRepository.calculateGainByCustomerAndMonthAndYear(customerId, year);
+        }
+        if (result != null && !result.isEmpty()) {
+            for (Map<String, Object> monthAmount: result) {
+                if (monthAmount != null) {
+                    Month month = Month.of((Integer) monthAmount.get("month") - 1);
+                    Double amount = (Double) monthAmount.get("amount");
+                    for (MonthAmount mAmount: returnValue) {
+                        if (mAmount.getMonth().equals(month)) {
+                            mAmount.setAmount(amount);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return returnValue;
     }
 }
