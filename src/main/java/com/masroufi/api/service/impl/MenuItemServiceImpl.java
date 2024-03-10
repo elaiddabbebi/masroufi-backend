@@ -25,7 +25,8 @@ public class MenuItemServiceImpl implements MenuItemService {
                 MenuItemDto.builder().code("STATISTICS").label("STATISTICS").icon("pi pi-fw pi-chart-bar").routerLink("/main/statistics").visible(false).build(),
                 MenuItemDto.builder().code("SIMULATOR").label("SIMULATOR").icon("pi pi-fw pi-calculator").routerLink("/main/simulator").visible(false).build(),
                 MenuItemDto.builder().code("MANAGE_PROFILE").label("MY_PROFILE").icon("pi pi-fw pi-user").routerLink("/main/profile").visible(false).build(),
-                MenuItemDto.builder().code("MANAGE_CONFIG").label("CONFIGURATION").icon("pi pi-fw pi-cog").routerLink("/main/configuration").visible(false).build()
+                MenuItemDto.builder().code("MANAGE_CONFIG").label("CONFIGURATION").icon("pi pi-fw pi-cog").routerLink("/main/configuration").visible(false).build(),
+                MenuItemDto.builder().code("VIEW_ABOUT").label("ABOUT").icon("pi pi-fw pi-info-circle").routerLink("/main/about").visible(false).build()
         );
     }
 
@@ -61,6 +62,13 @@ public class MenuItemServiceImpl implements MenuItemService {
                 ).build(),
                 MenuItemPermissionsDto.builder().code("SIMULATOR").permissions(
                         Arrays.asList(PermissionType.MANAGE_EXPENSES)
+                ).build(),
+                MenuItemPermissionsDto.builder().code("VIEW_ABOUT").permissions(
+                        Arrays.asList(
+                                PermissionType.VIEW_SUPER_ADMIN_DASHBOARD,
+                                PermissionType.VIEW_ADMIN_DASHBOARD,
+                                PermissionType.VIEW_CUSTOMER_DASHBOARD
+                        )
                 ).build()
         );
     }
