@@ -21,6 +21,11 @@ public class CashFlowController {
         return this.cashFlowService.findAll();
     }
 
+    @GetMapping("/search")
+    List<String> searchByCategory(@RequestParam(required = false) String category) {
+        return this.cashFlowService.searchByCategory(category);
+    }
+
     @GetMapping("/{uuid}")
     CashFlowDto findCashFlow(@PathVariable String uuid) {
         return this.cashFlowService.findCashFlowByUuid(uuid);

@@ -28,7 +28,7 @@ public interface CashFlowCategoryRepository extends JpaRepository<CashFlowCatego
     @Query("Select distinct(c.name) " +
             "From CashFlowCategory c " +
             "where (c.isDeleted is false or c.isDeleted is null) " +
-            "and c.status <> 'REJECTED' " +
+            "and c.status = 'VALIDATED' " +
             "and (c.createdBy = :customerId or c.published is true) " +
             "order by c.name")
     List<String> findAllCategoryNamesByCustomer(Long customerId);

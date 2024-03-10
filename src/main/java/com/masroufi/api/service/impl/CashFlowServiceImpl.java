@@ -140,6 +140,24 @@ public class CashFlowServiceImpl implements CashFlowService {
         }
     }
 
+    @Override
+    public List<String> searchByCategory(String category) {
+        if (this.applicationSecurityContext.isSupperAdmin()) {
+            if (category != null && !category.isEmpty()) {
+                return this.cashFlowRepository.findAllByCategoryForSupperAdmin(category);
+            } else {
+                return this.cashFlowRepository.findAllCashFlowNamesForSupperAdmin();
+            }
+        } else {
+            Account customer = this.applicationSecurityContext.getCurrentUser();
+            if (category != null && !category.isEmpty()) {
+                return this.cashFlowRepository.findAllByCustomerAndCategory(customer.getId(), category);
+            } else {
+                return this.cashFlowRepository.findAllCashFlowNamesByCustomer(customer.getId());
+            }
+        }
+    }
+
     private void isNewCashFlowOrThrowException(String cashFlowName, String categoryName) {
         if (!this.isNewCashFlow(cashFlowName,categoryName)) {
             throw new RuntimeException("Cash flow already exist");

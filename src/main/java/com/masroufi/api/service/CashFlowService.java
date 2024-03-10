@@ -21,4 +21,6 @@ public interface CashFlowService {
     CashFlow findOrCreatedOrUpdateCashFlow(String name, String category, boolean gain, boolean expense);
 
     List<String> getAllCashFlowNameList();
+
+    List<String> searchByCategory(String category);
 }

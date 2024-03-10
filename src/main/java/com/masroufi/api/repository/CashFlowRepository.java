@@ -25,10 +25,28 @@ public interface CashFlowRepository extends JpaRepository<CashFlow, Long>, JpaSp
 
     @Query("Select distinct(c.name) " +
             "From CashFlow c " +
+            "Left join CashFlowCategory ca on c.category = ca " +
             "where (c.isDeleted is false or c.isDeleted is null) " +
             "and c.status <> 'REJECTED' " +
+            "and upper(ca.name) = upper(:category) ")
+    List<String> findAllByCategoryForSupperAdmin(String category);
+
+    @Query("Select distinct(c.name) " +
+            "From CashFlow c " +
+            "where (c.isDeleted is false or c.isDeleted is null) " +
+            "and c.status = 'VALIDATED' " +
             "and (c.createdBy = :customerId or c.published is true) " +
             "order by c.name")
     List<String> findAllCashFlowNamesByCustomer(Long customerId);
+
+    @Query("Select distinct(c.name) " +
+            "From CashFlow c " +
+            "Left join CashFlowCategory ca on c.category = ca " +
+            "where (c.isDeleted is false or c.isDeleted is null) " +
+            "and c.status = 'VALIDATED' " +
+            "and (c.createdBy = :customerId or c.published is true) " +
+            "and upper(ca.name) = upper(:category) " +
+            "order by c.name")
+    List<String> findAllByCustomerAndCategory(Long customerId, String category);
 
 }
