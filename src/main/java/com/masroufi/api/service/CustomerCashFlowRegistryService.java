@@ -9,8 +9,6 @@ import java.util.List;
 
 public interface CustomerCashFlowRegistryService {
 
-    List<CustomerCashFlowRegistryDto> findAll();
-
     ResultSetResponse<CustomerCashFlowRegistryDto> search(CustomerCashFlowRegistrySearchCriteria searchCriteria);
 
     CustomerCashFlowRegistryDto create(CustomerCashFlowRegistryDto dto);

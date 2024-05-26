@@ -46,19 +46,6 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
     private AggregatedCustomerCashFlowRepository aggregatedCustomerCashFlowRepository;
 
     @Override
-    public List<CustomerCashFlowRegistryDto> findAll() {
-        this.applicationSecurityContext.isCustomerOrThrowException();
-        Account customer = this.applicationSecurityContext.getCurrentUser();
-        if (customer != null) {
-            List<CustomerCashFlowRegistry> customerCashFlowRegistryList = this.customerCashFlowRegistryRepository.findAllByCustomerOrderByDateDescIdDesc(customer);
-            if (customerCashFlowRegistryList != null && !customerCashFlowRegistryList.isEmpty()) {
-                return customerCashFlowRegistryList.stream().map(CustomerCashFlowRegistryDto::buildFromCashFlowRegistry).collect(Collectors.toList());
-            }
-        }
-        return null;
-    }
-
-    @Override
     public ResultSetResponse<CustomerCashFlowRegistryDto> search(CustomerCashFlowRegistrySearchCriteria searchCriteria) {
         this.applicationSecurityContext.isCustomerOrThrowException();
         Account customer = this.applicationSecurityContext.getCurrentUser();

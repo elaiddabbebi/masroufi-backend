@@ -18,11 +18,6 @@ public class CustomerCashFlowRegistryController {
     @Autowired
     private CustomerCashFlowRegistryService customerCashFlowRegistryService;
 
-    @GetMapping
-    List<CustomerCashFlowRegistryDto> findAll() {
-        return this.customerCashFlowRegistryService.findAll();
-    }
-
     @GetMapping("/search")
     ResultSetResponse<CustomerCashFlowRegistryDto> search(@ModelAttribute CustomerCashFlowRegistrySearchCriteria criteria) {
         return this.customerCashFlowRegistryService.search(criteria);
