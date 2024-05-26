@@ -17,38 +17,48 @@ public interface AggregatedCustomerCashFlowRepository extends JpaRepository<Aggr
 
     List<AggregatedCustomerCashFlow> findByCustomerIdAndDate(Long customerId, Date date);
 
-    @Query("Select agg " +
+    @Query(
+            "Select agg " +
             "From AggregatedCustomerCashFlow  agg " +
             "WHERE agg.customerId = :customerId " +
             "and agg.date between :startDate and :endDate " +
-            "Order by agg.date asc ")
+            "Order by agg.date asc "
+    )
     List<AggregatedCustomerCashFlow> findAllByCustomerIdAndDateBetween(Long customerId, Date startDate, Date endDate);
 
-    @Query("Select COALESCE(SUM(agg.expenseAmount), 0) " +
+    @Query(
+            "Select COALESCE(SUM(agg.expenseAmount), 0) " +
             "From AggregatedCustomerCashFlow  agg " +
             "WHERE agg.customerId = :customerId " +
-            "and agg.date between :startDate and :endDate")
+            "and agg.date between :startDate and :endDate"
+    )
     Double calculateExpenseByCustomerBetween(Long customerId, Date startDate, Date endDate);
 
-    @Query("Select COALESCE(SUM(agg.gainAmount), 0) " +
+    @Query(
+            "Select COALESCE(SUM(agg.gainAmount), 0) " +
             "From AggregatedCustomerCashFlow  agg " +
             "WHERE agg.customerId = :customerId " +
-            "and agg.date between :startDate and :endDate")
+            "and agg.date between :startDate and :endDate"
+    )
     Double calculateGainByCustomerBetween(Long customerId, Date startDate, Date endDate);
 
-    @Query("Select EXTRACT(month from agg.date) as month, SUM(agg.expenseAmount) as amount " +
+    @Query(
+            "Select EXTRACT(month from agg.date) as month, SUM(agg.expenseAmount) as amount " +
             "From AggregatedCustomerCashFlow  agg " +
             "WHERE agg.customerId = :customerId " +
             "and EXTRACT(year from agg.date) = :year " +
             "group by month " +
-            "order by EXTRACT(month from agg.date) ASC")
+            "order by EXTRACT(month from agg.date) ASC"
+    )
     List<Map<String, Object>> calculateExpenseByCustomerAndMonthAndYear(Long customerId, int year);
 
-    @Query("Select EXTRACT(month from agg.date) as month, SUM(agg.gainAmount) as amount " +
+    @Query(
+            "Select EXTRACT(month from agg.date) as month, SUM(agg.gainAmount) as amount " +
             "From AggregatedCustomerCashFlow  agg " +
             "WHERE agg.customerId = :customerId " +
             "and EXTRACT(year from agg.date) = :year " +
             "group by month " +
-            "order by EXTRACT(month from agg.date) ASC")
+            "order by EXTRACT(month from agg.date) ASC"
+    )
     List<Map<String, Object>> calculateGainByCustomerAndMonthAndYear(Long customerId, int year);
 }
