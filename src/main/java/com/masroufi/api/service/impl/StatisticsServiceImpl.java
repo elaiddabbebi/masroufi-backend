@@ -78,7 +78,11 @@ public class StatisticsServiceImpl implements StatisticsService {
                     .data(result.stream().map(elt -> (Double) elt.get("amount")).collect(Collectors.toList()))
                     .build();
         } else {
-            return null;
+            return StatisticsResult.builder()
+                    .translateLabels(false)
+                    .labels(new ArrayList<>())
+                    .data(new ArrayList<>())
+                    .build();
         }
     }
 

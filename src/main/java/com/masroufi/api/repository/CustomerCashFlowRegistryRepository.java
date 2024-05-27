@@ -39,7 +39,7 @@ public interface CustomerCashFlowRegistryRepository extends JpaRepository<Custom
                     "Left join CashFlowCategory cashFlowCategory ON cashFlowCategory = cashFlow.category " +
                     "Where account.id = :customerId " +
                     "And registry.type = :cashFlowType " +
-                    "Order by cashFlowCategory.name DESC "
+                    "Order by cashFlowCategory.name ASC "
     )
     List<Map<String, Object>> getCustomerCategories(Long customerId, CashFlowType cashFlowType);
 
