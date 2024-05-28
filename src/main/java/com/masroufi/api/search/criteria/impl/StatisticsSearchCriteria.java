@@ -14,7 +14,7 @@ import java.util.Date;
 public class StatisticsSearchCriteria {
     private CashFlowType cashFlowType;
     private StatisticsSearchType searchType;
-    private String category;
+    private String categoryUuid;
     private Integer year;
     private Date startDate;
     private Date endDate;
