@@ -73,4 +73,9 @@ public interface CustomerCashFlowRegistryRepository extends JpaRepository<Custom
     )
     List<Map<String, Object>> getCustomerCategories(Long customerId, CashFlowType cashFlowType);
 
+    @Query("Select distinct (extract(year from cashFlow.createdAt))" +
+            "From AggregatedCustomerCashFlow cashFlow " +
+            "Where cashFlow.customerId = :customerId ")
+    List<Integer> getYearsListByCustomer(Long customerId);
+
 }

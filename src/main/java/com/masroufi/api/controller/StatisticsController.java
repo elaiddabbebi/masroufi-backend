@@ -26,4 +26,9 @@ public class StatisticsController {
     List<GenericObject> getCustomerCategories(@RequestParam CashFlowType cashFlowType) {
         return this.statisticsService.getCustomerCategories(cashFlowType);
     }
+
+    @GetMapping("/years-list")
+    List<Integer> getYearsList() {
+        return this.statisticsService.getYearsList();
+    }
 }

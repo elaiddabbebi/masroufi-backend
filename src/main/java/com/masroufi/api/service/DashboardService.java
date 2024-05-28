@@ -3,6 +3,7 @@ package com.masroufi.api.service;
 import com.masroufi.api.dto.response.ConsumptionEvolutionData;
 import com.masroufi.api.dto.response.ExpenseRevenueEvolutionData;
 import com.masroufi.api.dto.response.MonthAmount;
+import com.masroufi.api.enums.CashFlowType;
 
 import java.util.List;
 
@@ -37,5 +38,7 @@ public interface DashboardService {
     List<MonthAmount> getCurrentYearExpenseEvolution();
 
     ExpenseRevenueEvolutionData getCurrentYearExpenseRevenueEvolution();
+
+    List<MonthAmount> calculateFlowByCustomerAndYear(Long customerId, int year, CashFlowType cashFlowType);
 
 }

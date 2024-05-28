@@ -1,12 +1,14 @@
 package com.masroufi.api.service.impl;
 
 import com.masroufi.api.dto.response.GenericObject;
+import com.masroufi.api.dto.response.MonthAmount;
 import com.masroufi.api.dto.response.StatisticsResult;
 import com.masroufi.api.entity.Account;
 import com.masroufi.api.enums.CashFlowType;
 import com.masroufi.api.repository.AggregatedCustomerCashFlowRepository;
 import com.masroufi.api.repository.CustomerCashFlowRegistryRepository;
 import com.masroufi.api.search.criteria.impl.StatisticsSearchCriteria;
+import com.masroufi.api.service.DashboardService;
 import com.masroufi.api.service.StatisticsService;
 import com.masroufi.api.shared.context.ApplicationSecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Autowired
     private ApplicationSecurityContext applicationSecurityContext;
+
+    @Autowired
+    private DashboardService dashboardService;
 
     @Override
     public StatisticsResult searchStatistics(StatisticsSearchCriteria criteria) {
@@ -62,6 +67,12 @@ public class StatisticsServiceImpl implements StatisticsService {
         } else {
             return new ArrayList<>();
         }
+    }
+
+    @Override
+    public List<Integer> getYearsList() {
+        Account currentUser = this.applicationSecurityContext.getCurrentUser();
+        return this.customerCashFlowRegistryRepository.getYearsListByCustomer(currentUser.getId());
     }
 
     private StatisticsResult searchCashFlowStatsPerCategory(StatisticsSearchCriteria criteria) {
@@ -101,6 +112,24 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     private StatisticsResult searchCashFlowStatsPerMonth(StatisticsSearchCriteria criteria) {
-        return null;
+        Account currentUser = this.applicationSecurityContext.getCurrentUser();
+        List<MonthAmount> result = this.dashboardService.calculateFlowByCustomerAndYear(
+                currentUser.getId(),
+                criteria.getYear(),
+                criteria.getCashFlowType()
+        );
+        if (result != null && !result.isEmpty()) {
+            return StatisticsResult.builder()
+                    .translateLabels(true)
+                    .labels(result.stream().map(elt -> elt.getMonth().name()).collect(Collectors.toList()))
+                    .data(result.stream().map(MonthAmount::getAmount).collect(Collectors.toList()))
+                    .build();
+        } else {
+            return StatisticsResult.builder()
+                    .translateLabels(true)
+                    .labels(new ArrayList<>())
+                    .data(new ArrayList<>())
+                    .build();
+        }
     }
 }

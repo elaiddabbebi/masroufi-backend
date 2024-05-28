@@ -354,7 +354,7 @@ public class DashboardServiceImpl implements DashboardService {
         return gain - expense;
     }
 
-    private List<MonthAmount> calculateFlowByCustomerAndYear(Long customerId, int year, CashFlowType cashFlowType) {
+    public List<MonthAmount> calculateFlowByCustomerAndYear(Long customerId, int year, CashFlowType cashFlowType) {
         List<Month> months = DateHelper.getMonthsOfYear();
         List<MonthAmount> returnValue = new ArrayList<>();
         for (Month month: months) {

@@ -12,4 +12,6 @@ public interface StatisticsService {
     StatisticsResult searchStatistics(StatisticsSearchCriteria criteria);
 
     List<GenericObject> getCustomerCategories(CashFlowType cashFlowType);
+
+    List<Integer> getYearsList();
 }
