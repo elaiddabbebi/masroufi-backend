@@ -25,7 +25,7 @@ public interface CustomerCashFlowRegistryRepository extends JpaRepository<Custom
                     "Left join CashFlowCategory cashFlowCategory ON cashFlowCategory = cashFlow.category " +
                     "Where account.id = :customerId " +
                     "And registry.type = :cashFlowType " +
-                    "And registry.createdAt between :startDate And :endDate " +
+                    "And (registry.date >= :startDate And registry.date <= :endDate) " +
                     "And amount > 0 " +
                     "Group by cashFlowCategory.name " +
                     "Order by amount DESC "
@@ -47,7 +47,7 @@ public interface CustomerCashFlowRegistryRepository extends JpaRepository<Custom
                     "Where account.id = :customerId " +
                     "And registry.type = :cashFlowType " +
                     "And cashFlowCategory.uuid = :categoryUuid " +
-                    "And registry.createdAt between :startDate And :endDate " +
+                    "And (registry.date >= :startDate And registry.date <= :endDate) " +
                     "And amount > 0 " +
                     "Group by cashFlow.name " +
                     "Order by amount DESC "
