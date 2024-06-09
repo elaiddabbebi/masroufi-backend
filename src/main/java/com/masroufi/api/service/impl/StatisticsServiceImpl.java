@@ -1,39 +1,31 @@
 package com.masroufi.api.service.impl;
 
+import com.masroufi.api.dto.StatisticsItem;
 import com.masroufi.api.dto.response.GenericObject;
 import com.masroufi.api.dto.response.MonthAmount;
 import com.masroufi.api.dto.response.StatisticsResult;
 import com.masroufi.api.entity.Account;
 import com.masroufi.api.enums.CashFlowType;
-import com.masroufi.api.repository.AggregatedCustomerCashFlowRepository;
-import com.masroufi.api.repository.CustomerCashFlowRegistryRepository;
+import com.masroufi.api.repository.StatisticsRepository;
 import com.masroufi.api.search.criteria.impl.StatisticsSearchCriteria;
-import com.masroufi.api.service.DashboardService;
 import com.masroufi.api.service.StatisticsService;
 import com.masroufi.api.shared.context.ApplicationSecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 public class StatisticsServiceImpl implements StatisticsService {
 
     @Autowired
-    private AggregatedCustomerCashFlowRepository aggregatedCustomerCashFlowRepository;
-
-    @Autowired
-    private CustomerCashFlowRegistryRepository customerCashFlowRegistryRepository;
-
-    @Autowired
     private ApplicationSecurityContext applicationSecurityContext;
 
     @Autowired
-    private DashboardService dashboardService;
+    private StatisticsRepository statisticsRepository;
 
     @Override
     public StatisticsResult searchStatistics(StatisticsSearchCriteria criteria) {
@@ -53,54 +45,41 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     public List<GenericObject> getCustomerCategories(CashFlowType cashFlowType) {
         Account currentUser = this.applicationSecurityContext.getCurrentUser();
-        List<Map<String, Object>> result = this.customerCashFlowRegistryRepository.getCustomerCategories(currentUser.getId(), cashFlowType);;
-        if (result != null && !result.isEmpty()) {
-            return result
-                    .stream()
-                    .map(elt -> GenericObject
-                            .builder()
-                            .key((String) elt.get("key"))
-                            .value(elt.get("value"))
-                            .build()
-                    )
-                    .collect(Collectors.toList());
-        } else {
-            return new ArrayList<>();
-        }
+        return this.statisticsRepository.getCategoriesByCustomerAndCashFlowType(currentUser.getId(), cashFlowType);
     }
 
     @Override
     public List<Integer> getYearsList() {
         Account currentUser = this.applicationSecurityContext.getCurrentUser();
-        return this.customerCashFlowRegistryRepository.getYearsListByCustomer(currentUser.getId());
+        return this.statisticsRepository.getYearsListByCustomer(currentUser.getId());
     }
 
     private StatisticsResult searchCashFlowStatsPerCategory(StatisticsSearchCriteria criteria) {
         Account currentUser = this.applicationSecurityContext.getCurrentUser();
-        List<Map<String, Object>> result;
+        List<StatisticsItem> result;
         if (criteria.getCategoryUuid() != null && !criteria.getCategoryUuid().isEmpty()) {
-            result = this.customerCashFlowRegistryRepository.getCashFlowByCategoryAndCustomerBetween(
+            result = this.statisticsRepository.getCashFlowByCategoryAndTypeAndCustomerAndDateBetween(
                     currentUser.getId(),
                     criteria.getCashFlowType(),
                     criteria.getCategoryUuid(),
                     criteria.getStartDate(),
                     criteria.getEndDate(),
-                    PageRequest.of(0, 15)
+                    15
             );
         } else {
-            result =  this.customerCashFlowRegistryRepository.getCashFlowByCustomerBetween(
+            result =  this.statisticsRepository.getCashFlowByCustomerAndTypeAndDateBetween(
                     currentUser.getId(),
                     criteria.getCashFlowType(),
                     criteria.getStartDate(),
                     criteria.getEndDate(),
-                    PageRequest.of(0, 15)
+                    15
             );
         }
         if (result != null && !result.isEmpty()) {
             return StatisticsResult.builder()
                     .translateLabels(false)
-                    .labels(result.stream().map(elt -> (String) elt.get("name")).collect(Collectors.toList()))
-                    .data(result.stream().map(elt -> (Double) elt.get("amount")).collect(Collectors.toList()))
+                    .labels(result.stream().map(StatisticsItem::getLabel).collect(Collectors.toList()))
+                    .data(result.stream().map(StatisticsItem::getAmount).collect(Collectors.toList()))
                     .build();
         } else {
             return StatisticsResult.builder()
@@ -113,11 +92,12 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     private StatisticsResult searchCashFlowStatsPerMonth(StatisticsSearchCriteria criteria) {
         Account currentUser = this.applicationSecurityContext.getCurrentUser();
-        List<MonthAmount> result = this.dashboardService.calculateFlowByCustomerAndYear(
-                currentUser.getId(),
-                criteria.getYear(),
-                criteria.getCashFlowType()
-        );
+        List<MonthAmount> result;
+        if (Objects.equals(criteria.getCashFlowType(), CashFlowType.EXPENSE)) {
+            result = this.statisticsRepository.getExpensesPerMonthByCustomerAndYear(currentUser.getId(), criteria.getYear());
+        } else {
+            result = this.statisticsRepository.getRevenuesPerMonthByCustomerAndYear(currentUser.getId(), criteria.getYear());
+        }
         if (result != null && !result.isEmpty()) {
             return StatisticsResult.builder()
                     .translateLabels(true)

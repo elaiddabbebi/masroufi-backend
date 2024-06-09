@@ -39,6 +39,4 @@ public interface DashboardService {
 
     ExpenseRevenueEvolutionData getCurrentYearExpenseRevenueEvolution();
 
-    List<MonthAmount> calculateFlowByCustomerAndYear(Long customerId, int year, CashFlowType cashFlowType);
-
 }

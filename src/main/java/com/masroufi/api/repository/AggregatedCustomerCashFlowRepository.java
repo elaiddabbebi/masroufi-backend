@@ -41,24 +41,4 @@ public interface AggregatedCustomerCashFlowRepository extends JpaRepository<Aggr
             "and agg.date between :startDate and :endDate"
     )
     Double calculateGainByCustomerBetween(Long customerId, Date startDate, Date endDate);
-
-    @Query(
-            "Select EXTRACT(month from agg.date) as month, SUM(agg.expenseAmount) as amount " +
-            "From AggregatedCustomerCashFlow  agg " +
-            "WHERE agg.customerId = :customerId " +
-            "and EXTRACT(year from agg.date) = :year " +
-            "group by month " +
-            "order by EXTRACT(month from agg.date) ASC"
-    )
-    List<Map<String, Object>> calculateExpenseByCustomerAndMonthAndYear(Long customerId, int year);
-
-    @Query(
-            "Select EXTRACT(month from agg.date) as month, SUM(agg.gainAmount) as amount " +
-            "From AggregatedCustomerCashFlow  agg " +
-            "WHERE agg.customerId = :customerId " +
-            "and EXTRACT(year from agg.date) = :year " +
-            "group by month " +
-            "order by EXTRACT(month from agg.date) ASC"
-    )
-    List<Map<String, Object>> calculateGainByCustomerAndMonthAndYear(Long customerId, int year);
 }

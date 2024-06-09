@@ -9,6 +9,7 @@ import com.masroufi.api.service.MenuItemService;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +24,7 @@ public class MenuItemServiceImpl implements MenuItemService {
                 MenuItemDto.builder().code("MANAGE_CASH_FLOW").label("CASH").icon("pi pi-fw pi-database").routerLink("/main/cash-flow").visible(false).build(),
                 MenuItemDto.builder().code("MANAGE_CASH_FLOW_REGISTRY").label("CASH_FLOW_REGISTRY").icon("pi pi-fw pi-wallet").routerLink("/main/cash-flow-registry").visible(false).build(),
                 MenuItemDto.builder().code("STATISTICS").label("STATISTICS").icon("pi pi-fw pi-chart-bar").routerLink("/main/statistics").visible(false).build(),
+                MenuItemDto.builder().code("KPI").label("KPI").icon("pi pi-fw pi-chart-line").routerLink("/main/kpi").visible(false).build(),
                 MenuItemDto.builder().code("SIMULATOR").label("SIMULATOR").icon("pi pi-fw pi-calculator").routerLink("/main/simulator").visible(false).build(),
                 MenuItemDto.builder().code("MANAGE_PROFILE").label("MY_PROFILE").icon("pi pi-fw pi-user").routerLink("/main/profile").visible(false).build(),
                 MenuItemDto.builder().code("MANAGE_CONFIG").label("CONFIGURATION").icon("pi pi-fw pi-cog").routerLink("/main/configuration").visible(false).build(),
@@ -40,28 +42,31 @@ public class MenuItemServiceImpl implements MenuItemService {
                         )
                 ).build(),
                 MenuItemPermissionsDto.builder().code("MANAGE_PROFILE").permissions(
-                        Arrays.asList(PermissionType.MANGE_PROFILE)
+                        Collections.singletonList(PermissionType.MANGE_PROFILE)
                 ).build(),
                 MenuItemPermissionsDto.builder().code("MANAGE_CONFIG").permissions(
-                        Arrays.asList(PermissionType.MANAGE_CONFIG)
+                        Collections.singletonList(PermissionType.MANAGE_CONFIG)
                 ).build(),
                 MenuItemPermissionsDto.builder().code("MANAGE_USERS").permissions(
-                        Arrays.asList(PermissionType.MANAGE_USERS)
+                        Collections.singletonList(PermissionType.MANAGE_USERS)
                 ).build(),
                 MenuItemPermissionsDto.builder().code("MANAGE_ROLES").permissions(
-                        Arrays.asList(PermissionType.MANGE_ROLES)
+                        Collections.singletonList(PermissionType.MANGE_ROLES)
                 ).build(),
                 MenuItemPermissionsDto.builder().code("MANAGE_CASH_FLOW").permissions(
-                        Arrays.asList(PermissionType.MANAGE_SYSTEM_LISTS)
+                        Collections.singletonList(PermissionType.MANAGE_SYSTEM_LISTS)
                 ).build(),
                 MenuItemPermissionsDto.builder().code("MANAGE_CASH_FLOW_REGISTRY").permissions(
-                        Arrays.asList(PermissionType.MANAGE_EXPENSES)
+                        Collections.singletonList(PermissionType.MANAGE_EXPENSES)
                 ).build(),
                 MenuItemPermissionsDto.builder().code("STATISTICS").permissions(
-                        Arrays.asList(PermissionType.MANAGE_EXPENSES)
+                        Collections.singletonList(PermissionType.MANAGE_EXPENSES)
+                ).build(),
+                MenuItemPermissionsDto.builder().code("KPI").permissions(
+                        Collections.singletonList(PermissionType.MANAGE_EXPENSES)
                 ).build(),
                 MenuItemPermissionsDto.builder().code("SIMULATOR").permissions(
-                        Arrays.asList(PermissionType.MANAGE_EXPENSES)
+                        Collections.singletonList(PermissionType.MANAGE_EXPENSES)
                 ).build(),
                 MenuItemPermissionsDto.builder().code("VIEW_ABOUT").permissions(
                         Arrays.asList(

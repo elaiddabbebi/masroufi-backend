@@ -1,4 +1,4 @@
-package com.masroufi.api.shared.helpers;
+package com.masroufi.api.shared.utils;
 
 import com.masroufi.api.enums.Day;
 import com.masroufi.api.enums.Month;
@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public class DateHelper {
+public class DateUtils {
 
     /********** Week utils ***********/
 

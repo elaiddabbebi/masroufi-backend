@@ -10,9 +10,10 @@ import com.masroufi.api.entity.embeddable.CustomerCashState;
 import com.masroufi.api.enums.CashFlowType;
 import com.masroufi.api.enums.Month;
 import com.masroufi.api.repository.AggregatedCustomerCashFlowRepository;
+import com.masroufi.api.repository.StatisticsRepository;
 import com.masroufi.api.service.DashboardService;
 import com.masroufi.api.shared.context.ApplicationSecurityContext;
-import com.masroufi.api.shared.helpers.DateHelper;
+import com.masroufi.api.shared.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,9 @@ public class DashboardServiceImpl implements DashboardService {
 
     @Autowired
     private AggregatedCustomerCashFlowRepository aggregatedCustomerCashFlowRepository;
+
+    @Autowired
+    private StatisticsRepository statisticsRepository;
 
     @Override
     public Double getCurrentCashAmount() {
@@ -52,8 +56,8 @@ public class DashboardServiceImpl implements DashboardService {
         this.applicationSecurityContext.isCustomerOrThrowException();
         Account customer = this.applicationSecurityContext.getCurrentUser();
         if (customer != null) {
-            Date currentWeekStartDate = DateHelper.getCurrentWeekStartDate();
-            Date currentWeekEndDate = DateHelper.getCurrentWeekEndDate();
+            Date currentWeekStartDate = DateUtils.getCurrentWeekStartDate();
+            Date currentWeekEndDate = DateUtils.getCurrentWeekEndDate();
             return this.aggregatedCustomerCashFlowRepository
                     .calculateExpenseByCustomerBetween(
                             customer.getId(),
@@ -70,8 +74,8 @@ public class DashboardServiceImpl implements DashboardService {
         this.applicationSecurityContext.isCustomerOrThrowException();
         Account customer = this.applicationSecurityContext.getCurrentUser();
         if (customer != null) {
-            Date lastWeekStartDate = DateHelper.getLastWeekStartDate();
-            Date lastWeekEndDate = DateHelper.getLastWeekEndDate();
+            Date lastWeekStartDate = DateUtils.getLastWeekStartDate();
+            Date lastWeekEndDate = DateUtils.getLastWeekEndDate();
             return this.aggregatedCustomerCashFlowRepository
                     .calculateExpenseByCustomerBetween(
                             customer.getId(),
@@ -88,8 +92,8 @@ public class DashboardServiceImpl implements DashboardService {
         this.applicationSecurityContext.isCustomerOrThrowException();
         Account customer = this.applicationSecurityContext.getCurrentUser();
         if (customer != null) {
-            Date currentWeekStartDate = DateHelper.getCurrentWeekStartDate();
-            Date currentWeekEndDate = DateHelper.getCurrentWeekEndDate();
+            Date currentWeekStartDate = DateUtils.getCurrentWeekStartDate();
+            Date currentWeekEndDate = DateUtils.getCurrentWeekEndDate();
             return calculateBalanceByCustomerBetween(customer, currentWeekStartDate, currentWeekEndDate);
         } else {
             return 0D;
@@ -101,8 +105,8 @@ public class DashboardServiceImpl implements DashboardService {
         this.applicationSecurityContext.isCustomerOrThrowException();
         Account customer = this.applicationSecurityContext.getCurrentUser();
         if (customer != null) {
-            Date lastWeekStartDate = DateHelper.getLastWeekStartDate();
-            Date lastWeekEndDate = DateHelper.getLastWeekEndDate();
+            Date lastWeekStartDate = DateUtils.getLastWeekStartDate();
+            Date lastWeekEndDate = DateUtils.getLastWeekEndDate();
             return calculateBalanceByCustomerBetween(customer, lastWeekStartDate, lastWeekEndDate);
         } else {
             return 0D;
@@ -114,8 +118,8 @@ public class DashboardServiceImpl implements DashboardService {
         this.applicationSecurityContext.isCustomerOrThrowException();
         Account customer = this.applicationSecurityContext.getCurrentUser();
         if (customer != null) {
-            Date currentMonthStartDate = DateHelper.getCurrentMonthStartDate();
-            Date currentMonthEndDate = DateHelper.getCurrentMonthEndDate();
+            Date currentMonthStartDate = DateUtils.getCurrentMonthStartDate();
+            Date currentMonthEndDate = DateUtils.getCurrentMonthEndDate();
             return this.aggregatedCustomerCashFlowRepository
                     .calculateExpenseByCustomerBetween(
                             customer.getId(),
@@ -132,8 +136,8 @@ public class DashboardServiceImpl implements DashboardService {
         this.applicationSecurityContext.isCustomerOrThrowException();
         Account customer = this.applicationSecurityContext.getCurrentUser();
         if (customer != null) {
-            Date lastMonthStartDate = DateHelper.getLastMonthStartDate();
-            Date lastMonthEndDate = DateHelper.getLastMonthEndDate();
+            Date lastMonthStartDate = DateUtils.getLastMonthStartDate();
+            Date lastMonthEndDate = DateUtils.getLastMonthEndDate();
             return this.aggregatedCustomerCashFlowRepository
                     .calculateExpenseByCustomerBetween(
                             customer.getId(),
@@ -150,8 +154,8 @@ public class DashboardServiceImpl implements DashboardService {
         this.applicationSecurityContext.isCustomerOrThrowException();
         Account customer = this.applicationSecurityContext.getCurrentUser();
         if (customer != null) {
-            Date currentMonthStartDate = DateHelper.getCurrentMonthStartDate();
-            Date currentMonthEndDate = DateHelper.getCurrentMonthEndDate();
+            Date currentMonthStartDate = DateUtils.getCurrentMonthStartDate();
+            Date currentMonthEndDate = DateUtils.getCurrentMonthEndDate();
             return calculateBalanceByCustomerBetween(customer, currentMonthStartDate, currentMonthEndDate);
         } else {
             return 0D;
@@ -163,8 +167,8 @@ public class DashboardServiceImpl implements DashboardService {
         this.applicationSecurityContext.isCustomerOrThrowException();
         Account customer = this.applicationSecurityContext.getCurrentUser();
         if (customer != null) {
-            Date lastMonthStartDate = DateHelper.getLastMonthStartDate();
-            Date lastMonthEndDate = DateHelper.getLastMonthEndDate();
+            Date lastMonthStartDate = DateUtils.getLastMonthStartDate();
+            Date lastMonthEndDate = DateUtils.getLastMonthEndDate();
             return calculateBalanceByCustomerBetween(customer, lastMonthStartDate, lastMonthEndDate);
         } else {
             return 0D;
@@ -176,8 +180,8 @@ public class DashboardServiceImpl implements DashboardService {
         this.applicationSecurityContext.isCustomerOrThrowException();
         Account customer = this.applicationSecurityContext.getCurrentUser();
         if (customer != null) {
-            Date currentYearStartDate = DateHelper.getCurrentYearStartDate();
-            Date currentYearEndDate = DateHelper.getCurrentYearEndDate();
+            Date currentYearStartDate = DateUtils.getCurrentYearStartDate();
+            Date currentYearEndDate = DateUtils.getCurrentYearEndDate();
             return this.aggregatedCustomerCashFlowRepository.calculateGainByCustomerBetween(
                     customer.getId(),
                     currentYearStartDate,
@@ -193,8 +197,8 @@ public class DashboardServiceImpl implements DashboardService {
         this.applicationSecurityContext.isCustomerOrThrowException();
         Account customer = this.applicationSecurityContext.getCurrentUser();
         if (customer != null) {
-            Date currentYearStartDate = DateHelper.getCurrentYearStartDate();
-            Date currentYearEndDate = DateHelper.getCurrentYearEndDate();
+            Date currentYearStartDate = DateUtils.getCurrentYearStartDate();
+            Date currentYearEndDate = DateUtils.getCurrentYearEndDate();
             return calculateBalanceByCustomerBetween(customer, currentYearStartDate, currentYearEndDate);
         } else {
             return 0D;
@@ -207,10 +211,10 @@ public class DashboardServiceImpl implements DashboardService {
         this.applicationSecurityContext.isCustomerOrThrowException();
         Account customer = this.applicationSecurityContext.getCurrentUser();
         if (customer != null) {
-            Date lastMonthStartDate = DateHelper.getLastMonthStartDate();
-            Date lastMonthEndDate = DateHelper.getLastMonthEndDate();
-            Date currentMonthStartDate = DateHelper.getCurrentMonthStartDate();
-            Date currentMonthEndDate = DateHelper.getCurrentMonthEndDate();
+            Date lastMonthStartDate = DateUtils.getLastMonthStartDate();
+            Date lastMonthEndDate = DateUtils.getLastMonthEndDate();
+            Date currentMonthStartDate = DateUtils.getCurrentMonthStartDate();
+            Date currentMonthEndDate = DateUtils.getCurrentMonthEndDate();
 
             List<String> monthDays = new ArrayList<>();
             List<Integer> monthDaysInteger = new ArrayList<>();
@@ -298,8 +302,8 @@ public class DashboardServiceImpl implements DashboardService {
         this.applicationSecurityContext.isCustomerOrThrowException();
         Account customer = this.applicationSecurityContext.getCurrentUser();
         if (customer != null) {
-            int year = DateHelper.getCurrentYear();
-            return this.calculateFlowByCustomerAndYear(customer.getId(), year, CashFlowType.GAIN);
+            int year = DateUtils.getCurrentYear();
+            return this.statisticsRepository.getRevenuesPerMonthByCustomerAndYear(customer.getId(), year);
         } else {
             return null;
         }
@@ -310,8 +314,8 @@ public class DashboardServiceImpl implements DashboardService {
         this.applicationSecurityContext.isCustomerOrThrowException();
         Account customer = this.applicationSecurityContext.getCurrentUser();
         if (customer != null) {
-            int year = DateHelper.getCurrentYear();
-            return this.calculateFlowByCustomerAndYear(customer.getId(), year, CashFlowType.EXPENSE);
+            int year = DateUtils.getCurrentYear();
+            return this.statisticsRepository.getExpensesPerMonthByCustomerAndYear(customer.getId(), year);
         } else {
             return null;
         }
@@ -322,10 +326,10 @@ public class DashboardServiceImpl implements DashboardService {
         this.applicationSecurityContext.isCustomerOrThrowException();
         Account customer = this.applicationSecurityContext.getCurrentUser();
         if (customer != null) {
-            int year = DateHelper.getCurrentYear();
-            List<MonthAmount> expenseEvolutionData = this.calculateFlowByCustomerAndYear(customer.getId(), year, CashFlowType.EXPENSE);
-            List<MonthAmount> revenueEvolutionData = this.calculateFlowByCustomerAndYear(customer.getId(), year, CashFlowType.GAIN);
-            List<Month> months = DateHelper.getMonthsOfYear();
+            int year = DateUtils.getCurrentYear();
+            List<MonthAmount> expenseEvolutionData = this.statisticsRepository.getExpensesPerMonthByCustomerAndYear(customer.getId(), year);
+            List<MonthAmount> revenueEvolutionData = this.statisticsRepository.getRevenuesPerMonthByCustomerAndYear(customer.getId(), year);
+            List<Month> months = DateUtils.getMonthsOfYear();
             return ExpenseRevenueEvolutionData.builder()
                     .months(months)
                     .expenseEvolution(expenseEvolutionData)
@@ -352,38 +356,5 @@ public class DashboardServiceImpl implements DashboardService {
                 );
         gain = gain != null ? gain : 0D;
         return gain - expense;
-    }
-
-    public List<MonthAmount> calculateFlowByCustomerAndYear(Long customerId, int year, CashFlowType cashFlowType) {
-        List<Month> months = DateHelper.getMonthsOfYear();
-        List<MonthAmount> returnValue = new ArrayList<>();
-        for (Month month: months) {
-            MonthAmount monthAmount = MonthAmount.builder()
-                    .month(month)
-                    .amount(0D)
-                    .build();
-            returnValue.add(monthAmount);
-        }
-        List<Map<String, Object>> result;
-        if (cashFlowType.equals(CashFlowType.EXPENSE)) {
-            result = this.aggregatedCustomerCashFlowRepository.calculateExpenseByCustomerAndMonthAndYear(customerId, year);
-        } else {
-            result = this.aggregatedCustomerCashFlowRepository.calculateGainByCustomerAndMonthAndYear(customerId, year);
-        }
-        if (result != null && !result.isEmpty()) {
-            for (Map<String, Object> monthAmount: result) {
-                if (monthAmount != null) {
-                    Month month = Month.of((Integer) monthAmount.get("month") - 1);
-                    Double amount = (Double) monthAmount.get("amount");
-                    for (MonthAmount mAmount: returnValue) {
-                        if (mAmount.getMonth().equals(month)) {
-                            mAmount.setAmount(amount);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        return returnValue;
     }
 }
