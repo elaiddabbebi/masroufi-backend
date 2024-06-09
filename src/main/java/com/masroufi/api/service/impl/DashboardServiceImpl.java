@@ -228,14 +228,14 @@ public class DashboardServiceImpl implements DashboardService {
             }
             returnValue.setDaysOfMonth(monthDays);
 
-            List< AggregatedCustomerCashFlow> lastMonthData = this.aggregatedCustomerCashFlowRepository
+            List<AggregatedCustomerCashFlow> lastMonthData = this.aggregatedCustomerCashFlowRepository
                     .findAllByCustomerIdAndDateBetween(
                             customer.getId(),
                             lastMonthStartDate,
                             lastMonthEndDate
                     );
 
-            List< AggregatedCustomerCashFlow> currentMonthData = this.aggregatedCustomerCashFlowRepository
+            List<AggregatedCustomerCashFlow> currentMonthData = this.aggregatedCustomerCashFlowRepository
                     .findAllByCustomerIdAndDateBetween(
                             customer.getId(),
                             currentMonthStartDate,
