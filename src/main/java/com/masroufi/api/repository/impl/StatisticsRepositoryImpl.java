@@ -169,25 +169,18 @@ public class StatisticsRepositoryImpl implements StatisticsRepository {
         return this.mergeResultInsideAllMonths(this.namedParameterJdbcTemplate.query(sqlQuery, params, monthAmountRowMapper));
     }
 
-    private List<MonthAmount> mergeResultInsideAllMonths(List<MonthAmount> result) {
+    private List<MonthAmount> mergeResultInsideAllMonths(List<MonthAmount> monthAmountList) {
         List<Month> months = DateUtils.getMonthsOfYear();
         List<MonthAmount> returnValue = new ArrayList<>();
         for (Month month: months) {
-            MonthAmount monthAmount = MonthAmount.builder()
-                    .month(month)
-                    .amount(0D)
-                    .build();
-            returnValue.add(monthAmount);
-        }
-        if (result != null && !result.isEmpty()) {
-            for (MonthAmount monthAmount: result) {
-                for (MonthAmount mAmount: returnValue) {
-                    if (mAmount.getMonth().equals(monthAmount.getMonth())) {
-                        mAmount.setAmount(monthAmount.getAmount());
-                        break;
-                    }
+            MonthAmount item = MonthAmount.builder().month(month).amount(0D).build();
+            for (MonthAmount monthAmount: monthAmountList) {
+                if (month.equals(monthAmount.getMonth())) {
+                    item.setAmount(monthAmount.getAmount());
+                    break;
                 }
             }
+            returnValue.add(item);
         }
         return returnValue;
     }
