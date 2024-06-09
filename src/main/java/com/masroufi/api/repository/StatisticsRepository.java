@@ -34,4 +34,10 @@ public interface StatisticsRepository {
     List<MonthAmount> getExpensesPerMonthByCustomerAndYear(Long customerId, int year);
 
     List<MonthAmount> getRevenuesPerMonthByCustomerAndYear(Long customerId, int year);
+
+    Double getBalanceByCustomerAndDateBetween(Long customerId, Date startDate, Date endDate);
+
+    Double getExpenseByCustomerAndDateBetween(Long customerId, Date startDate, Date endDate);
+
+    Double getRevenueByCustomerAndDateBetween(Long customerId, Date startDate, Date endDate);
 }

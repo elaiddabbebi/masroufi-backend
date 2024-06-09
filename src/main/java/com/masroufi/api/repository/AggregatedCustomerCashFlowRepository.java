@@ -17,28 +17,5 @@ public interface AggregatedCustomerCashFlowRepository extends JpaRepository<Aggr
 
     List<AggregatedCustomerCashFlow> findByCustomerIdAndDate(Long customerId, Date date);
 
-    @Query(
-            "Select agg " +
-            "From AggregatedCustomerCashFlow  agg " +
-            "WHERE agg.customerId = :customerId " +
-            "and agg.date between :startDate and :endDate " +
-            "Order by agg.date asc "
-    )
-    List<AggregatedCustomerCashFlow> findAllByCustomerIdAndDateBetween(Long customerId, Date startDate, Date endDate);
-
-    @Query(
-            "Select COALESCE(SUM(agg.expenseAmount), 0) " +
-            "From AggregatedCustomerCashFlow  agg " +
-            "WHERE agg.customerId = :customerId " +
-            "and agg.date between :startDate and :endDate"
-    )
-    Double calculateExpenseByCustomerBetween(Long customerId, Date startDate, Date endDate);
-
-    @Query(
-            "Select COALESCE(SUM(agg.gainAmount), 0) " +
-            "From AggregatedCustomerCashFlow  agg " +
-            "WHERE agg.customerId = :customerId " +
-            "and agg.date between :startDate and :endDate"
-    )
-    Double calculateGainByCustomerBetween(Long customerId, Date startDate, Date endDate);
+    List<AggregatedCustomerCashFlow> findAllByCustomerIdAndDateBetweenOrderByDate(Long customerId, Date startDate, Date endDate);
 }

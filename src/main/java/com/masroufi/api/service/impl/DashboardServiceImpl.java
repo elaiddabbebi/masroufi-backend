@@ -58,12 +58,11 @@ public class DashboardServiceImpl implements DashboardService {
         if (customer != null) {
             Date currentWeekStartDate = DateUtils.getCurrentWeekStartDate();
             Date currentWeekEndDate = DateUtils.getCurrentWeekEndDate();
-            return this.aggregatedCustomerCashFlowRepository
-                    .calculateExpenseByCustomerBetween(
-                            customer.getId(),
-                            currentWeekStartDate,
-                            currentWeekEndDate
-                    );
+            return this.statisticsRepository.getExpenseByCustomerAndDateBetween(
+                    customer.getId(),
+                    currentWeekStartDate,
+                    currentWeekEndDate
+            );
         } else {
             return 0D;
         }
@@ -76,12 +75,11 @@ public class DashboardServiceImpl implements DashboardService {
         if (customer != null) {
             Date lastWeekStartDate = DateUtils.getLastWeekStartDate();
             Date lastWeekEndDate = DateUtils.getLastWeekEndDate();
-            return this.aggregatedCustomerCashFlowRepository
-                    .calculateExpenseByCustomerBetween(
-                            customer.getId(),
-                            lastWeekStartDate,
-                            lastWeekEndDate
-                    );
+            return this.statisticsRepository.getExpenseByCustomerAndDateBetween(
+                    customer.getId(),
+                    lastWeekStartDate,
+                    lastWeekEndDate
+            );
         } else {
             return 0D;
         }
@@ -94,7 +92,11 @@ public class DashboardServiceImpl implements DashboardService {
         if (customer != null) {
             Date currentWeekStartDate = DateUtils.getCurrentWeekStartDate();
             Date currentWeekEndDate = DateUtils.getCurrentWeekEndDate();
-            return calculateBalanceByCustomerBetween(customer, currentWeekStartDate, currentWeekEndDate);
+            return this.statisticsRepository.getBalanceByCustomerAndDateBetween(
+                    customer.getId(),
+                    currentWeekStartDate,
+                    currentWeekEndDate
+            );
         } else {
             return 0D;
         }
@@ -107,7 +109,10 @@ public class DashboardServiceImpl implements DashboardService {
         if (customer != null) {
             Date lastWeekStartDate = DateUtils.getLastWeekStartDate();
             Date lastWeekEndDate = DateUtils.getLastWeekEndDate();
-            return calculateBalanceByCustomerBetween(customer, lastWeekStartDate, lastWeekEndDate);
+            return this.statisticsRepository.getBalanceByCustomerAndDateBetween(
+                    customer.getId(),
+                    lastWeekStartDate,
+                    lastWeekEndDate);
         } else {
             return 0D;
         }
@@ -120,12 +125,11 @@ public class DashboardServiceImpl implements DashboardService {
         if (customer != null) {
             Date currentMonthStartDate = DateUtils.getCurrentMonthStartDate();
             Date currentMonthEndDate = DateUtils.getCurrentMonthEndDate();
-            return this.aggregatedCustomerCashFlowRepository
-                    .calculateExpenseByCustomerBetween(
-                            customer.getId(),
-                            currentMonthStartDate,
-                            currentMonthEndDate
-                    );
+            return this.statisticsRepository.getExpenseByCustomerAndDateBetween(
+                    customer.getId(),
+                    currentMonthStartDate,
+                    currentMonthEndDate
+            );
         } else {
             return 0D;
         }
@@ -138,8 +142,7 @@ public class DashboardServiceImpl implements DashboardService {
         if (customer != null) {
             Date lastMonthStartDate = DateUtils.getLastMonthStartDate();
             Date lastMonthEndDate = DateUtils.getLastMonthEndDate();
-            return this.aggregatedCustomerCashFlowRepository
-                    .calculateExpenseByCustomerBetween(
+            return this.statisticsRepository.getExpenseByCustomerAndDateBetween(
                             customer.getId(),
                             lastMonthStartDate,
                             lastMonthEndDate
@@ -156,7 +159,11 @@ public class DashboardServiceImpl implements DashboardService {
         if (customer != null) {
             Date currentMonthStartDate = DateUtils.getCurrentMonthStartDate();
             Date currentMonthEndDate = DateUtils.getCurrentMonthEndDate();
-            return calculateBalanceByCustomerBetween(customer, currentMonthStartDate, currentMonthEndDate);
+            return this.statisticsRepository.getBalanceByCustomerAndDateBetween(
+                    customer.getId(),
+                    currentMonthStartDate,
+                    currentMonthEndDate
+            );
         } else {
             return 0D;
         }
@@ -169,7 +176,11 @@ public class DashboardServiceImpl implements DashboardService {
         if (customer != null) {
             Date lastMonthStartDate = DateUtils.getLastMonthStartDate();
             Date lastMonthEndDate = DateUtils.getLastMonthEndDate();
-            return calculateBalanceByCustomerBetween(customer, lastMonthStartDate, lastMonthEndDate);
+            return this.statisticsRepository.getBalanceByCustomerAndDateBetween(
+                    customer.getId(),
+                    lastMonthStartDate,
+                    lastMonthEndDate
+            );
         } else {
             return 0D;
         }
@@ -182,7 +193,7 @@ public class DashboardServiceImpl implements DashboardService {
         if (customer != null) {
             Date currentYearStartDate = DateUtils.getCurrentYearStartDate();
             Date currentYearEndDate = DateUtils.getCurrentYearEndDate();
-            return this.aggregatedCustomerCashFlowRepository.calculateGainByCustomerBetween(
+            return this.statisticsRepository.getRevenueByCustomerAndDateBetween(
                     customer.getId(),
                     currentYearStartDate,
                     currentYearEndDate
@@ -199,7 +210,11 @@ public class DashboardServiceImpl implements DashboardService {
         if (customer != null) {
             Date currentYearStartDate = DateUtils.getCurrentYearStartDate();
             Date currentYearEndDate = DateUtils.getCurrentYearEndDate();
-            return calculateBalanceByCustomerBetween(customer, currentYearStartDate, currentYearEndDate);
+            return this.statisticsRepository.getBalanceByCustomerAndDateBetween(
+                    customer.getId(),
+                    currentYearStartDate,
+                    currentYearEndDate
+            );
         } else {
             return 0D;
         }
@@ -229,14 +244,14 @@ public class DashboardServiceImpl implements DashboardService {
             returnValue.setDaysOfMonth(monthDays);
 
             List<AggregatedCustomerCashFlow> lastMonthData = this.aggregatedCustomerCashFlowRepository
-                    .findAllByCustomerIdAndDateBetween(
+                    .findAllByCustomerIdAndDateBetweenOrderByDate(
                             customer.getId(),
                             lastMonthStartDate,
                             lastMonthEndDate
                     );
 
             List<AggregatedCustomerCashFlow> currentMonthData = this.aggregatedCustomerCashFlowRepository
-                    .findAllByCustomerIdAndDateBetween(
+                    .findAllByCustomerIdAndDateBetweenOrderByDate(
                             customer.getId(),
                             currentMonthStartDate,
                             currentMonthEndDate
@@ -338,23 +353,5 @@ public class DashboardServiceImpl implements DashboardService {
         } else {
             return null;
         }
-    }
-
-    private Double calculateBalanceByCustomerBetween(Account customer, Date startDate, Date endDate) {
-        Double expense = this.aggregatedCustomerCashFlowRepository
-                .calculateExpenseByCustomerBetween(
-                        customer.getId(),
-                        startDate,
-                        endDate
-                );
-        expense = expense != null ? expense : 0D;
-        Double gain = this.aggregatedCustomerCashFlowRepository
-                .calculateGainByCustomerBetween(
-                        customer.getId(),
-                        startDate,
-                        endDate
-                );
-        gain = gain != null ? gain : 0D;
-        return gain - expense;
     }
 }

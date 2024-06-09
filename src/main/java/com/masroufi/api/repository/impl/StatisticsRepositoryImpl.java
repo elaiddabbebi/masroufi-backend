@@ -169,6 +169,54 @@ public class StatisticsRepositoryImpl implements StatisticsRepository {
         return this.mergeResultInsideAllMonths(this.namedParameterJdbcTemplate.query(sqlQuery, params, monthAmountRowMapper));
     }
 
+    @Override
+    public Double getBalanceByCustomerAndDateBetween(Long customerId, Date startDate, Date endDate) {
+        String sqlQuery =
+                "Select (COALESCE(SUM(agg.gain_amount), 0) - COALESCE(SUM(agg.expense_amount), 0)) as balance " +
+                "From aggregated_customer_cash_flow  agg " +
+                "WHERE agg.customer_id = :customerId " +
+                "and agg.date between :startDate and :endDate";
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("customerId", customerId);
+        params.addValue("startDate", startDate);
+        params.addValue("endDate", endDate);
+
+        return this.namedParameterJdbcTemplate.queryForObject(sqlQuery, params, Double.class);
+    }
+
+    @Override
+    public Double getExpenseByCustomerAndDateBetween(Long customerId, Date startDate, Date endDate) {
+        String sqlQuery =
+                "Select COALESCE(SUM(agg.expense_amount), 0) as expense " +
+                "From aggregated_customer_cash_flow  agg " +
+                "WHERE agg.customer_id = :customerId " +
+                "and agg.date between :startDate and :endDate";
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("customerId", customerId);
+        params.addValue("startDate", startDate);
+        params.addValue("endDate", endDate);
+
+        return this.namedParameterJdbcTemplate.queryForObject(sqlQuery, params, Double.class);
+    }
+
+    @Override
+    public Double getRevenueByCustomerAndDateBetween(Long customerId, Date startDate, Date endDate) {
+        String sqlQuery =
+                "Select COALESCE(SUM(agg.gain_amount), 0)  as revenue " +
+                "From aggregated_customer_cash_flow  agg " +
+                "WHERE agg.customer_id = :customerId " +
+                "and agg.date between :startDate and :endDate";
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("customerId", customerId);
+        params.addValue("startDate", startDate);
+        params.addValue("endDate", endDate);
+
+        return this.namedParameterJdbcTemplate.queryForObject(sqlQuery, params, Double.class);
+    }
+
     private List<MonthAmount> mergeResultInsideAllMonths(List<MonthAmount> monthAmountList) {
         List<Month> months = DateUtils.getMonthsOfYear();
         List<MonthAmount> returnValue = new ArrayList<>();
