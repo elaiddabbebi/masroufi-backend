@@ -1,6 +1,7 @@
 package com.masroufi.api.service.impl;
 
 import com.masroufi.api.dto.CashFlowConfigDto;
+import com.masroufi.api.dto.SubscriptionConfigDto;
 import com.masroufi.api.entity.Account;
 import com.masroufi.api.entity.embeddable.CashFlowConfig;
 import com.masroufi.api.entity.embeddable.CustomerCashState;
@@ -69,13 +70,12 @@ public class AccountConfigurationServiceImpl implements AccountConfigurationServ
     }
 
     @Override
-    public Double getInitialCashAmountOf(Account account) {
-        CashFlowConfig config = account.getCashFlowConfig();
-        if (config != null) {
-            if (config.getInitialCashAmount() != null) {
-                return config.getInitialCashAmount();
-            }
+    public SubscriptionConfigDto getSubscriptionConfig() {
+        Account currentUser = this.applicationSecurityContext.getCurrentUser();
+        if (currentUser != null) {
+            return SubscriptionConfigDto.buildFromSubscriptionConfig(currentUser.getSubscriptionConfig());
+        } else {
+            return null;
         }
-        return 0D;
     }
 }

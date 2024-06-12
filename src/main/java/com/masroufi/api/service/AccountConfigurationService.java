@@ -1,6 +1,7 @@
 package com.masroufi.api.service;
 
 import com.masroufi.api.dto.CashFlowConfigDto;
+import com.masroufi.api.dto.SubscriptionConfigDto;
 import com.masroufi.api.entity.Account;
 
 public interface AccountConfigurationService {
@@ -9,5 +10,5 @@ public interface AccountConfigurationService {
 
     CashFlowConfigDto updateCashFlowConfig(CashFlowConfigDto configDto);
 
-    Double getInitialCashAmountOf(Account account);
+    SubscriptionConfigDto getSubscriptionConfig();
 }

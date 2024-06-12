@@ -1,9 +1,6 @@
 package com.masroufi.api.search.specification.impl;
 
-import com.masroufi.api.entity.Account;
-import com.masroufi.api.entity.CashFlow;
-import com.masroufi.api.entity.CashFlowCategory;
-import com.masroufi.api.entity.CustomerCashFlowRegistry;
+import com.masroufi.api.entity.*;
 import com.masroufi.api.search.criteria.impl.CustomerCashFlowRegistrySearchCriteria;
 import com.masroufi.api.search.specification.AbstractSpecificationBuilder;
 import org.springframework.data.jpa.domain.Specification;
@@ -20,17 +17,17 @@ public class CustomerCashFlowRegistrySpecification extends AbstractSpecification
 
         if (searchCriteria.getCustomerId() != null) {
             specifications.add((Specification<CustomerCashFlowRegistry>) (root, query, criteriaBuilder) ->  {
-                Join<CustomerCashFlowRegistry, Account> accountJoin = root.join("customer");
-                return criteriaBuilder.equal(accountJoin.get("id"), searchCriteria.getCustomerId());
+                Join<CustomerCashFlowRegistry, Account> accountJoin = root.join(CustomerCashFlowRegistry_.customer);
+                return criteriaBuilder.equal(accountJoin.get(Account_.id), searchCriteria.getCustomerId());
             });
         }
 
         if (searchCriteria.getCashFlow() != null && !searchCriteria.getCashFlow().isEmpty()) {
             specifications.add((Specification<CustomerCashFlowRegistry>) (root, query, criteriaBuilder) ->  {
-                Join<CustomerCashFlowRegistry, CashFlow> cashFlowJoin = root.join("cashFlow");
-                Join<CashFlow, CashFlowCategory> cashFlowCategoryJoin = cashFlowJoin.join("category");
-                Predicate likeCashFlowName = criteriaBuilder.like(criteriaBuilder.upper(cashFlowJoin.get("name")), "%" + searchCriteria.getCashFlow().trim().toUpperCase() + "%");
-                Predicate likeCashFlowCategory = criteriaBuilder.like(criteriaBuilder.upper(cashFlowCategoryJoin.get("name")), "%" + searchCriteria.getCashFlow().trim().toUpperCase() + "%");
+                Join<CustomerCashFlowRegistry, CashFlow> cashFlowJoin = root.join(CustomerCashFlowRegistry_.cashFlow);
+                Join<CashFlow, CashFlowCategory> cashFlowCategoryJoin = cashFlowJoin.join(CashFlow_.category);
+                Predicate likeCashFlowName = criteriaBuilder.like(criteriaBuilder.upper(cashFlowJoin.get(CashFlow_.name)), "%" + searchCriteria.getCashFlow().trim().toUpperCase() + "%");
+                Predicate likeCashFlowCategory = criteriaBuilder.like(criteriaBuilder.upper(cashFlowCategoryJoin.get(CashFlowCategory_.name)), "%" + searchCriteria.getCashFlow().trim().toUpperCase() + "%");
                 return criteriaBuilder.or(likeCashFlowName, likeCashFlowCategory);
             });
         }

@@ -14,9 +14,9 @@ public class SubscriptionConfigDto {
     private Date startDate;
     private Date endDate;
 
-    public static SubscriptionConfig buildFromSubscriptionConfig(SubscriptionConfig config) {
+    public static SubscriptionConfigDto buildFromSubscriptionConfig(SubscriptionConfig config) {
         if (config != null) {
-            return SubscriptionConfig.builder()
+            return SubscriptionConfigDto.builder()
                     .startDate(config.getStartDate())
                     .endDate(config.getEndDate())
                     .build();
