@@ -2,6 +2,7 @@ package com.masroufi.api.dto;
 
 import com.masroufi.api.dto.response.MenuItemDto;
 import com.masroufi.api.entity.Account;
+import com.masroufi.api.enums.AppLocale;
 import lombok.*;
 import org.springframework.validation.annotation.Validated;
 
@@ -38,6 +39,7 @@ public class UserDetailsDto {
     private long age;
     private Boolean isActivated;
     private List<MenuItemDto> items;
+    private AppLocale locale;
 
     public static UserDetailsDto buildFromUser(Account user) {
         long age = 0;
@@ -57,6 +59,7 @@ public class UserDetailsDto {
                 .role(RoleDto.buildFromRole(user.getRole()))
                 .age(age)
                 .isActivated(user.getIsActivated())
+                .locale(user.getLocale())
                 .build();
     }
 }

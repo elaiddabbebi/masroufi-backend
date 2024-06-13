@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.masroufi.api.entity.embeddable.CashFlowConfig;
 import com.masroufi.api.entity.embeddable.CustomerCashState;
 import com.masroufi.api.entity.embeddable.SubscriptionConfig;
+import com.masroufi.api.enums.AppLocale;
 import lombok.*;
 
 import javax.persistence.*;
@@ -65,6 +66,9 @@ public class Account extends BaseEntity implements Serializable {
 
     @Embedded
     private CustomerCashState customerCashState;
+
+    @Enumerated(EnumType.STRING)
+    private AppLocale locale;
 
     public String getFullName() {
         String fullName = firstName;

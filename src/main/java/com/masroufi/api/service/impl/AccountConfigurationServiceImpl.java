@@ -5,6 +5,7 @@ import com.masroufi.api.dto.SubscriptionConfigDto;
 import com.masroufi.api.entity.Account;
 import com.masroufi.api.entity.embeddable.CashFlowConfig;
 import com.masroufi.api.entity.embeddable.CustomerCashState;
+import com.masroufi.api.enums.AppLocale;
 import com.masroufi.api.repository.AccountRepository;
 import com.masroufi.api.service.AccountConfigurationService;
 import com.masroufi.api.shared.context.ApplicationSecurityContext;
@@ -74,6 +75,28 @@ public class AccountConfigurationServiceImpl implements AccountConfigurationServ
         Account currentUser = this.applicationSecurityContext.getCurrentUser();
         if (currentUser != null) {
             return SubscriptionConfigDto.buildFromSubscriptionConfig(currentUser.getSubscriptionConfig());
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public AppLocale getLanguageConfig() {
+        Account currentUser = this.applicationSecurityContext.getCurrentUser();
+        if (currentUser != null) {
+            return currentUser.getLocale();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public AppLocale updateLanguageConfig(AppLocale locale) {
+        Account currentUser = this.applicationSecurityContext.getCurrentUser();
+        if (currentUser != null) {
+            currentUser.setLocale(locale);
+            this.accountRepository.save(currentUser);
+            return currentUser.getLocale();
         } else {
             return null;
         }

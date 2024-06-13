@@ -11,7 +11,7 @@ import javax.annotation.PostConstruct;
 @SpringBootApplication
 public class MasroufiBackendApplication {
 
-    @Qualifier("version_2_0_0_Initializer")
+    @Qualifier("version_3_0_0_Initializer")
     @Autowired
     private ApplicationInitializer initializer;
 
