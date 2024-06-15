@@ -2,11 +2,14 @@ package com.masroufi.api.controller;
 
 import com.masroufi.api.dto.CashFlowConfigDto;
 import com.masroufi.api.dto.SubscriptionConfigDto;
+import com.masroufi.api.dto.request.UserLanguageConfigModel;
 import com.masroufi.api.enums.AppLocale;
 import com.masroufi.api.service.AccountConfigurationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/account-config")
@@ -39,7 +42,7 @@ public class AccountConfigurationController {
     }
 
     @PutMapping("/language")
-    AppLocale updateLanguageConfig(@RequestBody AppLocale locale) {
-        return this.accountConfigurationService.updateLanguageConfig(locale);
+    AppLocale updateLanguageConfig(@RequestBody UserLanguageConfigModel languageConfigModel) {
+        return this.accountConfigurationService.updateLanguageConfig(languageConfigModel);
     }
 }

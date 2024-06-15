@@ -2,6 +2,7 @@ package com.masroufi.api.service.impl;
 
 import com.masroufi.api.dto.CashFlowConfigDto;
 import com.masroufi.api.dto.SubscriptionConfigDto;
+import com.masroufi.api.dto.request.UserLanguageConfigModel;
 import com.masroufi.api.entity.Account;
 import com.masroufi.api.entity.embeddable.CashFlowConfig;
 import com.masroufi.api.entity.embeddable.CustomerCashState;
@@ -91,10 +92,10 @@ public class AccountConfigurationServiceImpl implements AccountConfigurationServ
     }
 
     @Override
-    public AppLocale updateLanguageConfig(AppLocale locale) {
+    public AppLocale updateLanguageConfig(UserLanguageConfigModel languageConfigModel) {
         Account currentUser = this.applicationSecurityContext.getCurrentUser();
         if (currentUser != null) {
-            currentUser.setLocale(locale);
+            currentUser.setLocale(languageConfigModel.getLocale());
             this.accountRepository.save(currentUser);
             return currentUser.getLocale();
         } else {

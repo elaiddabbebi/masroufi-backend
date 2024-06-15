@@ -22,7 +22,7 @@ public class Version_3_0_0_Initializer implements ApplicationInitializer {
 
     @Override
     public void initApplication() {
-         this.initAllAccountsLocale();
+//         this.initAllAccountsLocale(); // Already executed
     }
 
     private void initAllAccountsLocale() {
