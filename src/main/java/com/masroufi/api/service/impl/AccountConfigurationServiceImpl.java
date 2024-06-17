@@ -49,8 +49,6 @@ public class AccountConfigurationServiceImpl implements AccountConfigurationServ
             if (config == null) {
                 config = new CashFlowConfig();
             }
-            config.setInitialCashAmount(configDto.getInitialCashAmount());
-            currentUser.setCashFlowConfig(config);
 
             CustomerCashState customerCashState = currentUser.getCustomerCashState();
             if (customerCashState == null) {
@@ -64,6 +62,8 @@ public class AccountConfigurationServiceImpl implements AccountConfigurationServ
                     )
             );
             currentUser.setCustomerCashState(customerCashState);
+            config.setInitialCashAmount(configDto.getInitialCashAmount());
+            currentUser.setCashFlowConfig(config);
 
             this.accountRepository.save(currentUser);
             return CashFlowConfigDto.buildFromCashFlowConfig(config);
