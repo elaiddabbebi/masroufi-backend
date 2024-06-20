@@ -174,30 +174,30 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
                     .sheetName(this.translationService.translate("cashFlowRegistry.export.excel.sheetName"))
                     .header(
                             ExcelRow
-                                    .builder()
-                                    .cells(
-                                            Arrays.asList(
-                                                    this.translationService.translate("cashFlowRegistry.export.excel.category"),
-                                                    this.translationService.translate("cashFlowRegistry.export.excel.name"),
-                                                    this.translationService.translate("cashFlowRegistry.export.excel.date"),
-                                                    this.translationService.translate("cashFlowRegistry.export.excel.amount")
-                                            )
-                                    ).build()
+                            .builder()
+                            .cells(
+                                    Arrays.asList(
+                                            this.translationService.translate("cashFlowRegistry.export.excel.category"),
+                                            this.translationService.translate("cashFlowRegistry.export.excel.name"),
+                                            this.translationService.translate("cashFlowRegistry.export.excel.date"),
+                                            this.translationService.translate("cashFlowRegistry.export.excel.amount")
+                                    )
+                            ).build()
                     ).body(
                             result
-                                    .stream()
-                                    .map(
-                                            elt -> ExcelRow
-                                                    .builder()
-                                                    .cells(
-                                                            Arrays.asList(
-                                                                    elt.getCashFlow().getCategory().getName(),
-                                                                    elt.getCashFlow().getName(),
-                                                                    elt.getDate().toString(),
-                                                                    elt.getAmount().toString()
-                                                            )
-                                                    ).build()
-                                    ).collect(Collectors.toList())
+                            .stream()
+                            .map(
+                                    elt -> ExcelRow
+                                            .builder()
+                                            .cells(
+                                                    Arrays.asList(
+                                                            elt.getCashFlow().getCategory().getName(),
+                                                            elt.getCashFlow().getName(),
+                                                            elt.getDate().toString(),
+                                                            elt.getAmount().toString()
+                                                    )
+                                            ).build()
+                            ).collect(Collectors.toList())
                     ).build();
             return this.excelWriterService.writeIntoExcel(sheet);
         } else {
