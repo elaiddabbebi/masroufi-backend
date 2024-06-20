@@ -2,7 +2,7 @@ package com.masroufi.api.entity.embeddable;
 
 import lombok.*;
 
-import javax.persistence.Embeddable;
+import jakarta.persistence.Embeddable;
 import java.util.Date;
 
 @Embeddable

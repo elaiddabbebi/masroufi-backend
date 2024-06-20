@@ -11,6 +11,7 @@ import com.masroufi.api.shared.context.ApplicationSecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -147,10 +148,12 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
     @Override
     public List<String> findAllCategoryNames() {
         if (this.applicationSecurityContext.isSupperAdmin()) {
-            return this.cashFlowCategoryRepository.findAllCategoryNamesForSupperAdmin();
+//            return this.cashFlowCategoryRepository.findAllCategoryNamesForSupperAdmin();
+            return new ArrayList<>();
         } else {
             Account customer = this.applicationSecurityContext.getCurrentUser();
-            return this.cashFlowCategoryRepository.findAllCategoryNamesByCustomer(customer.getId());
+//            return this.cashFlowCategoryRepository.findAllCategoryNamesByCustomer(customer.getId());
+            return new ArrayList<>();
         }
     }
 

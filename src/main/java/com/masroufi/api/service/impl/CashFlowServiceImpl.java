@@ -16,6 +16,7 @@ import com.masroufi.api.shared.context.ApplicationSecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -133,10 +134,12 @@ public class CashFlowServiceImpl implements CashFlowService {
     @Override
     public List<String> getAllCashFlowNameList() {
         if (this.applicationSecurityContext.isSupperAdmin()) {
-            return this.cashFlowRepository.findAllCashFlowNamesForSupperAdmin();
+//            return this.cashFlowRepository.findAllCashFlowNamesForSupperAdmin();
+            return new ArrayList<>();
         } else {
             Account customer = this.applicationSecurityContext.getCurrentUser();
-            return this.cashFlowRepository.findAllCashFlowNamesByCustomer(customer.getId());
+//            return this.cashFlowRepository.findAllCashFlowNamesByCustomer(customer.getId());
+            return new ArrayList<>();
         }
     }
 
@@ -144,16 +147,20 @@ public class CashFlowServiceImpl implements CashFlowService {
     public List<String> searchByCategory(String category) {
         if (this.applicationSecurityContext.isSupperAdmin()) {
             if (category != null && !category.isEmpty()) {
-                return this.cashFlowRepository.findAllByCategoryForSupperAdmin(category);
+//                return this.cashFlowRepository.findAllByCategoryForSupperAdmin(category);
+                return new ArrayList<>();
             } else {
-                return this.cashFlowRepository.findAllCashFlowNamesForSupperAdmin();
+//                return this.cashFlowRepository.findAllCashFlowNamesForSupperAdmin();
+                return new ArrayList<>();
             }
         } else {
             Account customer = this.applicationSecurityContext.getCurrentUser();
             if (category != null && !category.isEmpty()) {
-                return this.cashFlowRepository.findAllByCustomerAndCategory(customer.getId(), category);
+//                return this.cashFlowRepository.findAllByCustomerAndCategory(customer.getId(), category);
+                return new ArrayList<>();
             } else {
-                return this.cashFlowRepository.findAllCashFlowNamesByCustomer(customer.getId());
+//                return this.cashFlowRepository.findAllCashFlowNamesByCustomer(customer.getId());
+                return new ArrayList<>();
             }
         }
     }

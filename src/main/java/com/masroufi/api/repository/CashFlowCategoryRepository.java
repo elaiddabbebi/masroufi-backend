@@ -19,17 +19,17 @@ public interface CashFlowCategoryRepository extends JpaRepository<CashFlowCatego
 
     List<CashFlowCategory> findTop10ByNameLikeIgnoreCaseAndIsDeletedIsFalse(String name);
 
-    @Query("Select distinct(c.name) " +
-            "From CashFlowCategory c " +
-            "where (c.isDeleted is false or c.isDeleted is null) " +
-            "and c.status <> 'REJECTED'")
-    List<String> findAllCategoryNamesForSupperAdmin();
-
-    @Query("Select distinct(c.name) " +
-            "From CashFlowCategory c " +
-            "where (c.isDeleted is false or c.isDeleted is null) " +
-            "and c.status = 'VALIDATED' " +
-            "and (c.createdBy = :customerId or c.published is true) " +
-            "order by c.name")
-    List<String> findAllCategoryNamesByCustomer(Long customerId);
+//    @Query("Select distinct(c.name) " +
+//            "From CashFlowCategory c " +
+//            "where (c.isDeleted is false or c.isDeleted is null) " +
+//            "and c.status <> 'REJECTED'")
+//    List<String> findAllCategoryNamesForSupperAdmin();
+//
+//    @Query("Select distinct(c.name) " +
+//            "From CashFlowCategory c " +
+//            "where (c.isDeleted is false or c.isDeleted is null) " +
+//            "and c.status = 'VALIDATED' " +
+//            "and (c.createdBy = :customerId or c.published is true) " +
+//            "order by c.name")
+//    List<String> findAllCategoryNamesByCustomer(Long customerId);
 }

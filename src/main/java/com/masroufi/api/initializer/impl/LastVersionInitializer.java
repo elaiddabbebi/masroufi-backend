@@ -4,7 +4,7 @@ package com.masroufi.api.initializer.impl;
 import com.masroufi.api.initializer.ApplicationInitializer;
 import org.springframework.stereotype.Component;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 @Component
 @Transactional

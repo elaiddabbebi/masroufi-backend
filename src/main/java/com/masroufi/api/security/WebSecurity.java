@@ -1,59 +1,61 @@
 package com.masroufi.api.security;
 
 import com.masroufi.api.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
-@SuppressWarnings("deprecation")
 @EnableWebSecurity
 @Configuration
 @EnableMethodSecurity
-public class WebSecurity extends WebSecurityConfigurerAdapter {
-	
-	private final UserService userDetailsService;
-	private final BCryptPasswordEncoder bCryptPasswordEncoder;
-	public WebSecurity(UserService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder) {
-		this.userDetailsService = userDetailsService;
-		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-	}
+public class WebSecurity {
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
+	@Autowired
+	private UserService userDetailsService;
 
-		http.cors().and()
-				.csrf().disable().authorizeRequests()
-				.antMatchers(HttpMethod.POST, SecurityConstants.SIGN_IN_URL).permitAll()
-				.antMatchers(HttpMethod.POST, SecurityConstants.RECOVERY_URL).permitAll()
-				.antMatchers(HttpMethod.POST, SecurityConstants.RESET_PASSWORD_URL).permitAll()
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+	@Autowired
+	private AuthenticationConfiguration authenticationConfiguration;
+
+	@Bean
+	protected SecurityFilterChain SecurityFilterChain(HttpSecurity http) throws Exception {
+		return http
+				.cors().and()
+				.csrf(AbstractHttpConfigurer::disable)
+				.authorizeHttpRequests()
+				.requestMatchers(HttpMethod.POST, SecurityConstants.SIGN_IN_URL).permitAll()
+				.requestMatchers(HttpMethod.POST, SecurityConstants.RECOVERY_URL).permitAll()
+				.requestMatchers(HttpMethod.POST, SecurityConstants.RESET_PASSWORD_URL).permitAll()
 				.anyRequest().authenticated().and()
-				.addFilter(new AuthorizationFilter(authenticationManager()))
+				.authenticationProvider(authenticationProvider())
+				.addFilter(new AuthorizationFilter(authenticationManager(this.authenticationConfiguration)))
 				.sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-	}
-
-	@Override
-	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.and().build();
 	}
 
 	@Bean
-	@Override
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		return super.authenticationManagerBean();
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+		return authenticationConfiguration.getAuthenticationManager();
 	}
 
 	@Bean
@@ -69,5 +71,13 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 		source.registerCorsConfiguration("/**", configuration);
 
 		return source;
+	}
+
+	@Bean
+	public AuthenticationProvider authenticationProvider(){
+		DaoAuthenticationProvider authenticationProvider=new DaoAuthenticationProvider();
+		authenticationProvider.setUserDetailsService(userDetailsService);
+		authenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
+		return authenticationProvider;
 	}
 }

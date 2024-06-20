@@ -5,8 +5,8 @@ import com.masroufi.api.search.criteria.impl.CustomerCashFlowRegistrySearchCrite
 import com.masroufi.api.search.specification.AbstractSpecificationBuilder;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 

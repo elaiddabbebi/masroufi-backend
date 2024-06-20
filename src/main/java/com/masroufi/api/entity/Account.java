@@ -7,7 +7,9 @@ import com.masroufi.api.entity.embeddable.SubscriptionConfig;
 import com.masroufi.api.enums.AppLocale;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -20,6 +22,7 @@ import java.util.Date;
 @Table(name = "account")
 public class Account extends BaseEntity implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
