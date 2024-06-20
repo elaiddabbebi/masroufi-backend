@@ -1,5 +1,7 @@
 package com.masroufi.api.service.impl;
 
+import com.masroufi.api.dto.ExcelRow;
+import com.masroufi.api.dto.ExcelSheet;
 import com.masroufi.api.search.criteria.impl.CustomerCashFlowRegistrySearchCriteria;
 import com.masroufi.api.dto.CustomerCashFlowRegistryDto;
 import com.masroufi.api.dto.response.ResultSetResponse;
@@ -16,6 +18,7 @@ import com.masroufi.api.search.specification.SortSpecificationBuilder;
 import com.masroufi.api.search.specification.impl.CustomerCashFlowRegistrySpecification;
 import com.masroufi.api.service.CashFlowService;
 import com.masroufi.api.service.CustomerCashFlowRegistryService;
+import com.masroufi.api.service.ExcelWriterService;
 import com.masroufi.api.shared.context.ApplicationSecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +26,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
+
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,6 +49,9 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
 
     @Autowired
     private AggregatedCustomerCashFlowRepository aggregatedCustomerCashFlowRepository;
+
+    @Autowired
+    private ExcelWriterService excelWriterService;
 
     @Override
     public ResultSetResponse<CustomerCashFlowRegistryDto> search(CustomerCashFlowRegistrySearchCriteria searchCriteria) {
@@ -146,6 +154,44 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
             return CustomerCashFlowRegistryDto.buildFromCashFlowRegistry(cashFlowRegistry);
         }
         return null;
+    }
+
+    @Override
+    public byte[] exportInExcel(CustomerCashFlowRegistrySearchCriteria criteria) {
+        this.applicationSecurityContext.isCustomerOrThrowException();
+        Account customer = this.applicationSecurityContext.getCurrentUser();
+        if (customer != null) {
+            criteria.setCustomerId(customer.getId());
+            Specification<CustomerCashFlowRegistry> specification = CustomerCashFlowRegistrySpecification.of(criteria);
+            List<CustomerCashFlowRegistry> result = this.customerCashFlowRegistryRepository.findAll(specification);
+            ExcelSheet sheet = ExcelSheet
+                    .builder()
+                    .sheetName("Cash Flow registry")
+                    .header(
+                            ExcelRow
+                                    .builder()
+                                    .cells(Arrays.asList("Catégorie", "Nom", "Date", "Montant"))
+                                    .build()
+                    ).body(
+                            result
+                                    .stream()
+                                    .map(
+                                            elt -> ExcelRow
+                                                    .builder()
+                                                    .cells(
+                                                            Arrays.asList(
+                                                                    elt.getCashFlow().getCategory().getName(),
+                                                                    elt.getCashFlow().getName(),
+                                                                    elt.getDate().toString(),
+                                                                    elt.getAmount().toString()
+                                                            )
+                                                    ).build()
+                                    ).collect(Collectors.toList())
+                    ).build();
+            return this.excelWriterService.writeIntoExcel(sheet);
+        } else {
+            return new byte[0];
+        }
     }
 
     private void updateAggregatedCashFlowFrom(CustomerCashFlowRegistry cashFlow, TransactionType transactionType) {

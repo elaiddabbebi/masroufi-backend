@@ -19,6 +19,8 @@ public interface CustomerCashFlowRegistryService {
 
     CustomerCashFlowRegistryDto update(String uuid, CustomerCashFlowRegistryDto dto);
 
+    byte[] exportInExcel(CustomerCashFlowRegistrySearchCriteria criteria);
+
     void processCustomerCashFlowTransaction(CustomerCashFlowRegistry cashFlow);
 
     void reverseCustomerCashFlowTransaction(CustomerCashFlowRegistry cashFlow);
