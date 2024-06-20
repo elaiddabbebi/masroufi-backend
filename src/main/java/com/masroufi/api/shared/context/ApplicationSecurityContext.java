@@ -3,6 +3,7 @@ package com.masroufi.api.shared.context;
 import com.masroufi.api.entity.Account;
 import com.masroufi.api.entity.Permission;
 import com.masroufi.api.entity.Role;
+import com.masroufi.api.enums.AppLocale;
 import com.masroufi.api.enums.PermissionType;
 import com.masroufi.api.enums.RoleType;
 import com.masroufi.api.repository.AccountRepository;
@@ -96,5 +97,19 @@ public class ApplicationSecurityContext {
             }
         }
         return false;
+    }
+
+    public AppLocale getUserLocaleOrDefault() {
+        Account currentUser = this.getCurrentUser();
+        if (currentUser != null) {
+            AppLocale userLocale = currentUser.getLocale();
+            if (userLocale != null) {
+                return userLocale;
+            } else {
+                return AppLocale.FR;
+            }
+        } else {
+            return AppLocale.FR;
+        }
     }
 }

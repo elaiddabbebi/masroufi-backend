@@ -2,6 +2,7 @@ package com.masroufi.api.service.impl;
 
 import com.masroufi.api.dto.ExcelRow;
 import com.masroufi.api.dto.ExcelSheet;
+import com.masroufi.api.enums.AppLocale;
 import com.masroufi.api.search.criteria.impl.CustomerCashFlowRegistrySearchCriteria;
 import com.masroufi.api.dto.CustomerCashFlowRegistryDto;
 import com.masroufi.api.dto.response.ResultSetResponse;
@@ -19,6 +20,7 @@ import com.masroufi.api.search.specification.impl.CustomerCashFlowRegistrySpecif
 import com.masroufi.api.service.CashFlowService;
 import com.masroufi.api.service.CustomerCashFlowRegistryService;
 import com.masroufi.api.service.ExcelWriterService;
+import com.masroufi.api.service.TranslationService;
 import com.masroufi.api.shared.context.ApplicationSecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -52,6 +54,9 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
 
     @Autowired
     private ExcelWriterService excelWriterService;
+
+    @Autowired
+    private TranslationService translationService;
 
     @Override
     public ResultSetResponse<CustomerCashFlowRegistryDto> search(CustomerCashFlowRegistrySearchCriteria searchCriteria) {
@@ -166,12 +171,18 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
             List<CustomerCashFlowRegistry> result = this.customerCashFlowRegistryRepository.findAll(specification);
             ExcelSheet sheet = ExcelSheet
                     .builder()
-                    .sheetName("Cash Flow registry")
+                    .sheetName(this.translationService.translate("cashFlowRegistry.export.excel.sheetName"))
                     .header(
                             ExcelRow
                                     .builder()
-                                    .cells(Arrays.asList("Catégorie", "Nom", "Date", "Montant"))
-                                    .build()
+                                    .cells(
+                                            Arrays.asList(
+                                                    this.translationService.translate("cashFlowRegistry.export.excel.category"),
+                                                    this.translationService.translate("cashFlowRegistry.export.excel.name"),
+                                                    this.translationService.translate("cashFlowRegistry.export.excel.date"),
+                                                    this.translationService.translate("cashFlowRegistry.export.excel.amount")
+                                            )
+                                    ).build()
                     ).body(
                             result
                                     .stream()
