@@ -3,6 +3,7 @@ package com.masroufi.api.search.specification.impl;
 import com.masroufi.api.entity.*;
 import com.masroufi.api.search.criteria.impl.CustomerCashFlowRegistrySearchCriteria;
 import com.masroufi.api.search.specification.AbstractSpecificationBuilder;
+import com.masroufi.api.shared.constants.jpa.SpecialChars;
 import org.springframework.data.jpa.domain.Specification;
 
 import jakarta.persistence.criteria.Join;
@@ -26,8 +27,14 @@ public class CustomerCashFlowRegistrySpecification extends AbstractSpecification
             specifications.add((Specification<CustomerCashFlowRegistry>) (root, query, criteriaBuilder) ->  {
                 Join<CustomerCashFlowRegistry, CashFlow> cashFlowJoin = root.join(CustomerCashFlowRegistry_.cashFlow);
                 Join<CashFlow, CashFlowCategory> cashFlowCategoryJoin = cashFlowJoin.join(CashFlow_.category);
-                Predicate likeCashFlowName = criteriaBuilder.like(criteriaBuilder.upper(cashFlowJoin.get(CashFlow_.name)), "%" + searchCriteria.getCashFlow().trim().toUpperCase() + "%");
-                Predicate likeCashFlowCategory = criteriaBuilder.like(criteriaBuilder.upper(cashFlowCategoryJoin.get(CashFlowCategory_.name)), "%" + searchCriteria.getCashFlow().trim().toUpperCase() + "%");
+                Predicate likeCashFlowName = criteriaBuilder.like(
+                        criteriaBuilder.upper(cashFlowJoin.get(CashFlow_.name)),
+                        SpecialChars.PERCENT + searchCriteria.getCashFlow().trim().toUpperCase() + SpecialChars.PERCENT
+                );
+                Predicate likeCashFlowCategory = criteriaBuilder.like(
+                        criteriaBuilder.upper(cashFlowCategoryJoin.get(CashFlowCategory_.name)),
+                        SpecialChars.PERCENT + searchCriteria.getCashFlow().trim().toUpperCase() + SpecialChars.PERCENT
+                );
                 return criteriaBuilder.or(likeCashFlowName, likeCashFlowCategory);
             });
         }

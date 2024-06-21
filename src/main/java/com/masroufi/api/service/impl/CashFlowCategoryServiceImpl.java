@@ -7,6 +7,7 @@ import com.masroufi.api.enums.CashFlowCategoryStatus;
 import com.masroufi.api.repository.AccountRepository;
 import com.masroufi.api.repository.CashFlowCategoryRepository;
 import com.masroufi.api.service.CashFlowCategoryService;
+import com.masroufi.api.shared.constants.jpa.SpecialChars;
 import com.masroufi.api.shared.context.ApplicationSecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -140,7 +141,7 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
         if (name == null) {
             return null;
         } else {
-            List<CashFlowCategory> cashFlowCategories = this.cashFlowCategoryRepository.findTop10ByNameLikeIgnoreCaseAndIsDeletedIsFalse("%" + name.trim() + "%");
+            List<CashFlowCategory> cashFlowCategories = this.cashFlowCategoryRepository.findTop10ByNameLikeIgnoreCaseAndIsDeletedIsFalse(SpecialChars.PERCENT + name.trim() + SpecialChars.PERCENT);
             return cashFlowCategories.stream().map(CashFlowCategoryDto::buildFromCashFlowCategory).collect(Collectors.toList());
         }
     }
