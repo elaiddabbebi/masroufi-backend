@@ -21,7 +21,7 @@ public enum Month {
     Month(int value) {}
 
     public static Month of(int value) {
-        List<Month> months = Arrays.stream(Month.values()).filter(m -> m.ordinal() == value).collect(Collectors.toList());
+        List<Month> months = Arrays.stream(Month.values()).filter(m -> m.ordinal() == value).toList();
         if (months != null && !months.isEmpty()) {
             return months.get(0);
         } else {

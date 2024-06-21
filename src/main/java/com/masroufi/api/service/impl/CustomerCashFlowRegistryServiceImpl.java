@@ -21,6 +21,7 @@ import com.masroufi.api.service.CashFlowService;
 import com.masroufi.api.service.CustomerCashFlowRegistryService;
 import com.masroufi.api.service.ExcelWriterService;
 import com.masroufi.api.service.TranslationService;
+import com.masroufi.api.shared.constants.dictionary.ExportCashFlowDictionary;
 import com.masroufi.api.shared.context.ApplicationSecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -171,16 +172,16 @@ public class CustomerCashFlowRegistryServiceImpl implements CustomerCashFlowRegi
             List<CustomerCashFlowRegistry> result = this.customerCashFlowRegistryRepository.findAll(specification);
             ExcelSheet sheet = ExcelSheet
                     .builder()
-                    .sheetName(this.translationService.translate("cashFlowRegistry.export.excel.sheetName"))
+                    .sheetName(this.translationService.translate(ExportCashFlowDictionary.SHEET_NAME))
                     .header(
                             ExcelRow
                             .builder()
                             .cells(
                                     Arrays.asList(
-                                            this.translationService.translate("cashFlowRegistry.export.excel.category"),
-                                            this.translationService.translate("cashFlowRegistry.export.excel.name"),
-                                            this.translationService.translate("cashFlowRegistry.export.excel.date"),
-                                            this.translationService.translate("cashFlowRegistry.export.excel.amount")
+                                            this.translationService.translate(ExportCashFlowDictionary.CATEGORY),
+                                            this.translationService.translate(ExportCashFlowDictionary.NAME),
+                                            this.translationService.translate(ExportCashFlowDictionary.DATE),
+                                            this.translationService.translate(ExportCashFlowDictionary.AMOUNT)
                                     )
                             ).build()
                     ).body(
