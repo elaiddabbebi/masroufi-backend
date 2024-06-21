@@ -21,20 +21,20 @@ public interface CashFlowCategoryRepository extends JpaRepository<CashFlowCatego
 
     @Query(
             value = "Select distinct(c.name) " +
-            "From cash_flow_category c " +
-            "where (c.is_deleted is false or c.is_deleted is null) " +
-            "and c.status <> 'REJECTED'",
+                    "From cash_flow_category c " +
+                    "where (c.is_deleted is false or c.is_deleted is null) " +
+                    "and c.status <> 'REJECTED'",
             nativeQuery = true
     )
     List<String> findAllCategoryNamesForSupperAdmin();
 
     @Query(
             value = "Select distinct(c.name) " +
-            "From cash_flow_category c " +
-            "where (c.is_deleted is false or c.is_deleted is null) " +
-            "and c.status = 'VALIDATED' " +
-            "and (c.created_by = :customerId or c.published is true) " +
-            "order by c.name",
+                    "From cash_flow_category c " +
+                    "where (c.is_deleted is false or c.is_deleted is null) " +
+                    "and c.status = 'VALIDATED' " +
+                    "and (c.created_by = :customerId or c.published is true) " +
+                    "order by c.name",
             nativeQuery = true
     )
     List<String> findAllCategoryNamesByCustomer(Long customerId);
