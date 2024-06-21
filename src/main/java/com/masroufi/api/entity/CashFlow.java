@@ -5,6 +5,8 @@ import com.masroufi.api.enums.CashFlowStatus;
 import lombok.*;
 
 import jakarta.persistence.*;
+
+import java.io.Serial;
 import java.io.Serializable;
 
 @Setter
@@ -16,6 +18,7 @@ import java.io.Serializable;
 @Table(name = "cash_flow")
 public class CashFlow extends BaseEntity implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id

@@ -148,12 +148,10 @@ public class CashFlowCategoryServiceImpl implements CashFlowCategoryService {
     @Override
     public List<String> findAllCategoryNames() {
         if (this.applicationSecurityContext.isSupperAdmin()) {
-//            return this.cashFlowCategoryRepository.findAllCategoryNamesForSupperAdmin();
-            return new ArrayList<>();
+            return this.cashFlowCategoryRepository.findAllCategoryNamesForSupperAdmin();
         } else {
             Account customer = this.applicationSecurityContext.getCurrentUser();
-//            return this.cashFlowCategoryRepository.findAllCategoryNamesByCustomer(customer.getId());
-            return new ArrayList<>();
+            return this.cashFlowCategoryRepository.findAllCategoryNamesByCustomer(customer.getId());
         }
     }
 

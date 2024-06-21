@@ -134,12 +134,10 @@ public class CashFlowServiceImpl implements CashFlowService {
     @Override
     public List<String> getAllCashFlowNameList() {
         if (this.applicationSecurityContext.isSupperAdmin()) {
-//            return this.cashFlowRepository.findAllCashFlowNamesForSupperAdmin();
-            return new ArrayList<>();
+            return this.cashFlowRepository.findAllCashFlowNamesForSupperAdmin();
         } else {
             Account customer = this.applicationSecurityContext.getCurrentUser();
-//            return this.cashFlowRepository.findAllCashFlowNamesByCustomer(customer.getId());
-            return new ArrayList<>();
+            return this.cashFlowRepository.findAllCashFlowNamesByCustomer(customer.getId());
         }
     }
 
@@ -147,20 +145,16 @@ public class CashFlowServiceImpl implements CashFlowService {
     public List<String> searchByCategory(String category) {
         if (this.applicationSecurityContext.isSupperAdmin()) {
             if (category != null && !category.isEmpty()) {
-//                return this.cashFlowRepository.findAllByCategoryForSupperAdmin(category);
-                return new ArrayList<>();
+                return this.cashFlowRepository.findAllByCategoryForSupperAdmin(category);
             } else {
-//                return this.cashFlowRepository.findAllCashFlowNamesForSupperAdmin();
-                return new ArrayList<>();
+                return this.cashFlowRepository.findAllCashFlowNamesForSupperAdmin();
             }
         } else {
             Account customer = this.applicationSecurityContext.getCurrentUser();
             if (category != null && !category.isEmpty()) {
-//                return this.cashFlowRepository.findAllByCustomerAndCategory(customer.getId(), category);
-                return new ArrayList<>();
+                return this.cashFlowRepository.findAllByCustomerAndCategory(customer.getId(), category);
             } else {
-//                return this.cashFlowRepository.findAllCashFlowNamesByCustomer(customer.getId());
-                return new ArrayList<>();
+                return this.cashFlowRepository.findAllCashFlowNamesByCustomer(customer.getId());
             }
         }
     }
